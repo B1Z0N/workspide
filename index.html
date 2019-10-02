@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,11 +32,15 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <img src="img/logo5.png" width="250">
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto">
-                        <h3>Find job</h3>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto search-option pt-1">
+                        <button onclick="replaceWithSearch('jobs')" type="button" class="btn btn-link">
+                            <h3 style="color: black;">Find job</h3>
+                        </button>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto">
-                        <h3>Find workers</h3>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto search-option pt-1">
+                        <button onclick="replaceWithSearch('workers')" type="button" class="btn btn-link">
+                            <h3 style="color: black;">Find workers</h3>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -46,7 +50,9 @@
                 style="background-color: #292826;">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <h3 class="text-center" style="color: #F9D342">Login</h3>
+                        <button type="button" class="btn btn-link">
+                            <h3 class="text-center" style="color: #F9D342">Login</h3>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -61,6 +67,47 @@
         <!-- Copyright -->
 
     </footer>
-    <!-- Footer -->
+
+    <script>
+        var findJobsButton, findWorkersButton, searchButtonsParent
+        var searchBar = document.createElement('div')
+        searchBar.className = "col-lg-8 col-md-8 col-sm-12 col-xs-12 my-auto search-bar p-5"
+        searchBar.innerHTML = '\
+            <div class="active-pink-3 active-pink-4 mb-4">\
+                <input class="form-control" autofocus\
+                        type="text" placeholder="Search" aria-label="Search">\
+            </div>'
+        var type_of_search = ""
+
+        var replaceWithSearch = (type) => {
+            var el = document.getElementsByClassName("search-option")
+            searchButtonsParent = el[0].parentNode
+
+            findWorkersButton = searchButtonsParent.removeChild(el[1])
+            findJobsButton = searchButtonsParent.removeChild(el[0])
+
+            var inputEl = searchBar.getElementsByTagName("input")[0]
+            inputEl.setAttribute("placeholder", "Search " + type)
+            inputEl.value = ""
+
+            searchButtonsParent.appendChild(searchBar)
+            type_of_search = type;
+
+            window.onmousedown = (e) => {
+                if (e.target.nodeName == 'INPUT') return;
+                
+                replaceWithButtons();
+            };
+        }
+
+        var replaceWithButtons = () => {
+            searchBar = searchButtonsParent.removeChild(searchBar)
+            searchButtonsParent.appendChild(findJobsButton)
+            searchButtonsParent.appendChild(findWorkersButton)
+
+            window.onmousedown = () => {}
+        }
+    </script>
 </body>
+
 </html>
