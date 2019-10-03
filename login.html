@@ -31,12 +31,13 @@
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto">
                         <a href="index.html"><img src="img/logo5.png" width="250"></a>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 rounded" style="background-color: #292826;">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 rounded logging-in"
+                        style="background-color: #292826;">
                         <div class="container significant-info">
+                            <p>
+                                <h3 class="text-center mt-5 operation-title">Login</h3>
+                            </p>
                             <form class="form">
-                                <p>
-                                    <h3 class="text-center mt-5">Login</h3>
-                                </p>
                                 <div class="form-group text-left mt-5">
                                     <input type="text" class="form-control" id="surnameField" placeholder="Email">
                                 </div>
@@ -48,18 +49,18 @@
                             </form>
                             <button type="submit" class="btn btn-primary mb-5 significant-button">Submit</button>
                         </div>
-                        <div class="col-12 mb-3 rounded" style="background-color: rgb(173, 173, 173);">
+                        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
                             <h3>Connect with: </h3>
                             <img class="m-3" src="img/github_logo.svg" width=64>
                             <img class="m-3" src="img/google_logo.png" width=64>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto mx-auto pt-5">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto mx-auto pt-5 second-option">
                     <button type="button" class="btn btn-primary significant-button"
-                                            style="border-color: #292826; color: #292826;">
-                        <h1>Register</h1>
-                        <span class="badge badge-default">(for new users)</span>
+                        style="border-color: #292826; color: #292826;" onclick="replaceWithAlternateWay()">
+                        <h1 class="operation-title">Register</h1>
+                        <span class="badge badge-default user-note">(for new users)</span>
                     </button>
                 </div>
             </div>
@@ -76,45 +77,41 @@
     </footer>
 
     <script>
-        var findJobsButton, findWorkersButton, searchButtonsParent
-        var searchBar = document.createElement('div')
-        searchBar.className = "col-lg-8 col-md-8 col-sm-12 col-xs-12 my-auto search-bar p-5"
-        searchBar.innerHTML = '\
-            <div class="active-pink-3 active-pink-4 mb-4">\
-                <input class="form-control" autofocus\
-                        type="text" placeholder="Search" aria-label="Search">\
-            </div>'
-        var type_of_search = ""
+        var generalWay = document.getElementsByClassName("logging-in")[0]
+        var alternativeWay = document.getElementsByClassName("second-option")[0]
+        var operationTitle = "Register"
+        var alternativeOperationTitle = "Login"
 
-        var replaceWithSearch = (type) => {
-            var el = document.getElementsByClassName("search-option")
-            searchButtonsParent = el[0].parentNode
+        var connectOption = generalWay.getElementsByClassName("connect-options")[0];
 
-            findWorkersButton = searchButtonsParent.removeChild(el[1])
-            findJobsButton = searchButtonsParent.removeChild(el[0])
+        var replaceWithAlternateWay = () => {
+            generalWay.getElementsByClassName("operation-title")[0].innerHTML = operationTitle
+            alternativeWay.getElementsByClassName("operation-title")[0].innerHTML = alternativeOperationTitle
 
-            var inputEl = searchBar.getElementsByTagName("input")[0]
-            inputEl.setAttribute("placeholder", "Search " + type)
-            inputEl.value = ""
-            inputEl.focus()
-            inputEl.select()
+            if (alternativeOperationTitle == "Register") {
+                var userNote = "(for new users)"
+                generalWay.appendChild(connectOption)
+            }
+            else if (alternativeOperationTitle == "Login") {
+                var userNote = "(for registered users)"
+                connectOption = generalWay.removeChild(connectOption)
+            }
 
-            searchButtonsParent.appendChild(searchBar)
-            type_of_search = type;
+            alternativeWay.getElementsByClassName("user-note").innerHTML = userNote
+            scrollToTop()
 
-            window.onmousedown = (e) => {
-                if (e.target.nodeName == 'INPUT') return;
-
-                replaceWithButtons();
-            };
+            let temp = alternativeOperationTitle
+            alternativeOperationTitle = operationTitle
+            operationTitle = temp
         }
 
-        var replaceWithButtons = () => {
-            searchBar = searchButtonsParent.removeChild(searchBar)
-            searchButtonsParent.appendChild(findJobsButton)
-            searchButtonsParent.appendChild(findWorkersButton)
-
-            window.onmousedown = () => { }
+        function scrollToTop() {
+            var position =
+                document.body.scrollTop || document.documentElement.scrollTop;
+            if (position) {
+                window.scrollBy(0, -Math.max(1, Math.floor(position / 10)));
+                scrollAnimation = setTimeout("scrollToTop()", 20);
+            } else clearTimeout(scrollAnimation);
         }
     </script>
 </body>
