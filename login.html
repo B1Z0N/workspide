@@ -97,7 +97,7 @@
                 connectOption = generalWay.removeChild(connectOption)
             }
 
-            alternativeWay.getElementsByClassName("user-note").innerHTML = userNote
+            alternativeWay.getElementsByClassName("user-note")[0].innerHTML = userNote
             setTimeout(scrollToTop, 100)
 
             let temp = alternativeOperationTitle
