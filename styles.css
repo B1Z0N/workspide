@@ -1,0 +1,11 @@
+.after-all-page {
+    top: 100%;
+}
+.significant-info {
+    color: #F9D342;
+}
+.significant-button {
+    background-color: rgb(201, 167, 58); 
+    border-color: #F9D342; 
+    color: #292826;
+}
