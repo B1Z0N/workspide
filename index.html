@@ -17,7 +17,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         .after-all-page {
-            position: absolute;
+            /* position: absolute; */
             top: 100%;
         }
     </style>
@@ -59,7 +59,8 @@
         </p>
     </div>
 
-    <footer class="page-footer font-small teal pt-4 after-all-page container-fluid">
+    <footer android:windowSoftInputMode="hidden"
+                class="page-footer font-small teal pt-4 after-all-page container-fluid">
         <!-- Copyright -->
         <div class="footer-copyright text-center py-3">
             <p><a href="https://github.com/B1Z0N/">Fedurko Nikolaus</a> © 2019</p>
@@ -89,6 +90,8 @@
             var inputEl = searchBar.getElementsByTagName("input")[0]
             inputEl.setAttribute("placeholder", "Search " + type)
             inputEl.value = ""
+            inputEl.focus()
+            inputEl.select()
 
             searchButtonsParent.appendChild(searchBar)
             type_of_search = type;
