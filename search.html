@@ -26,7 +26,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark rounded-bottom">
             <form class="form-inline my-2 my-md-0 p-3" style="width: 65%;">
-                <input class="form-control" type="text" placeholder="Search" style="width: 100%;">
+                <input class="form-control" id="search-bar" type="text" style="width: 100%;">
             </form>
             <a href="index.html"><img src="img/logo5.png" width="64" /></a>
 
@@ -97,6 +97,15 @@
     </footer>
 
     <script>
+        window.onload = () => {
+            var searchBar = document.getElementById("search-bar")
+            var type = localStorage.getItem("searchType")
+            if (type == "") {
+                searchBar.placeholder = "Search jobs"
+            } else {
+                searchBar.placeholder = "Search " + type
+            } 
+        }
     </script>
 </body>
 

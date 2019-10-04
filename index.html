@@ -76,9 +76,10 @@
         searchBar.innerHTML = '\
             <div class="active-pink-3 active-pink-4 mb-4">\
                 <input class="form-control" autofocus\
-                        type="text" placeholder="Search" aria-label="Search">\
+                        type="text" placeholder="Search" aria-label="Search"\
+                        onkeypress="handleEnterKey(event)">\
             </div>'
-        var type_of_search = ""
+        var typeOfSearch = ""
 
         var replaceWithSearch = (type) => {
             var el = document.getElementsByClassName("search-option")
@@ -94,7 +95,7 @@
             inputEl.select()
 
             searchButtonsParent.appendChild(searchBar)
-            type_of_search = type;
+            typeOfSearch = type;
 
             window.onmousedown = (e) => {
                 if (e.target.nodeName == 'INPUT') return;
@@ -109,6 +110,16 @@
             searchButtonsParent.appendChild(findWorkersButton)
 
             window.onmousedown = () => { }
+        }
+
+
+        handleEnterKey = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault(); // Ensure it is only this code that runs
+
+                localStorage.setItem("searchType", typeOfSearch)
+                window.open("search.html", "_self")
+            }
         }
     </script>
 </body>
