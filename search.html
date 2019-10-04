@@ -26,8 +26,8 @@
     <div class="container">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark rounded-bottom">
             <form class="form-inline my-2 my-md-0 p-3" style="width: 65%;">
-                <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)"
-                       type="text" style="width: 100%;">
+                <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)" type="text"
+                    style="width: 100%;">
             </form>
             <a href="index.html"><img src="img/logo5.png" width="64" /></a>
 
@@ -46,11 +46,53 @@
                     </li>
                 </ul>
             </div>
+
+            <button type="button" class="btn btn-primary significant-button" 
+                    data-toggle="modal" data-target="#popup-filters" style="border-color: #292826;">
+                    Filters
+            </button>
+
+            <div class="modal fade" id="popup-filters" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="background-color: #292826;">
+                                <div class="container significant-info text-center">
+                                    <p>
+                                        <h3 class="text-center mt-5 operation-title">Filters</h3>
+                                    </p>
+                                    <div class="container mb-3 rounded connect-options py-3 mx-auto text-left"
+                                        style="background-color: rgb(173, 173, 173); color: #292826;">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua. Dolor sed viverra ipsum nunc aliquet
+                                        bibendum enim. In massa tempor nec feugiat. Nunc aliquet bibendum enim facilisis
+                                        gravida. Nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Amet luctus
+                                        venenatis lectus magna fringilla. Volutpat maecenas volutpat blandit aliquam etiam erat
+                                        velit scelerisque in. Egestas egestas fringilla phasellus faucibus scelerisque eleifend.
+                                        Sagittis orci a scelerisque purus semper eget duis. Nulla pharetra diam sit amet nisl
+                                        suscipit. Sed adipiscing diam donec adipiscing tristique risus nec feugiat in. Fusce ut
+                                        placerat orci nulla. Pharetra vel turpis nunc eget lorem dolor. Tristique senectus et
+                                        netus et malesuada.
+                                    </div>
+                                    <button class="btn btn-primary significant-button mx-auto my-3" 
+                                            type="submit"><h3>Apply</h3></button>
+                                </div>
+                            </div>
+                        <div class="modal-footer">
+                            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
-
-        <section class="header-info header-info-limited">
-
-        </section>
 
         <p>
             <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
@@ -58,31 +100,24 @@
                 <div class="row justify-content-around my-auto py-auto">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <h2>
-                            some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results 
+                            some search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results
                         </h2>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-0 search-option pt-1 rounded"
-                        style="background-color: #292826; height: 0%;">
-                        <div class="container significant-info">
-                            <p>
-                                <h3 class="text-center mt-5 operation-title">Filters</h3>
-                            </p>
-                            <div class="col-12 mb-3 rounded connect-options py-3"
-                                style="background-color: rgb(173, 173, 173); color: #292826;">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Dolor sed viverra ipsum nunc aliquet
-                                bibendum enim. In massa tempor nec feugiat. Nunc aliquet bibendum enim facilisis
-                                gravida. Nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Amet luctus
-                                venenatis lectus magna fringilla. Volutpat maecenas volutpat blandit aliquam etiam erat
-                                velit scelerisque in. Egestas egestas fringilla phasellus faucibus scelerisque eleifend.
-                                Sagittis orci a scelerisque purus semper eget duis. Nulla pharetra diam sit amet nisl
-                                suscipit. Sed adipiscing diam donec adipiscing tristique risus nec feugiat in. Fusce ut
-                                placerat orci nulla. Pharetra vel turpis nunc eget lorem dolor. Tristique senectus et
-                                netus et malesuada.
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-5 significant-button">Apply</button>
-                        </div>
                     </div>
                 </div>
             </div>
