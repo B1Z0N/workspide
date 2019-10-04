@@ -26,7 +26,8 @@
     <div class="container">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark rounded-bottom">
             <form class="form-inline my-2 my-md-0 p-3" style="width: 65%;">
-                <input class="form-control" id="search-bar" type="text" style="width: 100%;">
+                <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)"
+                       type="text" style="width: 100%;">
             </form>
             <a href="index.html"><img src="img/logo5.png" width="64" /></a>
 
@@ -60,8 +61,9 @@
                             some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results some search results 
                         </h2>
                     </div>
+                    
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-0 search-option pt-1 rounded"
-                        style="background-color: #292826; height: 100%;">
+                        style="background-color: #292826; height: 0%;">
                         <div class="container significant-info">
                             <p>
                                 <h3 class="text-center mt-5 operation-title">Filters</h3>
@@ -97,14 +99,29 @@
     </footer>
 
     <script>
+        var searchText = localStorage.getItem("searchText")
+        var searchType = localStorage.getItem("searchType")
+
+        var searchBar = document.getElementById("search-bar")
+
         window.onload = () => {
-            var searchBar = document.getElementById("search-bar")
-            var type = localStorage.getItem("searchType")
-            if (type == "") {
+            if (searchType == null) {
                 searchBar.placeholder = "Search jobs"
             } else {
-                searchBar.placeholder = "Search " + type
-            } 
+                searchBar.placeholder = "Search " + searchType
+                searchBar.setAttribute("value", searchText)
+            }
+            localStorage.removeItem("searchType")
+            localStorage.removeItem("searchText")
+        }
+
+
+        handleEnterKey = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault() // Ensure it is only this code that runs
+
+                searchText = searchBar.getAttribute("value")
+            }
         }
     </script>
 </body>
