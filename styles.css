@@ -1,12 +1,18 @@
 .after-all-page {
-    top: 100%;
+  top: 100%;
 }
 .significant-info {
-    color: #F9D342;
+  color: #f9d342;
 }
 .significant-button {
-    background-color: rgb(201, 167, 58); 
-    border-color: #F9D342; 
-    color: #292826;
-    border-color: #292826;
+  background-color: rgb(201, 167, 58);
+  border-color: #f9d342;
+  color: #292826;
+  border-color: #292826;
+}
+
+.custom-shadowed {
+    -moz-box-shadow: 0 0 15px rgb(0, 0, 75);
+    -webkit-box-shadow: 0 0 15px rgb(0, 0, 75);
+    box-shadow: 0 0 15px rgb(0, 0, 75);
 }
