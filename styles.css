@@ -40,3 +40,7 @@ div.small-logo a:hover, div.small-logo a:visited {
   text-decoration:none;
   color:inherit;
 }
+
+.after-small-logo {
+  padding-top: 40px;
+}

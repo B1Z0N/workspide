@@ -110,7 +110,7 @@
                     </a>
                     <strong><em>WorkSpide - work meeting your needs</em></strong>
                 </div>
-                <div class="row justify-content-around my-auto py-auto">
+                <div class="row justify-content-around my-auto py-auto after-small-logo">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <h2>
                             some search results some search results some search results some search results some search
@@ -181,7 +181,7 @@
 
                 var page = window.location.pathname.split("/").pop()
                 if (searchParams.get("text") === "") searchParams.delete("text")
-                
+
                 window.location.replace(page + "?" + searchParams.toString())
             }
         }
