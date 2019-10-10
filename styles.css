@@ -1,3 +1,12 @@
+
+@font-face { font-family: Moon; src: 'fonts/MOON 2.0 FREE/Moon2.0-Regular.otf'; } 
+@font-face { font-family: Moon; font-weight: bold; src: 'fonts/MOON 2.0 FREE/Moon2.0-Bold.otf'; } 
+@font-face { font-family: Moon; font-weight: lighter; src: 'fonts/MOON 2.0 FREE/Moon2.0-Light.otf'; } 
+
+body {
+  font-family: Moon;
+}
+
 .after-all-page {
   top: 100%;
 }
@@ -22,4 +31,12 @@
 
   left: 10px;
   top: 10px;
+}
+
+div.small-logo a, 
+div.small-logo a:hover, div.small-logo a:visited {
+  border:none;
+  outline:none;
+  text-decoration:none;
+  color:inherit;
 }
