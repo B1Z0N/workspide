@@ -180,7 +180,7 @@
                 }
 
                 var page = window.location.pathname.split("/").pop()
-                window.open(page + "?" + searchParams.toString(), false)
+                window.location.replace(page + "?" + searchParams.toString())
             }
         }
     </script>
