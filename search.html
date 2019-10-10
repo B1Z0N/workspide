@@ -27,7 +27,7 @@
     <div class="container">
         <nav class="custom-shadowed navbar navbar-expand-md navbar-dark bg-dark rounded-bottom">
             <form class="form-inline my-2 my-md-0 p-3" style="width: 65%;">
-                <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)" type="text"
+                <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)" autofocus type="text"
                     style="width: 100%;">
             </form>
             <a href="index.html"><img src="img/logo5.png" width="64" /></a>
@@ -135,8 +135,12 @@
     </footer>
 
     <script>
-        var searchText = localStorage.getItem("searchText")
-        var searchType = localStorage.getItem("searchType")
+        var searchParams = new URLSearchParams(location.search)
+        if (searchParams.get("type") == null) {
+            searchParams.append("type", "jobs");
+        }
+        var searchType = searchParams.get("type")
+        var searchText = searchParams.get("text")
 
         var searchBar = document.getElementById("search-bar")
 
@@ -145,7 +149,8 @@
                 searchBar.placeholder = "Search jobs"
             } else {
                 searchBar.placeholder = "Search " + searchType
-                searchBar.setAttribute("value", searchText)
+                if (searchText != null)
+                    searchBar.setAttribute("value", searchText)
             }
             localStorage.removeItem("searchType")
             localStorage.removeItem("searchText")
@@ -156,7 +161,14 @@
             if (e.keyCode === 13) {
                 e.preventDefault() // Ensure it is only this code that runs
 
-                searchText = searchBar.getAttribute("value")
+                if (searchParams.get("text") == null) {
+                    searchParams.append("text", searchBar.value)
+                } else {
+                    searchParams.set("text", searchBar.value)
+                }
+
+                var page = window.location.pathname.split("/").pop()
+                window.open(page + "?" + searchParams.toString(), false)
             }
         }
     </script>
