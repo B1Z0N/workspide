@@ -180,6 +180,8 @@
                 }
 
                 var page = window.location.pathname.split("/").pop()
+                if (searchParams.get("text") === "") searchParams.delete("text")
+                
                 window.location.replace(page + "?" + searchParams.toString())
             }
         }
