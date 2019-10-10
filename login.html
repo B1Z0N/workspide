@@ -29,17 +29,21 @@
             <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
                 style="background-color: rgb(201, 167, 58);">
                 <div class="row justify-content-around py-auto mt-4">
-                    <div class="order-lg-1 order-md-2 order-sm-2 order-xs-2 my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed" style="background-color: #292826;">
-                        <div class="col-12 mt-4 mx-auto rounded connect-options" style="background-color: rgb(173, 173, 173);">
+                    <div class="d-flex flex-wrap align-content-center p-3 second-option order-lg-1 order-md-2 order-sm-2 order-xs-2 my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed"
+                        style="background-color: #292826;">
+                        <div class="col-12 m-3 mx-auto rounded connect-options"
+                            style="background-color: rgb(173, 173, 173);">
                             <h3>Connect with: </h3>
                             <a href="#"><img class="m-3" src="img/github_logo.svg" width=64></a>
                             <a href="#"><img class="m-3" src="img/google_logo.png" width=64></a>
                         </div>
-                        <button type="button" class="my-4 mx-auto btn btn-primary significant-button"
-                            style="border-color: #292826; color: #292826;" onclick="replaceWithAlternateWay()">
-                            <h1 class="operation-title">Register</h1>
-                            <span class="badge badge-default user-note">(for new users)</span>
-                        </button>
+                        <div class="container m-3">
+                            <button type="button" class="mx-auto btn btn-primary significant-button second-option"
+                                style="border-color: #292826; color: #292826;" onclick="replaceWithAlternateWay()">
+                                <h1 class="operation-title">Register</h1>
+                                <span class="badge badge-default user-note">(for new users)</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="order-lg-2 order-md-1 order-sm-1 order-xs-1 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed"
                         style="background-color: #292826;">
@@ -57,8 +61,6 @@
                             </form>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto mx-auto pt-5 second-option">
                 </div>
             </div>
         </p>
@@ -79,7 +81,7 @@
         var operationTitle = "Register"
         var alternativeOperationTitle = "Login"
 
-        var connectOption = generalWay.getElementsByClassName("connect-options")[0];
+        var connectOption = alternativeWay.getElementsByClassName("connect-options")[0];
 
         var replaceWithAlternateWay = () => {
             generalWay.getElementsByClassName("operation-title")[0].innerHTML = operationTitle
@@ -87,11 +89,11 @@
 
             if (alternativeOperationTitle == "Register") {
                 var userNote = "(for new users)"
-                generalWay.appendChild(connectOption)
+                alternativeWay.insertBefore(connectOption, alternativeWay.firstChild)
             }
             else if (alternativeOperationTitle == "Login") {
                 var userNote = "(for registered users)"
-                connectOption = generalWay.removeChild(connectOption)
+                connectOption = alternativeWay.removeChild(connectOption)
             }
 
             alternativeWay.getElementsByClassName("user-note")[0].innerHTML = userNote
