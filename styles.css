@@ -16,3 +16,10 @@
     -webkit-box-shadow: 0 0 15px rgb(0, 0, 75);
     box-shadow: 0 0 15px rgb(0, 0, 75);
 }
+
+.small-logo {
+  position: absolute;
+
+  left: 10px;
+  top: 10px;
+}
