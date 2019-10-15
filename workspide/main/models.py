@@ -1,77 +1,63 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-
+# ?
 class Connector(models.Model):
-    id = models.IntegerField(primary_key=True)
-    uid = models.IntegerField()
-    ad_t = models.CharField(max_length=7)
-    ad_id = models.IntegerField()
+    uid = models.ForeignKey('User', on_delete=models.DO_NOTHING)
+    ad_type = models.ForeignKey(
+        ContentType, on_delete=models.DO_NOTHING, null=True)
+    ad_id = models.IntegerField()  # models.ForeignKey('', on_delete=models.DO_NOTHING)
+    ad_object = GenericForeignKey('ad_type', 'ad_id')
 
-    class Meta:
-        db_table = 'Connector'
-
-
-class Petproject(models.Model):
-    id = models.ForeignKey('Resume', models.DO_NOTHING,
-                           db_column='id', primary_key=True)
-    resume_id = models.IntegerField()
-    title = models.CharField(max_length=30)
-    link = models.CharField(max_length=30)
-
-    class Meta:
-        db_table = 'PetProject'
-
-
-class Responsibilities(models.Model):
-    id = models.IntegerField(primary_key=True)
-    vacancy_id = models.IntegerField()
-    responsibility = models.CharField(max_length=30)
-
-    class Meta:
-        db_table = 'Responsibilities'
-
-
-class Resume(models.Model):
-    id = models.IntegerField(primary_key=True)
-    uid = models.IntegerField()
-    title = models.CharField(max_length=30)
-    description = models.CharField(max_length=10000)
-    salary = models.IntegerField(blank=True, null=True)
-    currency = models.CharField(max_length=3, blank=True, null=True)
-
-    class Meta:
-        db_table = 'Resume'
-
-
+# ?
 class Skills(models.Model):
-    id = models.IntegerField(primary_key=True)
-    ad_t = models.CharField(max_length=7)
-    ad_id = models.IntegerField()
-    skill = models.CharField(max_length=30)
-
-    class Meta:
-        db_table = 'Skills'
+    # models.CharField(max_length=7)
+    ad_type = models.ForeignKey(
+        ContentType, on_delete=models.DO_NOTHING, null=True)
+    ad_id = models.IntegerField()  # models.ForeignKey('', on_delete=models.DO_NOTHING)
+    ad_object = GenericForeignKey('ad_type', 'ad_id')
+    text = models.CharField(max_length=30)
 
 
 class User(models.Model):
-    id = models.IntegerField(primary_key=True)
-    first_name = models.CharField(max_length=30, blank=True, null=True)
-    last_name = models.CharField(max_length=30, blank=True, null=True)
+    first_name = models.CharField(max_length=30, null=True)
+    last_name = models.CharField(max_length=30, null=True)
     email = models.CharField(max_length=30)
     pass_hash = models.CharField(max_length=50)
 
-    class Meta:
-        db_table = 'User'
+
+class Resume(models.Model):
+    uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    title = models.CharField(max_length=30)
+    description = models.CharField(max_length=10000)
+    salary = models.IntegerField()
+    currency = models.CharField(max_length=3, null=True)
 
 
 class Vacancy(models.Model):
-    id = models.IntegerField(primary_key=True)
-    uid = models.IntegerField()
+    uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=10000)
-    salary = models.IntegerField(blank=True, null=True)
-    currency = models.CharField(max_length=3, blank=True, null=True)
-    experience = models.IntegerField(blank=True, null=True)
+    salary = models.IntegerField(null=True)
+    currency = models.CharField(max_length=3, null=True)
+    experience_months = models.IntegerField(null=True)
 
-    class Meta:
-        db_table = 'Vacancy'
+
+class Petproject(models.Model):
+    resume_id = models.OneToOneField(
+        Resume,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
+    title = models.CharField(max_length=30)
+    link = models.CharField(max_length=30)
+
+
+class Responsibilities(models.Model):
+    vacancy_id = models.OneToOneField(
+        Vacancy,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
+    text = models.CharField(max_length=30)
