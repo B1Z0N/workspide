@@ -52,16 +52,39 @@ CREATE TABLE `Responsibilities` (
   `responsibility` varchar(30) NOT NULL
 );
 
-ALTER TABLE `User` ADD FOREIGN KEY (`id`) REFERENCES `Connector` (`uid`);
+ALTER TABLE
+  `User`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Connector` (`uid`);
 
-ALTER TABLE `Vacancy` ADD FOREIGN KEY (`id`) REFERENCES `Connector` (`ad_id`);
+ALTER TABLE
+  `Vacancy`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Connector` (`ad_id`);
 
-ALTER TABLE `Resume` ADD FOREIGN KEY (`id`) REFERENCES `Connector` (`ad_id`);
+ALTER TABLE
+  `Resume`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Connector` (`ad_id`);
 
-ALTER TABLE `Resume` ADD FOREIGN KEY (`id`) REFERENCES `Skills` (`ad_id`);
+ALTER TABLE
+  `Resume`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Skills` (`ad_id`);
 
-ALTER TABLE `Vacancy` ADD FOREIGN KEY (`id`) REFERENCES `Skills` (`ad_id`);
+ALTER TABLE
+  `Vacancy`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Skills` (`ad_id`);
 
-ALTER TABLE `Vacancy` ADD FOREIGN KEY (`id`) REFERENCES `Responsibilities` (`vacancy_id`);
+ALTER TABLE
+  `Vacancy`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Responsibilities` (`vacancy_id`);
 
-ALTER TABLE `PetProject` ADD FOREIGN KEY (`id`) REFERENCES `Resume` (`id`);
+ALTER TABLE
+  `PetProject`
+ADD
+  FOREIGN KEY (`id`) REFERENCES `Resume` (`id`);
+
+# DROP TABLE Connector, User, Responsibilities, Skills, Vacancy, PetProject, Resume; # - uncomment to drop all
