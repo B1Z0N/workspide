@@ -2,23 +2,6 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-# ?
-class Connector(models.Model):
-    uid = models.ForeignKey('User', on_delete=models.DO_NOTHING)
-    ad_type = models.ForeignKey(
-        ContentType, on_delete=models.DO_NOTHING, null=True)
-    ad_id = models.IntegerField()  # models.ForeignKey('', on_delete=models.DO_NOTHING)
-    ad_object = GenericForeignKey('ad_type', 'ad_id')
-
-# ?
-class Skills(models.Model):
-    # models.CharField(max_length=7)
-    ad_type = models.ForeignKey(
-        ContentType, on_delete=models.DO_NOTHING, null=True)
-    ad_id = models.IntegerField()  # models.ForeignKey('', on_delete=models.DO_NOTHING)
-    ad_object = GenericForeignKey('ad_type', 'ad_id')
-    text = models.CharField(max_length=30)
-
 
 class User(models.Model):
     first_name = models.CharField(max_length=30, null=True)
@@ -27,16 +10,8 @@ class User(models.Model):
     pass_hash = models.CharField(max_length=50)
 
 
-class Resume(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    title = models.CharField(max_length=30)
-    description = models.CharField(max_length=10000)
-    salary = models.IntegerField()
-    currency = models.CharField(max_length=3, null=True)
-
-
 class Vacancy(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    uid = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=10000)
     salary = models.IntegerField(null=True)
@@ -44,7 +19,25 @@ class Vacancy(models.Model):
     experience_months = models.IntegerField(null=True)
 
 
-class Petproject(models.Model):
+class Resume(models.Model):
+    uid = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=30)
+    description = models.CharField(max_length=10000)
+    salary = models.IntegerField()
+    currency = models.CharField(max_length=3, null=True)
+    
+
+class SkillsForVacancy(models.Model):
+    vacancy_id = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    text = models.CharField(max_length=100)
+
+
+class SkillsForResume(models.Model):
+    resume_id = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    text = models.CharField(max_length=100)
+
+
+class PetProject(models.Model):
     resume_id = models.OneToOneField(
         Resume,
         on_delete=models.CASCADE,

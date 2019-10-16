@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # database engine
         'NAME': 'workspide', # database name
         'USER': 'workspide_admin', # database user
-        'PASSWORD': 'workspide_password', # database password
+        'PASSWORD': 'wspass', # database password
         'HOST': 'localhost',   # Or an IP Address of database
         'PORT': '3306', # default database port
     }
