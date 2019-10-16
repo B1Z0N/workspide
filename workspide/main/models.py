@@ -7,7 +7,14 @@ class User(models.Model):
     first_name = models.CharField(max_length=30, null=True)
     last_name = models.CharField(max_length=30, null=True)
     email = models.CharField(max_length=30)
-    pass_hash = models.CharField(max_length=50)
+    pass_hash = models.CharField(max_length=64)
+
+
+CURRENCY_CHOICES = [
+    ('uah', 'Hryvnia'),
+    ('usd', 'Dollar'),
+    ('eur', 'Euro'),
+]
 
 
 class Vacancy(models.Model):
@@ -15,7 +22,7 @@ class Vacancy(models.Model):
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=10000)
     salary = models.IntegerField(null=True)
-    currency = models.CharField(max_length=3, null=True)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
     experience_months = models.IntegerField(null=True)
 
 
@@ -24,33 +31,25 @@ class Resume(models.Model):
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=10000)
     salary = models.IntegerField()
-    currency = models.CharField(max_length=3, null=True)
-    
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
 
-class SkillsForVacancy(models.Model):
+
+class SkillForVacancy(models.Model):
     vacancy_id = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
+    skill = models.CharField(max_length=100)
 
 
-class SkillsForResume(models.Model):
+class SkillForResume(models.Model):
     resume_id = models.ForeignKey(Resume, on_delete=models.CASCADE)
     text = models.CharField(max_length=100)
 
 
 class PetProject(models.Model):
-    resume_id = models.OneToOneField(
-        Resume,
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
+    resume_id = models.ForeignKey(Resume, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     link = models.CharField(max_length=30)
 
 
-class Responsibilities(models.Model):
-    vacancy_id = models.OneToOneField(
-        Vacancy,
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
+class Responsibility(models.Model):
+    vacancy_id = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     text = models.CharField(max_length=30)
