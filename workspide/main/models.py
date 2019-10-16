@@ -17,6 +17,14 @@ CURRENCY_CHOICES = [
 ]
 
 
+class Resume(models.Model):
+    uid = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=30)
+    description = models.CharField(max_length=10000)
+    salary = models.IntegerField()
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
+
+
 class Vacancy(models.Model):
     uid = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
@@ -25,13 +33,6 @@ class Vacancy(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
     experience_months = models.IntegerField(null=True)
 
-
-class Resume(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=30)
-    description = models.CharField(max_length=10000)
-    salary = models.IntegerField()
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
 
 
 class SkillForVacancy(models.Model):
