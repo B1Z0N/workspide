@@ -90,10 +90,18 @@ class User(AbstractBaseUser):
 
 
 CURRENCY_CHOICES = [
-    ('uah', 'Hryvnia'),
-    ('usd', 'Dollar'),
-    ('eur', 'Euro'),
+    ('uah', 'uah'),
+    ('usd', 'usd'),
+    ('eur', 'eur'),
 ]
+
+
+def print_ad_info(self):
+    sal = ''
+    if self.salary and self.currency:
+        sal = ', ' + str(self.salary) + ' ' + self.currency
+    exp = ', ' + str(self.experience_months) + ' months' if self.experience_months else ''
+    return self.title + sal + exp
 
 
 class Vacancy(models.Model):
@@ -107,10 +115,8 @@ class Vacancy(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
     experience_months = models.IntegerField(null=True)
 
-    def __str__(self):
-        sal = self.salary + currency if self.salary else '' 
-        return self.title + ' ' + sal
-
+    __str__ = print_ad_info
+    
 
 class Resume(models.Model):
     uid = models.ForeignKey(
@@ -121,10 +127,10 @@ class Resume(models.Model):
     description = models.CharField(max_length=10000)
     salary = models.IntegerField(null=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
+    experience_months = models.IntegerField(null=True)
     
-    def __str__(self):
-        sal = self.salary + self.currency if self.salary else '' 
-        return self.title + ' ' + sal
+    __str__ = print_ad_info
+
 
 
 class SkillForVacancy(models.Model):
