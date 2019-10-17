@@ -42,10 +42,9 @@
                                 <h3 class="text-center mt-5 operation-title">Login</h3>
                             </p>
                             <form class="form">
-                                <div class="form-group text-center mt-4">
+                                <div class="form-group text-center mt-4" id="user-data">
                                     <input type="text" class="form-control" id="emailField" placeholder="Email">
                                     <input type="text" class="form-control mt-4" id="passwordField1" placeholder="Password">
-                                    <input type="text" class="form-control mt-4" id="passwordField2" placeholder="Repeat password">
                                     <button type="submit"
                                         class="btn btn-primary mt-4 mb-5 significant-button">Submit</button>
                                 </div>
@@ -91,7 +90,15 @@
         var operationTitle = "Register"
         var alternativeOperationTitle = "Login"
 
+        var repeatPassword = document.createElement('div')
+        repeatPassword.innerHTML = '<input type="text" class="form-control mt-4" placeholder="Repeat password">'
+        repeatPassword.id = 'passwordField2'
         var connectOption = alternativeWay.getElementsByClassName("connect-options")[0];
+        var userDataForm = document.getElementById('user-data')
+
+        var insertAfter = (referenceNode, newNode) => {
+          referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }
 
         var replaceWithAlternateWay = () => {
             generalWay.getElementsByClassName("operation-title")[0].innerHTML = operationTitle
@@ -100,10 +107,12 @@
             if (alternativeOperationTitle == "Register") {
                 var userNote = "(for new users)"
                 alternativeWay.insertBefore(connectOption, alternativeWay.firstChild)
+                repeatPassword = userDataForm.removeChild(repeatPassword)
             }
             else if (alternativeOperationTitle == "Login") {
                 var userNote = "(for registered users)"
                 connectOption = alternativeWay.removeChild(connectOption)
+                insertAfter(document.getElementById("passwordField1"), repeatPassword)
             }
 
             alternativeWay.getElementsByClassName("user-note")[0].innerHTML = userNote
@@ -114,7 +123,7 @@
             operationTitle = temp
         }
 
-        function scrollToTop() {
+        var scrollToTop = () => {
             var position = document.body.scrollTop || document.documentElement.scrollTop;
             if (position) {
                 window.scrollBy(0, -Math.max(10, Math.floor(position / 10)));
