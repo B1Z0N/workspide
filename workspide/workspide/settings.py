@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+AUTH_USER_MODEL = 'main.User'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -79,13 +81,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # database engine
         'NAME': 'workspide', # database name
-        'USER': 'workspide_admin', # database user
+        'USER': 'wsadmin', # database user
         'PASSWORD': 'wspass', # database password
         'HOST': 'localhost',   # Or an IP Address of database
         'PORT': '3306', # default database port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
