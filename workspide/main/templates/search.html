@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Project specific styles -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Search</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="custom-shadowed navbar navbar-expand-md navbar-dark bg-dark rounded-bottom">
+            <form class="form-inline my-2 my-md-0 p-3" style="width: 65%;">
+                <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)" autofocus type="text"
+                    style="width: 100%;">
+            </form>
+
+            <a href="/">
+                {% load static %}
+                <img src="{% static "img/logo5.png" %}" width="64" />
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
+                aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse mr-auto" id="main-navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active mr-auto">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item mr-auto">
+                        <a class="nav-link" href="/account/">Account</a>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="button" class="btn btn-primary significant-button ml-auto" data-toggle="modal"
+                data-target="#popup-filters" style="border-color: #292826;">
+                Filters
+            </button>
+
+            <div class="custom-shadowed modal fade" id="popup-filters" tabindex="-1" role="dialog"
+                aria-labelledby="popup-filters-label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="popup-filters-label">Filters</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="background-color: #292826;">
+                            <div class="container significant-info text-center">
+                                <p>
+                                    <h3 class="text-center mt-5 operation-title">Filters</h3>
+                                </p>
+                                <div class="container mb-3 rounded connect-options py-3 mx-auto text-left"
+                                    style="background-color: rgb(173, 173, 173); color: #292826;">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Dolor sed viverra ipsum nunc aliquet
+                                    bibendum enim. In massa tempor nec feugiat. Nunc aliquet bibendum enim facilisis
+                                    gravida. Nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Amet luctus
+                                    venenatis lectus magna fringilla. Volutpat maecenas volutpat blandit aliquam etiam
+                                    erat
+                                    velit scelerisque in. Egestas egestas fringilla phasellus faucibus scelerisque
+                                    eleifend.
+                                    Sagittis orci a scelerisque purus semper eget duis. Nulla pharetra diam sit amet
+                                    nisl
+                                    suscipit. Sed adipiscing diam donec adipiscing tristique risus nec feugiat in. Fusce
+                                    ut
+                                    placerat orci nulla. Pharetra vel turpis nunc eget lorem dolor. Tristique senectus
+                                    et
+                                    netus et malesuada.
+                                </div>
+                                <button class="btn btn-primary significant-button mx-auto my-3" type="submit">
+                                    <h3>Apply</h3>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <p>
+            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
+                style="background-color: rgb(201, 167, 58);">
+                <div class="small-logo img-link">
+                    <a href="/">
+                        <img src='{% static "img/logo5.png" %}' width="64" />
+                    </a>
+                    <strong><em>WorkSpide - work meeting your needs</em></strong>
+                </div>
+                <div class="row justify-content-around my-auto py-auto after-small-logo">
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <h2>
+                            some search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results some search results some search
+                            results some search results some search results some search results some search results some
+                            search results some search results some search results
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </p>
+    </div>
+
+    <footer class="page-footer font-small teal pt-4 after-all-page container-fluid">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+            <p><a href="https://github.com/B1Z0N/">Fedurko Nikolaus</a> © 2019</p>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+
+    <script>
+        var searchType = "{{ search_type }}"
+        var searchText = "{{ search_text }}"
+
+        var searchBar = document.getElementById("search-bar")
+        window.onload = () => {
+
+            if (searchType == null) {
+                searchBar.placeholder = "Search jobs"
+            } else {
+                searchBar.placeholder = "Search " + searchType
+                if (searchText != '')
+                    searchBar.setAttribute("value", searchText)
+            }
+        }
+
+        handleEnterKey = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault() // Ensure it is only this code that runs
+
+                searchText = searchBar.value
+                searchLink = '/search/' + searchType + '/' + searchText
+                window.location.replace(searchLink)
+            }
+        }
+    </script>
+</body>
+
+</html>

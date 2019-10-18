@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Project specific styles -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Login</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <p>
+            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
+                style="background-color: rgb(201, 167, 58);">
+                <div class="small-logo img-link">
+                    <a href="/">
+                        {% load static %}
+                        <img src="{% static "img/logo5.png" %}" width="40px" />
+                    </a>
+                    <strong><em>WorkSpide - work meeting your needs</em></strong>
+                </div>
+                <div class="row justify-content-around py-auto after-small-logo">
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed"
+                        style="background-color: #292826;">
+                        <div class="container significant-info">
+                            <p>
+                                <h3 class="text-center mt-5 operation-title">Login</h3>
+                            </p>
+                            <form class="form">
+                                <div class="form-group text-center mt-4" id="user-data">
+                                    <input type="text" class="form-control" id="emailField" placeholder="Email">
+                                    <input type="text" class="form-control mt-4" id="passwordField1" placeholder="Password">
+                                    <button type="submit"
+                                        class="btn btn-primary mt-4 mb-5 significant-button">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap align-content-center p-3 second-option my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed"
+                        style="background-color: #292826;">
+                        <div class="col-12 m-3 mx-auto rounded connect-options img-link"
+                            style="background-color: rgb(173, 173, 173);">
+                            <h3>Connect with: </h3>
+                            <a href="#">
+                                {% load static %}
+                                <img class="m-3" src='{% static "img/github_logo.svg" %}' width=64>
+                            </a>
+                            <a href="#">
+                                {% load static %}
+                                <img class="m-3" src='{% static "img/google_logo.png" %}' width=64>
+                            </a>
+                        </div>
+                        <div class="container my-auto">
+                            <h3 class="significant-info">Or</h3>
+                        </div>
+                        <div class="container m-3">
+                            <button type="button" class="mx-auto btn btn-primary significant-button second-option"
+                                style="border-color: #292826; color: #292826;" onclick="replaceWithAlternateWay()">
+                                <h1 class="operation-title">Register</h1>
+                                <span class="badge badge-default user-note">(for new users)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p>
+    </div>
+
+    <footer class="page-footer font-small teal after-all-page container-fluid">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center pt-2">
+            <p><a href="https://github.com/B1Z0N/">Fedurko Nikolaus</a> © 2019</p>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+
+    <script>
+        var generalWay = document.getElementsByClassName("logging-in")[0]
+        var alternativeWay = document.getElementsByClassName("second-option")[0]
+        var operationTitle = "Register"
+        var alternativeOperationTitle = "Login"
+
+        var repeatPassword = document.createElement('div')
+        repeatPassword.innerHTML = '<input type="text" class="form-control mt-4" placeholder="Repeat password">'
+        repeatPassword.id = 'passwordField2'
+        var connectOption = alternativeWay.getElementsByClassName("connect-options")[0];
+        var userDataForm = document.getElementById('user-data')
+
+        var insertAfter = (referenceNode, newNode) => {
+          referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }
+
+        var replaceWithAlternateWay = () => {
+            generalWay.getElementsByClassName("operation-title")[0].innerHTML = operationTitle
+            alternativeWay.getElementsByClassName("operation-title")[0].innerHTML = alternativeOperationTitle
+
+            if (alternativeOperationTitle == "Register") {
+                var userNote = "(for new users)"
+                alternativeWay.insertBefore(connectOption, alternativeWay.firstChild)
+                repeatPassword = userDataForm.removeChild(repeatPassword)
+            }
+            else if (alternativeOperationTitle == "Login") {
+                var userNote = "(for registered users)"
+                connectOption = alternativeWay.removeChild(connectOption)
+                insertAfter(document.getElementById("passwordField1"), repeatPassword)
+            }
+
+            alternativeWay.getElementsByClassName("user-note")[0].innerHTML = userNote
+            setTimeout(scrollToTop, 100)
+
+            let temp = alternativeOperationTitle
+            alternativeOperationTitle = operationTitle
+            operationTitle = temp
+        }
+
+        var scrollToTop = () => {
+            var position = document.body.scrollTop || document.documentElement.scrollTop;
+            if (position) {
+                window.scrollBy(0, -Math.max(10, Math.floor(position / 10)));
+                scrollAnimation = setTimeout('scrollToTop()', 10);
+            }
+            else clearTimeout(scrollAnimation);
+        }
+    </script>
+</body>
+
+</html>

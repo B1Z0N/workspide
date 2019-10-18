@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Project specific styles -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Account settings</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <p>
+            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
+                style="background-color: rgb(201, 167, 58);">
+                <div class="small-logo img-link">
+                    <a href="/">
+                        {% load static %}
+                        <img src="{% static "img/logo5.png" %}" width="40px" />
+                    </a>
+                    <strong><em>WorkSpide - work meeting your needs</em></strong>
+                </div>
+                <div class="row justify-content-around my-auto py-auto">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 my-auto">
+                        <a href="/">
+                            {% load static %}
+                            <img src="{% static "img/logo5.png" %}" width="250" />
+                        </a>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 rounded logging-in"
+                        style="background-color: #292826;">
+                        <div class="container significant-info">
+                            <p>
+                                <h3 class="text-center mt-5 operation-title">Account settings</h3>
+                            </p>
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 mx-auto">
+                                    <form class="form">
+                                        <div class="form-group text-left mt-5">
+                                            <input type="text" class="form-control" id="surnameField"
+                                                placeholder="Name (current: 'Somename')">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 mx-auto">
+                                    <form class="form">
+                                        <div class="form-group text-left">
+                                            <input type="text" class="form-control" id="surnameField"
+                                                placeholder="Surname (current: 'Somesurname')">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 mx-auto">
+                                    <form class="form">
+                                        <div class="form-group text-left">
+                                            <input type="text" class="form-control" id="surnameField"
+                                                placeholder="Email (current: 'example@mail.com')">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 mx-auto mb-5">
+                                    <form class="form">
+                                        <div class="form-group text-left">
+                                            <input type="text" class="form-control" id="surnameField"
+                                                placeholder="Password">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+                            <h3>Resume</h3>
+                        </div>
+                        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+                            <h3>Vacancies</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto mx-auto pt-5 second-option">
+                    <button type="button" class="btn btn-primary significant-button"
+                        style="border-color: #292826; color: #292826;" onclick="replaceWithAlternateWay()">
+                        <h1 class="operation-title">Save</h1>
+                    </button>
+                </div>
+            </div>
+        </p>
+    </div>
+
+    <footer class="page-footer font-small teal pt-4 after-all-page container-fluid">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
+            <p><a href="https://github.com/B1Z0N/">Fedurko Nikolaus</a> © 2019</p>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+
+    <script></script>
+</body>
+
+</html>
