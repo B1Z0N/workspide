@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Register
+{% endblock %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% include "errors/already_authorized_error.html" %}
+{% else %}
+    <div class="row justify-content-around py-auto after-small-logo">
+        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed"
+            style="background-color: #292826;">
+            <div class="container significant-info">
+                <p>
+                    <h3 class="text-center mt-5 operation-title">Register</h3>
+                </p>
+                <form class="form" method="post">
+                    {% load widget_tweaks %}
+                    {% csrf_token %}
+                    <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+                        <!-- {{ form.non_field_errors }} -->
+                        {{ form.email|add_class:"form-control mt-4"|attr:"placeholder:Email" }}
+                        {{ form.password1|add_class:"form-control mt-4"|attr:"placeholder:Password" }}
+                        {{ form.password2|add_class:"form-control mt-4"|attr:"placeholder:Repeat password" }}
+                        <input value="Submit" type="submit" class="btn btn-primary mt-4 mb-5 significant-button" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap align-content-center p-3 second-option my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed"
+        style="background-color: #292826;">
+
+            <div class="container my-auto">
+                <h3 class="significant-info">Or</h3>
+            </div>
+            <div class="container m-3">
+                <a href="/signup/login/">
+                    <button type="button" class="mx-auto btn btn-primary significant-button second-option"
+                    style="border-color: #292826; color: #292826;">
+                        <h1 class="operation-title">Login</h1>
+                        <span class="badge badge-default user-note">(for registered users)</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
