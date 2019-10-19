@@ -1,138 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% block title %}
+Account
+{% endblock %}
 
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <!-- Project specific styles -->
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <title>Workspide</title>
-    <style>
-    </style>
-</head>
-
-<body>
-    <div class="container">
-
-        <p>
-            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
-                style="background-color: rgb(201, 167, 58);">
-                <div class="row justify-content-around my-auto py-auto">
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <figure>
-                        <a href="/">
-                            {% load static %}
-                            <img src='{% static "img/logo5.png" %}' width="250">
-                        </a>
-                        <figcaption>
-                            <h3><em>WorkSpide - work meeting your needs</em></h3>
-                        </figcaption>
-                    </figure>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto search-option pt-1">
-                        <a href="/search/jobs" class="btn btn-link">
-                            <h3 style="color: black;">Find jobs</h3>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto search-option pt-1">
-                        <a href="/search/workers" class="btn btn-link">
-                            <h3 style="color: black;">Find workers</h3>
-                        </a>
-                    </div>
+{% block content %}
+<div class="row justify-content-around my-auto py-auto">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <figure>
+            <a href="/">
+                {% load static %}
+                <img src='{% static "img/logo5.png" %}' width="250">
+            </a>
+            <figcaption>
+                <h3><em>WorkSpide - work meeting your needs</em></h3>
+            </figcaption>
+        </figure>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto search-option pt-1">
+        <a href="/search/jobs" class="btn btn-link">
+            <h3 style="color: black;">Find jobs</h3>
+        </a>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto search-option pt-1">
+        <a href="/search/workers" class="btn btn-link">
+            <h3 style="color: black;">Find workers</h3>
+        </a>
+    </div>
+</div>
+</div>
+<p>
+    <a href="{% if user.is_authenticated %}/account/{% else %}/signup/login{% endif %}">
+        <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
+            style="background-color: #292826;">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button type="button" class="btn btn-link">
+                        <h3 class="text-center" style="color: #F9D342">
+                            {% if user.is_authenticated %}
+                            Go to your account
+                            {% else %}
+                            Login
+                            {% endif %}
+                        </h3>
+                    </button>
                 </div>
             </div>
-            <p>
-                <a href="/login/">
-                    <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
-                        style="background-color: #292826;">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button type="button" class="btn btn-link">
-                                    <h3 class="text-center" style="color: #F9D342">Login</h3>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </p>
-        </p>
-    </div>
-
-    <footer class="page-footer font-small teal after-all-page container-fluid">
-        <!-- Copyright -->
-        <div class="footer-copyright text-center py-3">
-            <p><a href="https://github.com/B1Z0N/">Fedurko Nikolaus</a> © 2019</p>
         </div>
-        <!-- Copyright -->
-
-    </footer>
-
-    <script>
-        // var findJobsButton, findWorkersButton, searchButtonsParent
-        // var searchBar = document.createElement('div')
-        // searchBar.className = "col-lg-8 col-md-8 col-sm-12 col-xs-12 my-auto search-bar p-5"
-        // searchBar.innerHTML = '\
-        //     <div class="active-pink-3 active-pink-4 mb-4">\
-        //         <input class="form-control" autofocus\
-        //                 type="text" placeholder="Search" aria-label="Search"\
-        //                 onkeypress="handleEnterKey(event)">\
-        //     </div>'
-        // var typeOfSearch = ""
-
-        // var replaceWithSearch = (type) => {
-        //     var el = document.getElementsByClassName("search-option")
-        //     searchButtonsParent = el[0].parentNode
-
-        //     findWorkersButton = searchButtonsParent.removeChild(el[1])
-        //     findJobsButton = searchButtonsParent.removeChild(el[0])
-
-        //     var inputEl = searchBar.getElementsByTagName("input")[0]
-        //     inputEl.setAttribute("placeholder", "Search " + type)
-        //     inputEl.value = ""
-        //     inputEl.focus()
-        //     inputEl.select()
-
-        //     searchButtonsParent.appendChild(searchBar)
-        //     typeOfSearch = type;
-
-        //     window.onmousedown = (e) => {
-        //         if (e.target.nodeName == 'INPUT') return;
-
-        //         replaceWithButtons();
-        //     };
-        // }
-
-        // var replaceWithButtons = () => {
-        //     searchBar = searchButtonsParent.removeChild(searchBar)
-        //     searchButtonsParent.appendChild(findJobsButton)
-        //     searchButtonsParent.appendChild(findWorkersButton)
-
-        //     window.onmousedown = () => { }
-        // }
-
-        // handleEnterKey = (e) => {
-        //     if (e.keyCode === 13) {
-        //         e.preventDefault(); // Ensure it is only this code that runs
-
-        //         localStorage.setItem("searchText", searchBar.getElementsByTagName("input")[0].value)
-        //         localStorage.setItem("searchType", typeOfSearch)
-        //         window.open("search.html", "_self")
-        //     }
-        // }
-    </script>
-</body>
-
-</html>
+    </a>
+</p>
+{% endblock %}
