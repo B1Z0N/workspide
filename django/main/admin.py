@@ -30,7 +30,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'first_name', 'last_name', 'password1', 'password2')}
-        ),
+         ),
     )
     search_fields = ('email',)
     ordering = ('email',)
@@ -49,4 +49,3 @@ admin.site.register(SkillForResume)
 admin.site.register(SkillForVacancy)
 admin.site.register(PetProject)
 admin.site.register(Responsibility)
-    
