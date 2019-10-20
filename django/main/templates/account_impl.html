@@ -1,0 +1,87 @@
+<div class="row justify-content-around my-auto py-auto">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 my-auto">
+        <a href="/">
+            {% load static %}
+            <img src="{% static "img/logo5.png" %}" width="250" />
+        </a>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 rounded logging-in" style="background-color: #292826;">
+        <div class="container significant-info">
+            <p>
+                <h3 class="text-center mt-5 operation-title">Account settings</h3>
+            </p>
+            <div class="container">
+                {% load widget_tweaks %}
+                <form class="form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+                        {{ email_form.email|add_class:"form-control mt-3" }}
+                        <input name="email_btn" value="Save" type="submit"
+                            class="btn btn-primary m-3 btn-lg significant-button" />
+                    </div>
+                </form>
+                <form class="form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+                        {{ name_form.first_name|add_class:"form-control mt-3" }}
+                        {{ name_form.last_name|add_class:"form-control mt-3" }}
+                        <div class="row">
+                            <div class="col-6">
+                                <input name="name_btn" value="Save" type="submit"
+                                    class="btn btn-primary m-3 btn-lg significant-button" />
+                            </div>
+                            <div class="col-6">
+                                <input name="name_reset_btn" value="Reset" type="submit"
+                                    class="btn btn-primary m-3 btn-lg significant-button" />
+                            </div>
+                        </div>
+                    </div>
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <input name="pass_reset_btn" value="Reset password" type="submit"
+                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                    </form>
+            </div>
+        </div>
+        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+            <h3>Resume</h3>
+        </div>
+        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+            <h3>Vacancies</h3>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6 my-auto pt-5 second-option">
+        <form class="form" method="post">
+            {% csrf_token %}
+            <input style="border-color: #292826; color: #292826;" name="delete_account_btn" value="Delete account"
+                type="submit" class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+        </form>
+    </div>
+    <div class="col-6 my-auto pt-5 second-option">
+        <a href="/signup/logout/">
+                {% csrf_token %}
+                <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
+                    class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+        </a>
+    </div>
+</div>
+<script>
+    var currentFirstName = '{% if user.first_name is None %}empty{% else %}{{ user.first_name }}{% endif %}'
+    var currentLastName = '{% if user.last_name is None %}empty{% else %}{{ user.last_name }}{% endif %}'
+    var currentEmail = '{{ user.email }}'
+
+    var emailField = document.getElementById('id_email')
+    var firstNameField = document.getElementById('id_first_name')
+    var lastNameField = document.getElementById('id_last_name')
+
+    window.onload = () => {
+        emailField.placeholder = "Email(current: " + currentEmail + ")"
+        emailField.value = ''
+        firstNameField.placeholder = "First name(current: " + currentFirstName + ")"
+        firstNameField.value = ''
+        lastNameField.placeholder = "Last name(current: " + currentLastName + ")"
+        lastNameField.value = ''
+    }
+</script>
