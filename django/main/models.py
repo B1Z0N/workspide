@@ -132,7 +132,6 @@ class Resume(models.Model):
     __str__ = print_ad_info
 
 
-
 class SkillForVacancy(models.Model):
     vacancy_id = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     text = models.CharField(max_length=100)

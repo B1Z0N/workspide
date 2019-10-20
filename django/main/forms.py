@@ -2,8 +2,9 @@ from django import forms
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm as DefaultUserChangeForm
 from main.models import User
+
 
 class UserCreationForm(UserCreationForm):
     """A form for creating new users. Includes all the required
@@ -16,7 +17,7 @@ class UserCreationForm(UserCreationForm):
         fields = ('email', )
 
 
-class UserChangeForm(UserChangeForm):
+class UserChangeForm(DefaultUserChangeForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
@@ -31,3 +32,34 @@ class UserChangeForm(UserChangeForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial['password']
+
+
+
+class CustomUserChangeForm(DefaultUserChangeForm):
+    """A form for updating users FROM ACCOUNT SETTINGS PAGE"""
+
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name' )
+
+    # def clean_password(self):
+    #     # Regardless of what the user provides, return the initial value.
+    #     # This is done here, rather than on the field, because the
+    #     # field does not have access to the initial value
+    #     return self.initial['password']
+
+class EmailChangeForm(forms.ModelForm):
+    email = forms.EmailField(label="Email")
+
+    class Meta:
+        model = User
+        fields = ('email', )
+
+
+class NameChangeForm(forms.ModelForm):
+    first_name = forms.CharField(label="First name", max_length=30)
+    last_name = forms.CharField(label="Last name", max_length=30)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', )

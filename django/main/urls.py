@@ -10,7 +10,7 @@ urlpatterns = [
     path('signup/register/', account_views.register),
     # path('logout/', ),
     path('signup/', include('django.contrib.auth.urls')),
-    path('account/', TemplateView.as_view(template_name='account.html')),
+    path('account/', account_views.account),
 
     path('search/<str:_type>/<str:_text>/', search_views.search),
     path('search/<str:_type>/', search_views.empty_search),
