@@ -15,6 +15,13 @@ class UserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email', )
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            self.add_error('email', 'Email already exists')
+            return self.fields['email'].initial
+        return email
 
 
 class UserChangeForm(DefaultUserChangeForm):
@@ -40,6 +47,13 @@ class EmailChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email', )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            self.add_error('email', 'Email already exists')
+            return self.initial['email']
+        return email
 
 
 class NameChangeForm(forms.ModelForm):
