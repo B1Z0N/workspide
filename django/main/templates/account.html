@@ -7,85 +7,21 @@ Account
 
 
 {% block content %}
-{% if not user.is_authenticated %}
-{% include "errors/not_authorized_error.html" %}
-{% else %}
-<div class="row justify-content-around my-auto py-auto">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 my-auto">
-        <a href="/">
-            {% load static %}
-            <img src="{% static "img/logo5.png" %}" width="250" />
-        </a>
-    </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 rounded logging-in" style="background-color: #292826;">
-        <div class="container significant-info">
-            <p>
-                <h3 class="text-center mt-5 operation-title">Account settings</h3>
-            </p>
-            <div class="container">
-                    {% load widget_tweaks %}
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <div class="form-group text-center mt-4 justify-content-around" id="user-data">
-                            {{ email_form.email|add_class:"form-control mt-3" }}
-                            <input name="email_btn" value="Save" type="submit" class="btn btn-primary btn-lg mt-4 mb-5 significant-button" />
-                            {% comment %} {{ email_form.non_field_errors }} {% endcomment %}
-                        </div>
-                    </form>
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <div class="form-group text-center mt-4 justify-content-around" id="user-data">
-                            {{ name_form.first_name|add_class:"form-control mt-3" }}
-                            {{ name_form.last_name|add_class:"form-control mt-3" }}
-                            <input name="name_btn" value="Save" type="submit" class="btn btn-primary btn-lg mt-4 mb-5 significant-button" />
-                        </div> 
-                    </form>
-            </div>
-        </div>
-        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
-            <h3>Resume</h3>
-        </div>
-        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
-            <h3>Vacancies</h3>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto pt-5 second-option">
-        <a href="#">
-            <button type="button" class="btn btn-primary significant-button"
-                style="border-color: #292826; color: #292826;">
-                <h1 class="operation-title">Delete account</h1>
-            </button>
-        </a>
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 my-auto pt-5 second-option">
-        <a href="/signup/logout/">
-            <button type="button" class="btn btn-primary significant-button"
-                style="border-color: #292826; color: #292826;" onclick="replaceWithAlternateWay()">
-                <h1 class="operation-title">Logout</h1>
-            </button>
-        </a>
-    </div>
-</div>
-{% endif %}
-<script>
-    var currentFirstName = '{% if user.first_name is None %}empty{% else %}{{ user.first_name }}{% endif %}'
-    var currentLastName = '{% if user.last_name is None %}empty{% else %}{{ user.last_name }}{% endif %}'
-    var currentEmail = '{{ user.email }}'
-
-    var emailField = document.getElementById('id_email')
-    var firstNameField = document.getElementById('id_first_name')
-    var lastNameField = document.getElementById('id_last_name')
-
-    window.onload = () => {
-        emailField.placeholder = "Email(current: " + currentEmail + ")"
-        emailField.value = ''
-        firstNameField.placeholder = "First name(current: " + currentFirstName + ")"
-        firstNameField.value = ''
-        lastNameField.placeholder = "Last name(current: " + currentLastName + ")"
-        lastNameField.value = ''
-    }
-</script>
-    
+    {% if not user.is_authenticated %}
+        {% include "alerts/not_authorized_error.html" %}
+    {% else %}
+        {% if email_success %}
+            {% include "alerts/email_change.html" %}
+        {% else %}
+            {% if pass_reset %}
+                {% include "alerts/pass_reset.html" %}
+            {% else %}
+                {% if delete_account %}
+                    {% include "alerts/delete_account.html" %}
+                {% else %}
+                    {% include "account_impl.html" %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
 {% endblock %}
