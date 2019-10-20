@@ -4,10 +4,9 @@ from django.contrib.auth import logout as logout_user
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 
-from .forms import UserCreationForm as RegisterForm, CustomUserChangeForm, \
-            EmailChangeForm, NameChangeForm, UserChangeForm
+from .forms import UserCreationForm as RegisterForm, EmailChangeForm, NameChangeForm
 
 
 def register(request):
@@ -26,52 +25,41 @@ def register(request):
 
 
 def account(request):
+    email_success = False
+    pass_reset = request.method == 'POST' and 'pass_reset_btn' in request.POST
+    delete_account = request.method == 'POST' and 'delete_account_btn' in request.POST
+
     if request.method == 'POST' and 'email_btn' in request.POST:
         email_form = EmailChangeForm(request.POST, instance=request.user)
         if email_form.is_valid():
-            email_form.save()
-        elif not email_form.data['email']:
-            email_form = EmailChangeForm(instance=request.user)
-            email_form.save()
+            email_form.save() # TODO: uncomment when implement email confirmation
+            email_success = True
     else:
         email_form = EmailChangeForm()
+
+    if request.method == 'POST' and 'name_reset_btn' in request.POST:
+        instance = NameChangeForm(request.POST, instance=request.user).save(commit=False)
+        instance.first_name = instance.last_name = None
+        instance.save()
+
     if request.method == 'POST' and 'name_btn' in request.POST:
         name_form = NameChangeForm(request.POST, instance=request.user)
         if name_form.is_valid():
-            name_form.save()
-        elif not name_form.data['email']:
-            name_form = NameChangeForm(instance=request.user)
-            name_form.save()
+            instance = name_form.save(commit=False)
+            if not instance.first_name:
+                instance.first_name = name_form.initial['first_name']
+            if not instance.last_name:
+                instance.last_name = name_form.initial['last_name']
+            instance.save()
+            name_form = NameChangeForm(instance=instance)
     else:
         name_form = NameChangeForm()
 
     return render(request, 'account.html', {
         'email_form' : email_form,
         'name_form' : name_form,
+        'email_success' : email_success,
+        'pass_reset' : pass_reset,
+        'delete_account' : delete_account,
     })
 
-
-# def account(request):
-#     if request.method == 'POST':
-#         form = CustomUserChangeForm(request.POST, instance=request.user)
-#         if form.is_valid():
-#             initial_email = form.initial['email']
-#             initial_first_name = form.initial['first_name']
-#             initial_last_name = form.initial['last_name']
-#             raise Http404(' '.join[initial_email, initial_first_name, initial_last_name])
-
-#             instance = form.save(commit=False)
-
-#             if not form.cleaned_data['email']:
-#                 instance.email = initial_email
-#             if not form.cleaned_data['first_name']:
-#                 instance.first_name = initial_first_name
-#             if not form.cleaned_data['last_name']:
-#                 instance.last_name = initial_last_name
-#             instance.save()
-#     else:
-#         form = CustomUserChangeForm()
-    
-#     return render(request, 'account.html', {
-#         'form' : form,
-#     })
