@@ -19,12 +19,28 @@
                         <input name="email_btn" value="Save" type="submit"
                             class="btn btn-primary m-3 btn-lg significant-button" />
                     </div>
+                    {% if email_form.errors %}
+                        {{ email_form.non_field_errors }}
+                        <ul>
+                            {% for field in email_form %}
+                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </form>
                 <form class="form" method="post">
                     {% csrf_token %}
                     <div class="form-group text-center mt-4 justify-content-around" id="user-data">
                         {{ name_form.first_name|add_class:"form-control mt-3" }}
                         {{ name_form.last_name|add_class:"form-control mt-3" }}
+                        {% if email_form.errors %}
+                        {{ name_form.non_field_errors }}
+                        <ul>
+                            {% for field in name_form %}
+                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                         <div class="row">
                             <div class="col-6">
                                 <input name="name_btn" value="Save" type="submit"

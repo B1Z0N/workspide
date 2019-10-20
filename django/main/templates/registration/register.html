@@ -7,9 +7,8 @@ Register
 
 
 {% block content %}
-
 {% if user.is_authenticated %}
-    {% include "errors/already_authorized_error.html" %}
+    {% include "alerts/already_authorized.html" %}
 {% else %}
     <div class="row justify-content-around py-auto after-small-logo">
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed"
@@ -27,6 +26,14 @@ Register
                         {{ form.password1|add_class:"form-control mt-4"|attr:"placeholder:Password" }}
                         {{ form.password2|add_class:"form-control mt-4"|attr:"placeholder:Repeat password" }}
                         <input value="Submit" type="submit" class="btn btn-primary mt-4 mb-5 significant-button" />
+                        {% if form.errors %}
+                        {{ form.non_field_errors }}
+                        <ul>
+                            {% for field in form %}
+                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     </div>
                 </form>
             </div>

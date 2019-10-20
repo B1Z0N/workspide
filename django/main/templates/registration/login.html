@@ -8,7 +8,7 @@ Login
 
 {% block content %}
 {% if user.is_authenticated %}
-{% include "errors/already_authorized_error.html" %}
+{% include "alerts/already_authorized.html" %}
 {% else %}
 <div class="row justify-content-around py-auto after-small-logo">
     <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed"
