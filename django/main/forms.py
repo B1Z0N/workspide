@@ -34,20 +34,6 @@ class UserChangeForm(DefaultUserChangeForm):
         return self.initial['password']
 
 
-
-class CustomUserChangeForm(DefaultUserChangeForm):
-    """A form for updating users FROM ACCOUNT SETTINGS PAGE"""
-
-    class Meta:
-        model = User
-        fields = ('email', 'first_name', 'last_name' )
-
-    # def clean_password(self):
-    #     # Regardless of what the user provides, return the initial value.
-    #     # This is done here, rather than on the field, because the
-    #     # field does not have access to the initial value
-    #     return self.initial['password']
-
 class EmailChangeForm(forms.ModelForm):
     email = forms.EmailField(label="Email")
 
@@ -57,8 +43,8 @@ class EmailChangeForm(forms.ModelForm):
 
 
 class NameChangeForm(forms.ModelForm):
-    first_name = forms.CharField(label="First name", max_length=30)
-    last_name = forms.CharField(label="Last name", max_length=30)
+    first_name = forms.CharField(label="First name", max_length=30, required=False)
+    last_name = forms.CharField(label="Last name", max_length=30, required=False)
 
     class Meta:
         model = User
