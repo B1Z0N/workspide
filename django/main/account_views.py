@@ -7,9 +7,11 @@ from django.views.generic.edit import CreateView
 from django.http import Http404, HttpResponseRedirect
 
 from .forms import UserCreationForm as RegisterForm, EmailChangeForm, NameChangeForm
+from .models import User
 
 
 def register(request):
+    form = RegisterForm()
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -19,8 +21,7 @@ def register(request):
             user = authenticate(email=email, password=raw_password)
             login(request, user)
             return redirect('/')
-    else:
-        form = RegisterForm()
+
     return render(request, 'registration/register.html', {'form': form})
 
 
@@ -28,14 +29,14 @@ def account(request):
     email_success = False
     pass_reset = request.method == 'POST' and 'pass_reset_btn' in request.POST
     delete_account = request.method == 'POST' and 'delete_account_btn' in request.POST
+    email_form = EmailChangeForm(instance=request.user)
+    name_form = NameChangeForm(instance=request.user)
 
     if request.method == 'POST' and 'email_btn' in request.POST:
         email_form = EmailChangeForm(request.POST, instance=request.user)
         if email_form.is_valid():
-            email_form.save() # TODO: uncomment when implement email confirmation
+            email_form.save()
             email_success = True
-    else:
-        email_form = EmailChangeForm()
 
     if request.method == 'POST' and 'name_reset_btn' in request.POST:
         instance = NameChangeForm(request.POST, instance=request.user).save(commit=False)
@@ -52,8 +53,6 @@ def account(request):
                 instance.last_name = name_form.initial['last_name']
             instance.save()
             name_form = NameChangeForm(instance=instance)
-    else:
-        name_form = NameChangeForm()
 
     return render(request, 'account.html', {
         'email_form' : email_form,
