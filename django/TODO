@@ -1,0 +1,23 @@
+TODO:
+    clean project
+        clean account_views
+        reorder url.py
+        rename files and variables to suit their functionality and for consistency
+        prettify emails
+    add functionality
+        password change form
+            add template
+            add view
+        email change form
+            add model to listen for mail change
+            add view
+            add template
+    
+    ... ... ...
+    
+    customize models to be concise and generic
+    add resume panel
+    add resume page
+    add feed
+    add search
+    
