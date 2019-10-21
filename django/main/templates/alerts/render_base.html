@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+<!-- Extend base from ../ directory -->
+
+{% block title %}
+    {{ reponse_error_title }}
+{% endblock %}
+
+{% block content %}
+<div class="container custom-shadowed rounded p-5 m-5 text-center mx-auto"
+    style="background-color:#292826; color: rgb(201, 167, 58);">
+    <h1>
+        {% block alert %}
+        <h1>
+            {{ response_error_text }}
+        </h1>
+        {% endblock %}
+    </h1>
+</div>
+{% endblock %}
