@@ -7,8 +7,9 @@ from . import search_views, account_views
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html')),
     
-    path('signup/register/', account_views.signup, name='register'),
-    path('activate/<str:uid>/<str:token>', account_views.Activate.as_view(), name='activate'),
+    path('signup/register/', account_views.register, name='register'),
+    path('signup/activate_mail/<str:uidb64>/<str:token>', account_views.activate_mail, name='activate'),
+    path('account/delete/<str:uidb64>/<str:token>', account_views.delete_account, name='activate'),
     path('signup/', include('django.contrib.auth.urls')),
     path('account/', account_views.account),
 
