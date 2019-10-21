@@ -19,8 +19,8 @@ Register
                 </p>
                 <form class="form" method="post">
                     {% load widget_tweaks %}
-                    {% csrf_token %}
                     <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+                        {% csrf_token %}
                         <!-- {{ form.non_field_errors }} -->
                         {{ form.email|add_class:"form-control mt-4"|attr:"placeholder:Email" }}
                         {{ form.password1|add_class:"form-control mt-4"|attr:"placeholder:Password" }}

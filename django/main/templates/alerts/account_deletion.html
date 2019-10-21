@@ -1,0 +1,12 @@
+{% extends "alerts/render_base.html" %}
+ 
+{% block alert %}
+    <form class="form" method="post">
+        {% load widget_tweaks %}
+        <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+            {% csrf_token %}
+            <!-- {{ form.non_field_errors }} -->
+            <input name="account_delete_btn" value="Delete account forever" type="submit" class="btn btn-danger mt-4 mb-5 significant-button" />
+        </div>
+    </form>
+{% endblock %}
