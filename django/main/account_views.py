@@ -17,11 +17,12 @@ from django.shortcuts import render, redirect
 # imports for creating email messaging
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
-from django.core.mail import EmailMessage
 
 # handwritten functionality imports
 from .forms import UserCreationForm as RegisterForm, EmailChangeForm, NameChangeForm
-from .tokens import account_activation_token, account_deletion_token, password_change_token
+from .email import account_activation_token, account_deletion_token, \
+    password_change_token, send_mail
+
 
 
 User = get_user_model()
@@ -37,15 +38,21 @@ def register(request):
             user.save()
 
             # Send an email to the user with the token:
-            mail_subject = 'Activate your account.'
             current_site = get_current_site(request)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = account_activation_token.make_token(user)
-            activation_link = f"{current_site}/signup/activate_mail/{uid}/{token}"
-            message = "Hello from WorkSpide, activate your account: \n {0}".format(activation_link)
-            to_email = form.cleaned_data['email']
-            email = EmailMessage(mail_subject, message, to=[to_email])
-            email.send()
+            send_mail(
+                subject='Activate your account',
+                message=\
+                """
+                We are happy to see you aboard!
+                Click on the button down, so we can start doing our job.
+                And you will find yours!
+                """, 
+                link=f"http://{current_site}/signup/activate_mail/{uid}/{token}", 
+                link_text="Activate account",
+                to_email=[form.cleaned_data['email']],
+            )
         
             return render(request, 'alerts/render_base.html', { 
                 'response_error_text' : 'Please confirm your email address to complete the registration',
@@ -65,15 +72,21 @@ def account(request):
     name_form = NameChangeForm(instance=request.user)
 
     if delete_account:
-            mail_subject = 'Delete your account.'
             current_site = get_current_site(request)
             uid = urlsafe_base64_encode(force_bytes(request.user.pk))
             token = account_deletion_token.make_token(request.user)
-            activation_link = f"{current_site}/account/delete/{uid}/{token}"
-            message = "Hello from WorkSpide, go here to delete account: \n {0}".format(activation_link)
-            to_email = request.user.email
-            email = EmailMessage(mail_subject, message, to=[to_email])
-            email.send()
+            send_mail(
+                subject='Submit your account deletion',
+                message=\
+                """
+                We are sorry to hear that you are leaving us, 
+                but if that's what you wish, let it be. 
+                Just click on that button down there.
+                """, 
+                link=f"http://{current_site}/account/delete/{uid}/{token}", 
+                link_text="Delete account",
+                to_email=[request.user.email]
+            )
 
     if request.method == 'POST' and 'email_btn' in request.POST:
         email_form = EmailChangeForm(request.POST, instance=request.user)
@@ -121,7 +134,7 @@ def activate_mail(request, uidb64, token):
         return render(request, 'alerts/render_base.html', {
             'response_error_title' : 'Successful confirmation',
             'response_error_text' : 
-                'You are now registered with {}, <a href="/">account page</a>'.format(user.email),
+                'You are now registered with email: {}'.format(user.email),
         })
     else:
         return render(request, 'alerts/render_base.html', {
