@@ -1,12 +1,11 @@
 """ 
     File with views for handling: 
         1. Registration, 
-        2. Login
-        3. Account settings
-        4. Account activation
-        5. Account deletion
-        6. Password change
-        7. Email change
+        2. Account settings
+        3. Account activation
+        4. Account deletion
+        5. Password change
+        6. Email change
 """
 
 # generals imports for views
@@ -26,6 +25,36 @@ from .tokens import account_activation_token, account_deletion_token, password_c
 
 
 User = get_user_model()
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            # Create an inactive user with no password:
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+
+            # Send an email to the user with the token:
+            mail_subject = 'Activate your account.'
+            current_site = get_current_site(request)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = account_activation_token.make_token(user)
+            activation_link = f"{current_site}/signup/activate_mail/{uid}/{token}"
+            message = "Hello from WorkSpide, activate your account: \n {0}".format(activation_link)
+            to_email = form.cleaned_data['email']
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            email.send()
+        
+            return render(request, 'alerts/render_base.html', { 
+                'response_error_text' : 'Please confirm your email address to complete the registration',
+                'response_error_title' : 'Email confirmation'
+            })
+    else:
+        form = RegisterForm()
+    
+    return render(request, 'registration/register.html', {'form': form})
 
 
 def account(request):
@@ -76,35 +105,6 @@ def account(request):
         'delete_account' : delete_account,
     })
 
-
-def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            # Create an inactive user with no password:
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-
-            # Send an email to the user with the token:
-            mail_subject = 'Activate your account.'
-            current_site = get_current_site(request)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = account_activation_token.make_token(user)
-            activation_link = f"{current_site}/signup/activate_mail/{uid}/{token}"
-            message = "Hello from WorkSpide, activate your account: \n {0}".format(activation_link)
-            to_email = form.cleaned_data['email']
-            email = EmailMessage(mail_subject, message, to=[to_email])
-            email.send()
-        
-            return render(request, 'alerts/render_base.html', { 
-                'response_error_text' : 'Please confirm your email address to complete the registration',
-                'response_error_title' : 'Email confirmation'
-            })
-    else:
-        form = RegisterForm()
-    
-    return render(request, 'registration/register.html', {'form': form})
 
 
 def activate_mail(request, uidb64, token):
