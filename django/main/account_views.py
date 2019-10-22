@@ -1,46 +1,31 @@
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.views import LoginView
-from django.contrib.auth import logout as logout_user
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from django.http import Http404, HttpResponseRedirect
+""" 
+    File with views for handling: 
+        1. Registration, 
+        2. Login
+        3. Account settings
+        4. Account activation
+        5. Account deletion
+        6. Password change
+        7. Email change
+"""
 
-from django.views import View
-from django.http import HttpResponse
-from django.shortcuts import render
-from .forms import UserCreationForm
+# generals imports for views
+from django.contrib.auth import get_user_model, login, authenticate, update_session_auth_hash
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from .tokens import account_activation_token
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, redirect
+
+# imports for creating email messaging
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage
 
+# handwritten functionality imports
 from .forms import UserCreationForm as RegisterForm, EmailChangeForm, NameChangeForm
-
-from django.contrib.auth import get_user_model, login, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import account_activation_token, account_deletion_token, password_change_token
 
 
 User = get_user_model()
-
-
-# def register(request):
-#     form = RegisterForm()
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             email = form.cleaned_data.get('email')
-#             raw_password = form.cleaned_data.get('password1')
-#             user = authenticate(email=email, password=raw_password)
-#             login(request, user)
-#             return redirect('/')
-
-#     return render(request, 'registration/register.html', {'form': form})
 
 
 def account(request):
