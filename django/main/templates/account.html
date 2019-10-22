@@ -14,7 +14,7 @@ Account
             {% include "alerts/email_change.html" %}
         {% else %}
             {% if pass_reset %}
-                {% include "alerts/pass_reset.html" %}
+                {% include "activations/password_reset.html" %}
             {% else %}
                 {% if delete_account %}
                     {% include "alerts/delete_account.html" %}

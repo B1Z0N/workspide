@@ -20,12 +20,12 @@
                             class="btn btn-primary m-3 btn-lg significant-button" />
                     </div>
                     {% if email_form.errors %}
-                        {{ email_form.non_field_errors }}
-                        <ul>
-                            {% for field in email_form %}
-                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
-                            {% endfor %}
-                        </ul>
+                    {{ email_form.non_field_errors }}
+                    <ul>
+                        {% for field in email_form %}
+                        {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                        {% endfor %}
+                    </ul>
                     {% endif %}
                 </form>
                 <form class="form" method="post">
@@ -47,16 +47,17 @@
                                     class="btn btn-primary m-3 btn-lg significant-button" />
                             </div>
                             <div class="col-6">
-                                <input name="name_reset_btn" value="Reset" type="submit"
+                                <input name="name_change_btn" value="change" type="submit"
                                     class="btn btn-primary m-3 btn-lg significant-button" />
                             </div>
                         </div>
                     </div>
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <input name="pass_reset_btn" value="Reset password" type="submit"
-                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                    </form>
+                </form>
+                <form class="form" method="post">
+                    {% csrf_token %}
+                    <input name="pass_change_btn" value="Change password" type="submit"
+                        class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                </form>
             </div>
         </div>
         <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
@@ -77,9 +78,9 @@
     </div>
     <div class="col-6 my-auto pt-5 second-option">
         <a href="/signup/logout/">
-                {% csrf_token %}
-                <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
-                    class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+            {% csrf_token %}
+            <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
+                class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
         </a>
     </div>
 </div>

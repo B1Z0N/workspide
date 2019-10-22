@@ -40,12 +40,11 @@ class MailSender:
     def __init__(self, template_path='emails/base.html'):
             self.EMAIL_TEMPLATE = get_template(template_path)
 
-    def __call__(self, subject, message, link, link_text, to_email):
+    def __call__(self, subject, message, link, to_email):
         message = self.EMAIL_TEMPLATE.render(
             {
                 'message' : message, 
                 'link' : link, 
-                'link_text' : link_text,
             }
         )
         email = EmailMultiAlternatives(subject, '', settings.EMAIL_HOST_USER, [to_email])

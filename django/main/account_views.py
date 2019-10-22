@@ -13,16 +13,17 @@ from django.contrib.auth import get_user_model, login, authenticate, update_sess
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.contrib.auth.views import PasswordChangeForm, PasswordResetForm
 
 # imports for creating email messaging
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
+from django.conf import settings
 
 # handwritten functionality imports
-from .forms import UserCreationForm as RegisterForm, EmailChangeForm, NameChangeForm
-from .email import account_activation_token, account_deletion_token, \
-    password_change_token, send_mail
-
+from .forms import UserCreationForm as RegisterForm, EmailChangeForm,\
+    NameChangeForm
+from .email import account_activation_token, account_deletion_token, send_mail
 
 
 User = get_user_model()
@@ -43,50 +44,48 @@ def register(request):
             token = account_activation_token.make_token(user)
             send_mail(
                 subject='Activate your account',
-                message=\
-                """
+                message="""
                 We are happy to see you aboard!
-                Click on the button down, so we can start doing our job.
+                Click on the link down, so we can start doing our job.
                 And you will find yours!
-                """, 
-                link=f"http://{current_site}/signup/activate_mail/{uid}/{token}", 
-                link_text="Activate account",
+                """,
+                link=f"http://{current_site}/signup/activate_mail/{uid}/{token}",
                 to_email=[form.cleaned_data['email']],
             )
-        
-            return render(request, 'alerts/render_base.html', { 
-                'response_error_text' : 'Please confirm your email address to complete the registration',
-                'response_error_title' : 'Email confirmation'
+
+            return render(request, 'alerts/render_base.html', {
+                'response_error_text': 'Please confirm your email address to complete the registration',
+                'response_error_title': 'Email confirmation'
             })
     else:
         form = RegisterForm()
-    
+
     return render(request, 'registration/register.html', {'form': form})
 
 
 def account(request):
     email_success = False
-    pass_reset = request.method == 'POST' and 'pass_reset_btn' in request.POST
+    pass_change = request.method == 'POST' and 'pass_change_btn' in request.POST
     delete_account = request.method == 'POST' and 'delete_account_btn' in request.POST
     email_form = EmailChangeForm(instance=request.user)
     name_form = NameChangeForm(instance=request.user)
 
+    if pass_change:
+        return redirect('/account/password_change')
     if delete_account:
-            current_site = get_current_site(request)
-            uid = urlsafe_base64_encode(force_bytes(request.user.pk))
-            token = account_deletion_token.make_token(request.user)
-            send_mail(
-                subject='Submit your account deletion',
-                message=\
-                """
+        current_site = get_current_site(request)
+        uid = urlsafe_base64_encode(force_bytes(request.user.pk))
+        token = account_deletion_token.make_token(request.user)
+        send_mail(
+            subject='Submit your account deletion',
+            message="""
                 We are sorry to hear that you are leaving us, 
                 but if that's what you wish, let it be. 
-                Just click on that button down there.
-                """, 
-                link=f"http://{current_site}/account/delete/{uid}/{token}", 
-                link_text="Delete account",
-                to_email=[request.user.email]
-            )
+                Just click on that link down there.
+                """,
+            link=f"http://{current_site}/account/delete/{uid}/{token}",
+            to_email=[request.user.email]
+        )
 
     if request.method == 'POST' and 'email_btn' in request.POST:
         email_form = EmailChangeForm(request.POST, instance=request.user)
@@ -95,7 +94,8 @@ def account(request):
             email_success = True
 
     if request.method == 'POST' and 'name_reset_btn' in request.POST:
-        instance = NameChangeForm(request.POST, instance=request.user).save(commit=False)
+        instance = NameChangeForm(
+            request.POST, instance=request.user).save(commit=False)
         instance.first_name = instance.last_name = None
         instance.save()
 
@@ -111,13 +111,12 @@ def account(request):
             name_form = NameChangeForm(instance=instance)
 
     return render(request, 'account.html', {
-        'email_form' : email_form,
-        'name_form' : name_form,
-        'email_success' : email_success,
-        'pass_reset' : pass_reset,
-        'delete_account' : delete_account,
+        'email_form': email_form,
+        'name_form': name_form,
+        'email_success': email_success,
+        'pass_change': pass_change,
+        'delete_account': delete_account,
     })
-
 
 
 def activate_mail(request, uidb64, token):
@@ -132,14 +131,14 @@ def activate_mail(request, uidb64, token):
         user.save()
         login(request, user)
         return render(request, 'alerts/render_base.html', {
-            'response_error_title' : 'Successful confirmation',
-            'response_error_text' : 
+            'response_error_title': 'Successful confirmation',
+            'response_error_text':
                 'You are now registered with email: {}'.format(user.email),
         })
     else:
         return render(request, 'alerts/render_base.html', {
-            'response_error_title' : 'Confirmation failure',
-            'response_error_text' : 'Oops, activation link is invalid',
+            'response_error_title': 'Confirmation failure',
+            'response_error_text': 'Oops, activation link is invalid',
         })
 
 
@@ -150,25 +149,37 @@ def delete_account(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
-    if user is None:
+    if user is None or not account_deletion_token.check_token(user, token):
         return render(request, 'alerts/render_base.html', {
-                'response_error_title' : 'Deletion failure',
-                'response_error_text' : 'Oops, acc deletion link is invalid',
-            })
+            'response_error_title': 'Deletion failure',
+            'response_error_text': 'Oops, acc deletion link is invalid',
+        })
 
     if request.method == 'POST' and 'account_delete_btn' in request.POST:
         user.delete()
         return render(request, 'alerts/render_base.html', {
-            'response_error_title' : 'Successfull deletion',
-            'response_error_text' : 'We`re sorry to see you going, go your way, good luck..',
+            'response_error_title': 'Successfull deletion',
+            'response_error_text': 'We`re sorry to see you going, go your way, good luck..',
         })
-    
-    if request.method == 'GET':
-        if user is not None and account_deletion_token.check_token(user, token):
-            # activate user and login:
-            return render(request, 'alerts/account_deletion.html', {
-                'response_error_title' : '',
-                'response_error_text' : 
-                    'You are now registered with {}, <a href="/">account page</a>'.format(user.email),
-            })
 
+    return render(request, 'activations/account_deletion.html', {})
+
+
+def password_change(request):
+    if request.method == 'POST':
+        if 'change_password_btn' in request.POST:
+            form = PasswordChangeForm(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+
+                return render(request, 'alerts/render_base.html', {
+                    'response_error_text': 'Successful password change',
+                    'response_error_title': 'Success'
+                })
+        elif 'reset_password_btn' in request.POST:
+            redirect('/signup/password_reset')
+    else:
+        form = PasswordChangeForm(user=request.user,)
+
+    return render(request, 'activations/password_change.html', {'form': form})

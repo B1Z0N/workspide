@@ -1,9 +1,4 @@
 TODO:
-    clean project
-        clean account_views
-        reorder url.py
-        rename files and variables to suit their functionality and for consistency
-        prettify emails
     add functionality
         password change form
             add template
