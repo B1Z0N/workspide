@@ -45,18 +45,14 @@ class UserChangeForm(DefaultUserChangeForm):
         return self.initial['password']
 
 
-class EmailChangeForm(forms.ModelForm):
+class EmailChangeForm(forms.Form):
     email = forms.EmailField(label="Email")
 
-    class Meta:
-        model = User
-        fields = ('email', )
-
     def clean_email(self):
-        email = self.email
+        email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            self.add_error('email', 'Email already exists')
-            return self.initial['email']
+            error = f'Email "{email}" is already in use.'
+            self.add_error('email', error)
         return email
 
 
