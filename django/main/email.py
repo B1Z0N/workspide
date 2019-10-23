@@ -16,6 +16,7 @@ class TokenLinkType(enum.Enum):
     mail_activation = 1
     account_deletion = 2
     password_change = 3
+    email_change = 4
 
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -33,6 +34,7 @@ class TokenGenerator(PasswordResetTokenGenerator):
 account_activation_token = TokenGenerator(TokenLinkType.mail_activation)
 account_deletion_token = TokenGenerator(TokenLinkType.account_deletion)
 password_change_token = TokenGenerator(TokenLinkType.password_change)
+email_change_token = TokenGenerator(TokenLinkType.email_change)
 
 
 class MailSender:
