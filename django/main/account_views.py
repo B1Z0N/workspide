@@ -23,7 +23,8 @@ from django.conf import settings
 # handwritten functionality imports
 from .forms import UserCreationForm as RegisterForm, EmailChangeForm,\
     NameChangeForm
-from .email import account_activation_token, account_deletion_token, send_mail
+from .email import account_activation_token, account_deletion_token, \
+    email_change_token, send_mail
 
 
 User = get_user_model()
@@ -67,11 +68,13 @@ def account(request):
     email_success = False
     pass_change = request.method == 'POST' and 'pass_change_btn' in request.POST
     delete_account = request.method == 'POST' and 'delete_account_btn' in request.POST
-    email_form = EmailChangeForm(instance=request.user)
+    email_change = request.method == 'POST' and 'email_change_btn' in request.POST
+
     name_form = NameChangeForm(instance=request.user)
 
     if pass_change:
         return redirect('/account/password_change')
+
     if delete_account:
         current_site = get_current_site(request)
         uid = urlsafe_base64_encode(force_bytes(request.user.pk))
@@ -86,12 +89,29 @@ def account(request):
             link=f"http://{current_site}/account/delete/{uid}/{token}",
             to_email=[request.user.email]
         )
+        
+    if email_change:
+        current_site = get_current_site(request)
+        uid = urlsafe_base64_encode(force_bytes(request.user.pk))
+        token = email_change_token.make_token(request.user)
+        send_mail(
+            subject='Submit your email change',
+            message="""
+                So you want to change email, here is what you need to do.
+                First open link below in this letter, that we've sent you 
+                to your old(this) mail, then open link in your new mail and 
+                we're done! If it's not you, who wants to change mail, we'd
+                recommend you to reset password on the site.
+                """,
+            link=f"http://{current_site}/account/email_change/{uid}/{token}",
+            to_email=[request.user.email]
+        )
 
-    if request.method == 'POST' and 'email_btn' in request.POST:
-        email_form = EmailChangeForm(request.POST, instance=request.user)
-        if email_form.is_valid():
-            email_form.save()
-            email_success = True
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title' : 'Email change',
+            'response_error_text' : 'We`ve sent email change email to your email =)', 
+        })
+        
 
     if request.method == 'POST' and 'name_reset_btn' in request.POST:
         instance = NameChangeForm(
@@ -111,7 +131,6 @@ def account(request):
             name_form = NameChangeForm(instance=instance)
 
     return render(request, 'account.html', {
-        'email_form': email_form,
         'name_form': name_form,
         'email_success': email_success,
         'pass_change': pass_change,
@@ -183,3 +202,70 @@ def password_change(request):
         form = PasswordChangeForm(user=request.user,)
 
     return render(request, 'activations/password_change.html', {'form': form})
+
+
+def email_change(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64)
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is None or not email_change_token.check_token(user, token):
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title': 'Email change failure',
+            'response_error_text': 'Oops, email change link is invalid',
+        })
+
+    if request.method == 'POST':
+        if 'email_change_btn' in request.POST:
+            form = EmailChangeForm(request.POST)
+            if form.is_valid():
+                current_site = get_current_site(request)
+                emailb64 = urlsafe_base64_encode(force_bytes(form.cleaned_data['email']))
+                token = email_change_token.make_token(request.user)
+                send_mail(
+                    subject='Submit your email change',
+                    message="""
+                        Someone wants to change their email account to this one,
+                        if it is you, just click the link, and we are okay.
+                        If no, just ignore this.
+                        """,
+                    link=f"http://{current_site}/account/email_change_complete/{uidb64}/{emailb64}/{token}",
+                    to_email=[form.cleaned_data['email']]
+                )
+                return render(request, 'alerts/render_base.html', {
+                    'response_error_text': 'Check your mailbox on new mail',
+                    'response_error_title': 'Submit email change',
+                })
+        elif 'reset_password_btn' in request.POST:
+            redirect('/signup/password_reset')
+    else:
+        form = EmailChangeForm()
+
+    return render(request, 'activations/email_change.html', {'form': form})
+
+
+def email_change_complete(request, uidb64, emailb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64)
+        email = urlsafe_base64_decode(emailb64).decode("utf-8")
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is None or not email_change_token.check_token(user, token):
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title': 'Email change failure',
+            'response_error_text': 'Oops, email change link is invalid',
+        })
+
+    if request.method == 'POST':
+        user.email = email
+        user.save()
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title': 'Successfull email change',
+            'response_error_text': f'Successfull email change to {email}',
+        })
+
+    return render(request, 'activations/email_change_complete.html', {})
