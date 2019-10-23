@@ -28,7 +28,9 @@ urlpatterns = [
     
     path('signup/activate_mail/<str:uidb64>/<str:token>', account_views.activate_mail, name='activate_main'),
     path('account/delete/<str:uidb64>/<str:token>', account_views.delete_account, name='submit_deletion'),
+    path('account/email_change_complete/<str:uidb64>/<str:emailb64>/<str:token>', account_views.email_change_complete, name='submit_deletion'),
     path('account/password_change/', unauthorized_access(account_views.password_change), name='password_change'),
+    path('account/email_change/<str:uidb64>/<str:token>', account_views.email_change, name='email_change'),
     path('account/password_reset/', auth_views.PasswordResetView.as_view(
         subject_template_name='emails/password_reset_subject.txt',
         html_email_template_name='emails/password_reset.html',
