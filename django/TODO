@@ -1,10 +1,6 @@
 TODO:
     add functionality
-        password change form
-            add template
-            add view
         email change form
-            add model to listen for mail change
             add view
             add template
     
