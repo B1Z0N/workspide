@@ -1,0 +1,14 @@
+{% extends "alerts/render_base.html" %}
+ 
+{% block alert %}
+    <h1>
+        <form class="form" method="post">
+            {% load widget_tweaks %}
+            <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+                {% csrf_token %}
+                <!-- {{ form.non_field_errors }} -->
+                <input name="email_change_btn" value="Change email" type="submit" class="btn btn-lg btn-danger mt-4 mb-5 significant-button" />
+            </div>
+        </form>
+    </h1>
+{% endblock %}
