@@ -53,7 +53,7 @@ class EmailChangeForm(forms.ModelForm):
         fields = ('email', )
 
     def clean_email(self):
-        email = self.cleaned_data['email']
+        email = self.email
         if User.objects.filter(email=email).exists():
             self.add_error('email', 'Email already exists')
             return self.initial['email']
@@ -67,4 +67,3 @@ class NameChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', )
-

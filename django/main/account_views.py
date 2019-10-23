@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model, login, authenticate, update_sess
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth.views import PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.views import PasswordChangeForm, PasswordResetForm, PasswordResetView
 
 # imports for creating email messaging
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
