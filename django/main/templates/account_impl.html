@@ -8,26 +8,10 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 rounded logging-in" style="background-color: #292826;">
         <div class="container significant-info">
             <p>
-                <h3 class="text-center mt-5 operation-title">Account settings</h3>
+                <h3 class="text-center mt-5 operation-title">Account settings: {{ user.email }}</h3>
             </p>
             <div class="container">
                 {% load widget_tweaks %}
-                <form class="form" method="post">
-                    {% csrf_token %}
-                    <div class="form-group text-center mt-4 justify-content-around" id="user-data">
-                        {{ email_form.email|add_class:"form-control mt-3" }}
-                        <input name="email_btn" value="Save" type="submit"
-                            class="btn btn-primary m-3 btn-lg significant-button" />
-                    </div>
-                    {% if email_form.errors %}
-                    {{ email_form.non_field_errors }}
-                    <ul>
-                        {% for field in email_form %}
-                        {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </form>
                 <form class="form" method="post">
                     {% csrf_token %}
                     <div class="form-group text-center mt-4 justify-content-around" id="user-data">
@@ -53,11 +37,22 @@
                         </div>
                     </div>
                 </form>
-                <form class="form" method="post">
-                    {% csrf_token %}
-                    <input name="pass_change_btn" value="Change password" type="submit"
-                        class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                </form>
+                <div class="row">
+                <div class="col-6">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <input name="email_change_btn" value="Change email" type="submit"
+                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                    </form>
+                </div>
+                <div class="col-6">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <input name="pass_change_btn" value="Change password" type="submit"
+                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                    </form>
+                </div>
+            </div>
             </div>
         </div>
         <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
@@ -89,13 +84,10 @@
     var currentLastName = '{% if user.last_name is None %}empty{% else %}{{ user.last_name }}{% endif %}'
     var currentEmail = '{{ user.email }}'
 
-    var emailField = document.getElementById('id_email')
     var firstNameField = document.getElementById('id_first_name')
     var lastNameField = document.getElementById('id_last_name')
 
     window.onload = () => {
-        emailField.placeholder = "Email(current: " + currentEmail + ")"
-        emailField.value = ''
         firstNameField.placeholder = "First name(current: " + currentFirstName + ")"
         firstNameField.value = ''
         lastNameField.placeholder = "Last name(current: " + currentLastName + ")"
