@@ -23,23 +23,25 @@ Login
                 <div class="form-group text-center mt-4 justify-content-around" id="user-data">
                     {{ form.username|add_class:"form-control mt-4"|attr:"placeholder:Email" }}
                     {{ form.password|add_class:"form-control mt-4"|attr:"placeholder:Password" }}
-                    <input value="Submit" type="submit" class="btn btn-primary mt-4 mb-5 significant-button" />
+                    <input value="Submit" type="submit" class="btn btn-primary mt-4 significant-button" />
                     {% if form.errors %}
-                        {{ form.non_field_errors }}
-                        <ul>
-                            {% for field in form %}
-                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
-                            {% endfor %}
-                        </ul>
+                    {{ form.non_field_errors }}
+                    <ul>
+                        {% for field in form %}
+                        {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                        {% endfor %}
+                    </ul>
                     {% endif %}
                 </div>
             </form>
-            <a href="/account/password_reset/" style="color: aqua;">Forgot password?</a>
+            <div class="container my-5 mx-auto">
+                <a href="/account/password_reset/" style="color: aqua;">Forgot password?</a>
+            </div>
         </div>
     </div>
     <div class="d-flex flex-wrap align-content-center p-3 second-option my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed"
         style="background-color: #292826;">
-        <div class="col-12 m-3 mx-auto rounded connect-options img-link" style="background-color: rgb(173, 173, 173);">
+        <!-- <div class="col-12 m-3 mx-auto rounded connect-options img-link" style="background-color: rgb(173, 173, 173);">
             <h3>Connect with: </h3>
             <a href="#">
                 {% load static %}
@@ -49,7 +51,7 @@ Login
                 {% load static %}
                 <img class="m-3" src='{% static "img/google_logo.png" %}' width=64>
             </a>
-        </div>
+        </div> -->
         <div class="container my-auto">
             <h3 class="significant-info">Or</h3>
         </div>
