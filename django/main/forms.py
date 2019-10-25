@@ -6,9 +6,15 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm as Defaul
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetForm
 
+from .models import Ad, Skill, PetProject, Responsibility
+
 
 User = get_user_model()
 
+
+##################################################
+# Account management forms
+##################################################
 
 class UserCreationForm(UserCreationForm):
     """A form for creating new users. Includes all the required
@@ -63,3 +69,19 @@ class NameChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', )
+
+
+##################################################
+# Ad forms
+##################################################
+
+
+from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
+
+class AdModelForm(forms.ModelForm):
+    class Meta:
+        model = Ad
+        widgets = {
+            'text': SummernoteWidget(),
+        }
+        fields = ('ad_type', 'title', 'text', 'salary', 'currency', 'experience_months', )

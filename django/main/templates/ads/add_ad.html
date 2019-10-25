@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add resume
+{% endblock %}
+
+{% block content %}
+    {% load widget_tweaks %}    
+    <div class="container mt-5">
+    {{ form.text|add_class:"rounded"|attr:"border-radius: 10px;" }}
+    </div>
+{% endblock %}

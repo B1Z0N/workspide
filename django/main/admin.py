@@ -4,6 +4,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
+from django_summernote.admin import SummernoteModelAdmin
+
 from .forms import UserChangeForm, UserCreationForm
 from .models import User, Ad, Skill, PetProject, Responsibility
 
@@ -42,7 +44,12 @@ admin.site.register(User, UserAdmin)
 # unregister the Group model from admin.
 admin.site.unregister(Group)
 # # register other models
-admin.site.register(Ad)
 admin.site.register(Skill)
 admin.site.register(PetProject)
 admin.site.register(Responsibility)
+# register Ad model
+# Apply summernote to all TextField in Ad model.
+class AdModelAdmin(SummernoteModelAdmin):
+    summernote_fields = '__all__'
+
+admin.site.register(Ad, AdModelAdmin)
