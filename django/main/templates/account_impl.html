@@ -38,21 +38,21 @@
                     </div>
                 </form>
                 <div class="row">
-                <div class="col-6">
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <input name="email_change_btn" value="Change email" type="submit"
-                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                    </form>
+                    <div class="col-6">
+                        <form class="form" method="post">
+                            {% csrf_token %}
+                            <input name="email_change_btn" value="Change email" type="submit"
+                                class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                        </form>
+                    </div>
+                    <div class="col-6">
+                        <form class="form" method="post">
+                            {% csrf_token %}
+                            <input name="pass_change_btn" value="Change password" type="submit"
+                                class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                        </form>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <input name="pass_change_btn" value="Change password" type="submit"
-                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                    </form>
-                </div>
-            </div>
             </div>
         </div>
         <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
