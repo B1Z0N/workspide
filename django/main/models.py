@@ -96,68 +96,55 @@ CURRENCY_CHOICES = [
 ]
 
 
+AD_CHOICES = [
+    ('res', 'resume')
+    ('vac', 'vacancy')
+]
+
+
 def print_ad_info(self):
     sal = ''
     if self.salary and self.currency:
         sal = ', ' + str(self.salary) + ' ' + self.currency
     exp = ', ' + str(self.experience_months) + ' months' if self.experience_months else ''
-    return self.title + sal + exp
+    return self.ad_type + ': ' + self.title + sal + exp
 
 
-class Vacancy(models.Model):
+class Ad(models.Model):
     uid = models.ForeignKey(
         settings.AUTH_USER_MODEL,   # use User specified in settings file
         on_delete=models.CASCADE
         )
+    ad_type = models.CharField(max_length=3, choices=AD_CHOICES, default='res')
     title = models.CharField(max_length=30)
-    description = models.CharField(max_length=10000)
-    salary = models.IntegerField(null=True)
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
-    experience_months = models.IntegerField(null=True)
+    text = models.TextField()
+    salary = models.IntegerField(null=True, blank=True)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True, blank=True)
+    experience_months = models.IntegerField(null=True, blank=True)
 
-    __str__ = print_ad_info
-    
-
-class Resume(models.Model):
-    uid = models.ForeignKey(
-        settings.AUTH_USER_MODEL,   # use User specified in settings file
-        on_delete=models.CASCADE
-    )
-    title = models.CharField(max_length=30)
-    description = models.CharField(max_length=10000)
-    salary = models.IntegerField(null=True)
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True)
-    experience_months = models.IntegerField(null=True)
-    
     __str__ = print_ad_info
 
 
-class SkillForVacancy(models.Model):
-    vacancy_id = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
+class Skill(models.Model):
+    ad_id = models.ForeignKey(Ad, on_delete=models.CASCADE)
+    text = models.CharField(max_length=50)
 
     def __str__(self):
         return self.text
 
-
-class SkillForResume(models.Model):
-    resume_id = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.text
 
 class PetProject(models.Model):
-    resume_id = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    title = models.CharField(max_length=30)
-    link = models.CharField(max_length=30)
+    resume_id = models.ForeignKey(Ad, on_delete=models.CASCADE)
+    text = models.CharField(max_length=50)
+    link = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.title
+        return self.text
+
 
 class Responsibility(models.Model):
-    vacancy_id = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
-    text = models.CharField(max_length=30)
+    vacancy_id = models.ForeignKey(Ad, on_delete=models.CASCADE)
+    text = models.CharField(max_length=50)
 
     def __str__(self):
         return self.text
