@@ -97,8 +97,8 @@ CURRENCY_CHOICES = [
 
 
 AD_CHOICES = [
-    ('res', 'resume'),
-    ('vac', 'vacancy')
+    ('resume', 'resume'),
+    ('vacancy', 'vacancy')
 ]
 
 
@@ -115,11 +115,11 @@ class Ad(models.Model):
         settings.AUTH_USER_MODEL,   # use User specified in settings file
         on_delete=models.CASCADE
         )
-    ad_type = models.CharField(max_length=3, choices=AD_CHOICES, default='res')
+    ad_type = models.CharField(max_length=7, choices=AD_CHOICES, default='resume')
     title = models.CharField(max_length=30)
     text = models.TextField()
     salary = models.PositiveIntegerField(null=True, blank=True)
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True, blank=True)
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True, blank=True, default='usd')
     experience_months = models.PositiveIntegerField(null=True, blank=True)
 
     __str__ = print_ad_info
