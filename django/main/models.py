@@ -118,9 +118,9 @@ class Ad(models.Model):
     ad_type = models.CharField(max_length=3, choices=AD_CHOICES, default='res')
     title = models.CharField(max_length=30)
     text = models.TextField()
-    salary = models.IntegerField(null=True, blank=True)
+    salary = models.PositiveIntegerField(null=True, blank=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True, blank=True)
-    experience_months = models.IntegerField(null=True, blank=True)
+    experience_months = models.PositiveIntegerField(null=True, blank=True)
 
     __str__ = print_ad_info
 

@@ -7,6 +7,6 @@
 {% block content %}
     {% load widget_tweaks %}    
     <div class="container mt-5">
-    {{ form.text|add_class:"rounded"|attr:"border-radius: 10px;" }}
+    {{ form.as_p }}
     </div>
 {% endblock %}
