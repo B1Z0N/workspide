@@ -97,7 +97,7 @@ CURRENCY_CHOICES = [
 
 
 AD_CHOICES = [
-    ('res', 'resume')
+    ('res', 'resume'),
     ('vac', 'vacancy')
 ]
 

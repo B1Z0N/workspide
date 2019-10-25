@@ -5,8 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from .forms import UserChangeForm, UserCreationForm
-from .models import User, Vacancy, Resume, \
-    SkillForResume, SkillForVacancy, PetProject, Responsibility
+from .models import User, Ad, Skill, PetProject, Responsibility
 
 
 class UserAdmin(BaseUserAdmin):
@@ -43,9 +42,7 @@ admin.site.register(User, UserAdmin)
 # unregister the Group model from admin.
 admin.site.unregister(Group)
 # # register other models
-admin.site.register(Vacancy)
-admin.site.register(Resume)
-admin.site.register(SkillForResume)
-admin.site.register(SkillForVacancy)
+admin.site.register(Ad)
+admin.site.register(Skill)
 admin.site.register(PetProject)
 admin.site.register(Responsibility)
