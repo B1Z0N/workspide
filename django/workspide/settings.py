@@ -146,7 +146,7 @@ SUMMERNOTE_THEME = 'bs4'
 
 SUMMERNOTE_CONFIG = {
     # Using SummernoteWidget - iframe mode, default
-    'iframe': True,
+    'iframe': False,
 
     # You can put custom Summernote settings
     'summernote': {
