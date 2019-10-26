@@ -10,7 +10,7 @@
     <h1><em>{{ title }}</em></h1>
 
 
-    <form class="form" method="post">
+    <form id="general-form" class="form" method="post">
         {% csrf_token %}
         <div class="mb-3">
             {{ form.title|add_class:"form-control mt-4" }}
@@ -29,74 +29,69 @@
         <div class="md-3">
             {{ form.experience_months|add_class:"form-control mt-4" }}
         </div>
-        <input name="submit_button" value="Submit" type="submit"
-            class="btn btn-primary mt-3 mb-3 btn-lg significant-button" />
-    </form>
 
+        <h1><em>Skills</em></h1>
+        <div id="skill_list">
+        </div>
 
-    <h1><em>Skills</em></h1>
-    <div id="skill_list">
-    </div>
-
-    <form class="form">
-        {% csrf_token %}
-        <input id="skill_text" required type="text" maxlength="50" placeholder="Skill description" class="form-control mt-4" />
+        <input id="skill_text" type="text" maxlength="50" placeholder="Skill description" class="form-control mt-4" />
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <input type="button" name="add_skill_btn" onclick="pushSkill()" value="Add skill"
-                    class="btn btn-primary mx-auto my-5 btn-lg significant-button" />
+                <input type="button" name="add_skill_btn" onclick="pushSkill()" value="Add"
+                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <input type="button" name="remove_skill_btn" onclick="popSkill()" value="Remove skill"
-                    class="btn btn-danger mx-auto my-5 btn-lg significant-button" />
+                <input type="button" name="remove_skill_btn" onclick="popSkill()" value="Remove"
+                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
             </div>
         </div>
-    </form>
 
-    {% if vacancy %}
-    <h1><em>Responsiblities</em></h1>
-    <div id="resp_list">
-    </div>
 
-    <form class="form">
+        {% if vacancy %}
+        <h1><em>Responsiblities</em></h1>
+        <div id="resp_list">
+        </div>
+
         {% csrf_token %}
-        <input id="resp_text" required type="text" maxlength="50" placeholder="Responsibility text" class="form-control mt-4" />
+        <input id="resp_text" type="text" maxlength="50" placeholder="Responsibility text" class="form-control mt-4" />
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <input type="button" name="add_resp_btn" onclick="pushResp()" value="Add responsibility"
-                    class="btn btn-primary mx-auto my-5 btn-lg significant-button" />
+                <input type="button" name="add_resp_btn" onclick="pushResp()" value="Add"
+                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <input type="button" name="remove_resp_btn" onclick="popResp()" value="Remove responsibility"
-                    class="btn btn-danger mx-auto my-5 btn-lg significant-button" />
+                <input type="button" name="remove_resp_btn" onclick="popResp()" value="Remove"
+                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
             </div>
         </div>
-    </form>
-    {% endif %}
+        {% endif %}
 
-    {% if resume %}
-    <h1><em>Projects</em></h1>
-    <div id="project_list">
-    </div>
+        {% if resume %}
+        <h1><em>Projects</em></h1>
+        <div id="project_list">
+        </div>
 
-    <form class="form">
         {% csrf_token %}
-        <input id="project_text" required type="text" maxlength="50" placeholder="Project description" class="form-control mt-4" />
-        <input id="project_link" type="url" maxlength="50" placeholder="Link to your project" class="form-control mt-4" />
+        <input id="project_text" type="text" maxlength="50" placeholder="Project description"
+            class="form-control mt-4" />
+        <input id="project_link" type="url" maxlength="50" placeholder="Link to your project"
+            class="form-control mt-4" />
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <input type="button" name="add_project_btn" onclick="pushProject()" value="Add project"
-                    class="btn btn-primary mx-auto my-5 btn-lg significant-button" />
+                <input type="button" name="add_project_btn" onclick="pushProject()" value="Add"
+                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <input type="button" name="remove_project_btn" onclick="popProject()" value="Remove project"
-                    class="btn btn-danger mx-auto my-5 btn-lg significant-button" />
+                <input type="button" name="remove_project_btn" onclick="popProject()" value="Remove"
+                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
             </div>
         </div>
+        {% endif %}
+
+        <input id="general-submit-btn" name="submit_button" value="Submit" type="submit"
+            class="btn btn-primary mt-3 mb-3 btn-lg" />
     </form>
-    {% endif %}
 </div>
-
 <script>
     var titleField = document.getElementById('id_title')
     var salaryField = document.getElementById('id_salary')
@@ -112,11 +107,13 @@
     responsibilities = []
     projects = []
 
-    var createPanelElement = (variable) => {
-        elem = document.createElement("div")
-        elem.className = 'col-12 mx-auto my-2 rounded connect-options text-center'
-        elem.style = 'background-color: rgb(173, 173, 173); color: #292826;'
-        elem.innerHTML = `<h3>${variable}</h3>`
+    var createPanelElement = (variable, name) => {
+        elem = document.createElement("input")
+        elem.className = 'form-control mt-4'
+        elem.type = 'text'
+        elem.maxLength = 50
+        elem.value = variable
+        elem.name = name
 
         return elem
     }
@@ -126,8 +123,9 @@
         if (!skill.value) return;
         skill_list = document.getElementById("skill_list")
         skills.push(skill.value)
-        skill_list.appendChild(createPanelElement(skill.value))
+        skill_list.appendChild(createPanelElement(skill.value, "skill" + skills.length.toString()))
         skill.value = ''
+        skill.focus()
     }
 
     var popSkill = () => {
@@ -137,13 +135,29 @@
     }
 
     var validURL = (str) => {
-        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-          '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-          '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-          '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        var pattern = new RegExp('^(https?:\\/\\/)' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
         return !!pattern.test(str);
+    }
+
+    var createTwoPanelElements = (value1, name1, value2, name2) => {
+        container = document.createElement("div")
+        container.innerHTML = `\
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <input class="form-control mt-4" type="text" maxLength="50" name="${name1}" value="${value1}"/>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <input class="form-control mt-4" type="text" maxLength="50" name="${name2}" value="${value2}"/>
+                </div>
+            </div>
+        `
+
+        return container
     }
 
     var pushProject = () => {
@@ -154,19 +168,22 @@
             project_text.value = ''
             project_link.value = ''
             alert("Invalid link. Must start with 'http' or 'https'")
+            project_text.focus()
             return;
         }
-        projects.push({ 
-            'text' : project_text.value, 
-            'link' : project_link.value,
+        projects.push({
+            'text': project_text.value,
+            'link': project_link.value,
         })
 
-        display_project_text = project_text.value
-        if (project_link.value !== '')
-            display_project_text += '(<a href="' + project_link.value + '">link</a>)'
-
-        project_list.appendChild(createPanelElement(display_project_text))
+        project_list.appendChild(
+            createTwoPanelElements(
+                project_text.value, "project_text" + projects.length.toString(),
+                project_link.value, "project_link" + projects.length.toString(),
+            )
+        )
         project_text.value = project_link.value = ''
+        project_text.focus()
     }
 
     var popProject = () => {
@@ -180,8 +197,9 @@
         if (!resp.value) return;
         resp_list = document.getElementById("resp_list")
         responsibilities.push(resp.value)
-        resp_list.appendChild(createPanelElement(resp.value))
+        resp_list.appendChild(createPanelElement(resp.value, "resp" + responsibilities.length.toString()))
         resp.value = ''
+        resp.focus()
     }
 
     var popResp = () => {
@@ -189,5 +207,41 @@
         resp_list = document.getElementById("resp_list")
         if (resp_list.lastChild) resp_list.lastChild.remove()
     }
+
+    window.onkeydown = (event) => {
+        return event.key != "Enter";
+    };
+
+    document.getElementById("skill_text")
+        .addEventListener("keyup", (event) => {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                pushSkill()
+            }
+        })
+    document.getElementById("project_text")
+        .addEventListener("keyup", (event) => {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                document.getElementById("project_link").focus()
+            }
+        })
+    document.getElementById("project_link")
+        .addEventListener("keyup", (event) => {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                pushProject()
+            }
+        })
+
+    {% if vacancy %}
+    document.getElementById("resp_text")
+        .addEventListener("keyup", (event) => {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                pushResp()
+            }
+        });
+    {% endif %}
 </script>
 {% endblock %}
