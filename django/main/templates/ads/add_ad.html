@@ -219,6 +219,7 @@
                 pushSkill()
             }
         })
+    {% if resume %}
     document.getElementById("project_text")
         .addEventListener("keyup", (event) => {
             event.preventDefault();
@@ -233,8 +234,7 @@
                 pushProject()
             }
         })
-
-    {% if vacancy %}
+    {% else %}
     document.getElementById("resp_text")
         .addEventListener("keyup", (event) => {
             event.preventDefault();
