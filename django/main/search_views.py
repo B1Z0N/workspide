@@ -3,7 +3,8 @@ from django.http import Http404
 from django.conf import settings
 import random
 
-from .forms import AdModelForm, SKillModelForm, PetProjectModelForm, ResponsibilityModelForm
+from .forms import AdModelForm
+from .models import User, Ad, Skill, PetProject, Responsibility
 
 
 def search(request, _type, _text):
@@ -76,11 +77,56 @@ def set_description_placeholder(ad_type):
 def add_ad(ad_type):
     assert(ad_type == "vacancy" or ad_type == "resume")
 
+    def save_skills(post, ad):
+        i = 1
+        last = post.get('skill1')
+        while last is not None:
+            Skill.objects.create(text=last, ad_id=ad).save()
+            i += 1
+            last = post.get('skill' + str(i))
+
+    def save_resp(post, ad):
+        i = 1
+        last = post.get('resp1')
+        while last is not None:
+            Responsibility.objects.create(text=last, vacancy_id=ad).save()
+            i += 1
+            last = post.get('resp' + str(i))
+
+    def save_projects(post, ad):
+        i = 1
+        last_text = post.get('project_text1')
+        last_link = post.get('project_link1')
+        while last_text is not None:
+            PetProject.objects.create(text=last_text, link=last_link, resume_id=ad).save()
+            i += 1
+            last_text = post.get('project_text' + str(i))
+            last_link = post.get('project_link' + str(i))
+
+    def save_all_additional(post, ad, ad_type):
+        save_skills(post, ad)
+        if ad_type == 'vacancy':
+            save_resp(post, ad)
+        elif ad_type =='resume':
+            save_projects(post, ad)
+
     def actual_view(request):
         form = AdModelForm()
 
         if request.method == 'POST' and 'submit_button' in request.POST:
-            pass
+            data = request.POST.copy()
+            data['ad_type'] = ad_type
+            form = AdModelForm(data=data)
+            if form.is_valid():
+                ad = form.save(commit=False)
+                ad.uid = request.user
+
+                ad.save()
+                save_all_additional(request.POST, ad, ad_type)
+
+                return render(request, 'alerts/render_base.html', {
+                    'response_error_text' : 'Success ' + str(form.cleaned_data)
+                })
 
         context = {
             'form' : form,
