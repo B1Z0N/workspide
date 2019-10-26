@@ -155,6 +155,7 @@ SUMMERNOTE_CONFIG = {
 
         # Change editor size
         'width': '100%',
+        'placeholder' : 'Write an epic...',
         'toolbar': [
             ['style', ['style']],
             ['font', ['bold', 'italic', 'underline', 'clear']],
