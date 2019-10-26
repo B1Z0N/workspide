@@ -117,7 +117,7 @@ class Ad(models.Model):
         )
     ad_type = models.CharField(max_length=7, choices=AD_CHOICES, default='resume')
     title = models.CharField(max_length=30)
-    text = models.TextField()
+    text = models.TextField(null=True, blank=True)
     salary = models.PositiveIntegerField(null=True, blank=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, null=True, blank=True, default='usd')
     experience_months = models.PositiveIntegerField(null=True, blank=True)
