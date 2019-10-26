@@ -101,6 +101,7 @@ DATABASES = {
         'PASSWORD': 'wspass', # database password
         'HOST': 'localhost',   # Or an IP Address of database
         'PORT': '3306', # default database port
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
