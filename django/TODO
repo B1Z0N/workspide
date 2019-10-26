@@ -4,3 +4,6 @@ TODO:
     add resume page
     add feed
     add search
+
+IDEAS:
+    add appropriate `focus()` to all input elements
