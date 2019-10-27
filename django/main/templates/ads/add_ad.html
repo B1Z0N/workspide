@@ -15,19 +15,28 @@
         <div class="mb-3">
             {{ form.title|add_class:"form-control mt-4" }}
         </div>
+        <div class="mb-3">
+            {{ form.city|add_class:"form-control mt-4"|attr:"placeholder:City of yours" }}
+        </div>
         <div class="my-3">
             {{ form.text|safe }}
         </div>
-        <div class="row">
-            <div class="col-9">
-                {{ form.salary|add_class:"form-control mt-4" }}
+
+        <h1><em>Additional data</em></h1>
+
+        <div class="row my-3">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                {{ form.salary|add_class:"form-control" }}
             </div>
-            <div class="col-3 mt-4">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 {{ form.currency|add_class:"custom-select" }}
             </div>
-        </div>
-        <div class="md-3">
-            {{ form.experience_months|add_class:"form-control mt-4" }}
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                {{ form.experience_months|add_class:"form-control" }}
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    {{ form.experience_type|add_class:"custom-select" }}
+            </div>
         </div>
 
         <h1><em>Skills</em></h1>
@@ -100,7 +109,7 @@
     window.onload = () => {
         titleField.placeholder = '{% if vacancy %}Your vacancy title{% else %}Your resume title{% endif %}'
         salaryField.placeholder = '{% if vacancy %}Future employee`s salary{% else %}Expected salary{% endif %}'
-        experienceField.placeholder = '{% if vacancy %}Expected experience(in months){% else %}Your experience(in months){% endif %}'
+        experienceField.placeholder = '{% if vacancy %}Expected experience(in months){% else %}Your experience{% endif %}'
     }
 
     skills = []
