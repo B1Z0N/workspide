@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+{{ ad.title }}
+{% endblock %}
+
+{% block content %}
+<div class="mt-5">
+<p>
+    {% include "ads/small_ad.html" %}
+</p>
+</div>
+
+{% if description %}
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
+    style="background-color:rgb(173, 173, 173); color: #292826;">
+    <h1><em>Description</em></h1>
+    {% load widget_tweaks %}
+    <h3>
+        {{ description|safe }}
+    </h3>
+</div>
+{% endif %}
+
+{% if skills %}
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
+    style="background-color:#292826; color: rgb(201, 167, 58);">
+    <h1><em>Skills</em></h1>
+    {% for skill in skills %}
+    <div class="col-12 mb-3 p-3 rounded connect-options" style="color: #292826;background-color: rgb(173, 173, 173);">
+        <h3>
+            {{skill.text}}
+        </h3>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if resps %}
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
+    style="background-color:#292826; color: rgb(201, 167, 58);">
+    <h1><em>Responsibilties</em></h1>
+    {% for resp in resps %}
+    <div class="col-12 mb-3 p-3 rounded connect-options" style="color: #292826;background-color: rgb(173, 173, 173);">
+        <h3>
+            {{resp.text}}
+        </h3>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if projects %}
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
+    style="background-color:#292826; color: rgb(201, 167, 58);">
+    <h1><em>Projects</em></h1>
+    {% for project in projects %}
+    <div class="col-12 mb-3 p-3 rounded connect-options" style="color: #292826;background-color: rgb(173, 173, 173);">
+        <h3>
+            {{project.text}}(<a href="{{project.link}}">link</a>)
+        </h3>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if name %}
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
+    style="background-color:rgb(173, 173, 173); color: #292826;">
+    <h1><em>By {{ name }}</em></h1>
+</div>
+{% endif %}
+
+{% block footer %}
+{% endblock%}
+
+{% endblock %}
