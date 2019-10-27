@@ -89,7 +89,8 @@ class AdModelForm(forms.ModelForm):
         widgets = {
             'text': SummernoteWidget(),
         }
-        fields = ('ad_type', 'title', 'text', 'salary', 'currency', 'experience_months', )
+        fields = ('ad_type', 'title', 'city', 'text', 
+            'salary', 'currency', 'experience_months', 'experience_type' )
 
 
 class SKillModelForm(forms.ModelForm):
