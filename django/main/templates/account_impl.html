@@ -8,7 +8,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 rounded logging-in" style="background-color: #292826;">
         <div class="container significant-info">
             <p>
-                <h3 class="text-center mt-5 operation-title">Account settings: {{ user.email }}</h3>
+                <h1 class="text-center mt-5 operation-title"><em>Account settings for {{ user.email }}</em></h1>
             </p>
             <div class="container">
                 {% load widget_tweaks %}
@@ -55,11 +55,29 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
-            <h3>Resume</h3>
+        <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+            <h1><em>Resumes</em></h1>
+            {% for resume in resumes %}
+                {% include "ads/small_ad.html" with ad=resume %}
+            {% endfor%}
+            <div class="container mx-auto py-3">
+                <a href="add_resume/">
+                    {% load static %}
+                    <img src="{% static "img/plus_icon.png" %}" width="35" />
+                </a>
+            </div>
         </div>
-        <div class="col-12 mb-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
-            <h3>Vacancies</h3>
+        <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+            <h1><em>Vacancies</em></h1>
+            {% for vacancy in vacancies %}
+                {% include "ads/small_ad.html" with ad=vacancy %}
+            {% endfor%}
+            <div class="container mx-auto py-3">
+                <a href="add_vacancy/">
+                    {% load static %}
+                    <img src="{% static "img/plus_icon.png" %}" width="35" />
+                </a>
+            </div>
         </div>
     </div>
 </div>
