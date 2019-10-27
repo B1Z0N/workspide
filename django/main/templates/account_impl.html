@@ -58,7 +58,7 @@
         <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
             <h1><em>Resumes</em></h1>
             {% for resume in resumes %}
-                {% include "ads/small_ad.html" with ad=resume %}
+                {% include "ads/ad_panel_manage.html" with ad=resume %}
             {% endfor%}
             <div class="container mx-auto py-3">
                 <a href="add_resume/">
@@ -70,7 +70,7 @@
         <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
             <h1><em>Vacancies</em></h1>
             {% for vacancy in vacancies %}
-                {% include "ads/small_ad.html" with ad=vacancy %}
+                {% include "ads/ad_panel_manage.html" with ad=vacancy %}
             {% endfor%}
             <div class="container mx-auto py-3">
                 <a href="add_vacancy/">

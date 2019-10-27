@@ -164,7 +164,6 @@ def add_ad(ad_type):
 #                 context['projects'] = projects
 
 
-        
 def show_ad(request, ad_id):
     try:
         ad = Ad.objects.get(id=ad_id)
@@ -172,7 +171,7 @@ def show_ad(request, ad_id):
         return render(request, 'alerts/render_base.html', {
             'response_error_title' : 'Error',
             'response_error_text' : 'No such ad exist'
-        }) 
+        })
 
     def assign(context, var, name):
         if var:
@@ -192,3 +191,26 @@ def show_ad(request, ad_id):
         assign(context, PetProject.objects.filter(resume_id=ad_id), 'projects')
 
     return render(request, 'ads/ad_view.html', context)
+
+
+def delete_ad(request, ad_id):
+    try:
+        ad = Ad.objects.get(id=ad_id)
+    except Ad.DoesNotExist:
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title' : 'Error',
+            'response_error_text' : 'No such ad exist'
+        })
+
+    if request.user != ad.uid:
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title' : 'Error',
+            'response_error_text' : 'Na ah, you are not allowed to do this!'
+        })
+    
+    if request.method == 'POST':
+        ad.delete()
+        return redirect('/account/')
+
+    return render(request, 'ads/delete_ad.html', {'ad' : ad})
+
