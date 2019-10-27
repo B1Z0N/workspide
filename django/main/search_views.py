@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 from django.conf import settings
 import random
+import json
 
 from .forms import AdModelForm
 from .models import User, Ad, Skill, PetProject, Responsibility
@@ -64,7 +65,7 @@ def set_description_placeholder(ad_type):
     def set_summernote_placeholder(placeholder):
         settings.SUMMERNOTE_CONFIG['summernote']['placeholder'] = placeholder 
     
-    if ad_type == 'vacancy':
+    if ad_type == 'vacancy':            
         set_summernote_placeholder(
             ' '.join([gen_radnom_vacancy_beginning(), gen_random_job()])
         )
@@ -124,9 +125,7 @@ def add_ad(ad_type):
                 ad.save()
                 save_all_additional(request.POST, ad, ad_type)
 
-                return render(request, 'alerts/render_base.html', {
-                    'response_error_text' : 'Success ' + str(form.cleaned_data)
-                })
+                return redirect('/account/')
 
         context = {
             'form' : form,
@@ -138,3 +137,58 @@ def add_ad(ad_type):
         return render(request, 'ads/add_ad.html', context)
 
     return actual_view
+
+
+# def edit_ad(ad_type):
+#     assert(ad_type == "vacancy" or ad_type == "resume")
+#     def actual_view(request, ad_id):
+#         instance = Ad.objects.get(id=ad_id)
+#         if not instance:
+#             return render(request, 'alerts/render_base.html', {
+#                 'response_error_title' : 'No',
+#                 'response_error_text' : ad_type[0].upper() + ad_type[1:]  + \
+#                     ' you are trying to edit doesn`t exist'
+#             })
+    
+#         context = {}
+#         skills = Skill.objects.get(ad_id=instance)
+#         if skills is not None:
+#             context['skills'] = skills
+#         if ad_type == 'vacancy':
+#             resps = Responsibility.objects.get(vacancy_id=instance)
+#             if resps is not None:
+#                 context['resps'] = resps
+#         elif ad_type == 'resume':
+#             projects = PetProject.objects.get(resume_id=instance)
+#             if projects is not None:
+#                 context['projects'] = projects
+
+
+        
+def show_ad(request, ad_id):
+    try:
+        ad = Ad.objects.get(id=ad_id)
+    except Ad.DoesNotExist:
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title' : 'Error',
+            'response_error_text' : 'No such ad exist'
+        }) 
+
+    def assign(context, var, name):
+        if var:
+            context[name] = var
+
+    context = {'ad' : ad,}
+    assign(context, Skill.objects.filter(ad_id=ad_id), 'skills')
+    assign(context, ad.text, 'description')
+    user = ad.uid
+    emptify = lambda s: '' if s is None else s
+    if user.first_name or user.last_name:
+        assign(context, emptify(user.first_name) + ' ' + emptify(user.last_name), 'name')
+
+    if ad.ad_type == 'vacancy':
+        assign(context, Responsibility.objects.filter(vacancy_id=ad_id), 'resps')
+    elif ad.ad_type == 'resume':
+        assign(context, PetProject.objects.filter(resume_id=ad_id), 'projects')
+
+    return render(request, 'ads/ad_view.html', context)
