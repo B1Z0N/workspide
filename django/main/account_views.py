@@ -25,6 +25,7 @@ from .forms import UserCreationForm as RegisterForm, EmailChangeForm,\
     NameChangeForm
 from .email import account_activation_token, account_deletion_token, \
     email_change_token, send_mail
+from .models import User, Ad, Skill, PetProject, Responsibility
 
 
 User = get_user_model()
@@ -130,11 +131,17 @@ def account(request):
             instance.save()
             name_form = NameChangeForm(instance=instance)
 
+    resumes = Ad.objects.filter(uid=request.user, ad_type='resume')
+    vacancies = Ad.objects.filter(uid=request.user, ad_type='vacancy')
+
     return render(request, 'account.html', {
         'name_form': name_form,
         'email_success': email_success,
         'pass_change': pass_change,
         'delete_account': delete_account,
+
+        'resumes' : resumes,
+        'vacancies' : vacancies,
     })
 
 
