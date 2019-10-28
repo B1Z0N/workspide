@@ -80,7 +80,7 @@ class NameChangeForm(forms.ModelForm):
 ##################################################
 
 
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
+from django_summernote.widgets import SummernoteWidget
 
 
 class AdModelForm(forms.ModelForm):
@@ -91,6 +91,14 @@ class AdModelForm(forms.ModelForm):
         }
         fields = ('ad_type', 'title', 'city', 'text', 
             'salary', 'currency', 'experience_months', 'experience_type' )
+    
+    @staticmethod
+    def get_form(text_widget_attrs=None, *args, **kwargs):
+        obj = AdModelForm(*args, **kwargs)
+        obj.fields['text'].widget = SummernoteWidget(attrs={
+            'summernote' : text_widget_attrs if text_widget_attrs is not None else {}
+        })
+        return obj
 
 
 class SKillModelForm(forms.ModelForm):
