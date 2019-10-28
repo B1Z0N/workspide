@@ -8,13 +8,18 @@ from .forms import AdModelForm
 from .models import User, Ad, Skill, PetProject, Responsibility
 
 
+##################################################
+# Search views
+##################################################
+
+
 def search(request, _type, _text):
     if _type != 'jobs' and _type != 'employees':
         raise Http404()
 
     return render(request, 'search.html', {
-            'search_type' : _type, 
-            'search_text' : _text
+        'search_type': _type,
+        'search_text': _text
     })
 
 
@@ -22,8 +27,52 @@ def empty_search(request, _type):
     return search(request, _type, "")
 
 
+##################################################
+# Helper functions
+##################################################
+
+
+def save_skills(post, ad):
+    i = 1
+    last = post.get('skill1')
+    while last is not None:
+        Skill.objects.create(text=last, ad_id=ad).save()
+        i += 1
+        last = post.get('skill' + str(i))
+
+
+def save_resp(post, ad):
+    i = 1
+    last = post.get('resp1')
+    while last is not None:
+        Responsibility.objects.create(text=last, vacancy_id=ad).save()
+        i += 1
+        last = post.get('resp' + str(i))
+
+
+def save_projects(post, ad):
+    i = 1
+    last_text = post.get('project_text1')
+    last_link = post.get('project_link1')
+    while last_text is not None:
+        PetProject.objects.create(
+            text=last_text, link=last_link, resume_id=ad).save()
+        i += 1
+        last_text = post.get('project_text' + str(i))
+        last_link = post.get('project_link' + str(i))
+
+
+def save_all_additional(post, ad, ad_type):
+    save_skills(post, ad)
+    if ad_type == 'vacancy':
+        save_resp(post, ad)
+    elif ad_type == 'resume':
+        save_projects(post, ad)
+
+
+
 # just a summernote placeholder generator
-def set_description_placeholder(ad_type):
+def get_description_placeholder(ad_type):
     assert(ad_type == "vacancy" or ad_type == "resume")
 
     def gen_random_job():
@@ -62,58 +111,32 @@ def set_description_placeholder(ad_type):
         ]
         return random.choice(VACANCY_BEGINNING)
 
-    def set_summernote_placeholder(placeholder):
-        settings.SUMMERNOTE_CONFIG['summernote']['placeholder'] = placeholder 
-    
-    if ad_type == 'vacancy':            
-        set_summernote_placeholder(
-            ' '.join([gen_radnom_vacancy_beginning(), gen_random_job()])
-        )
+    if ad_type == 'vacancy':
+        return ' '.join([gen_radnom_vacancy_beginning(), gen_random_job()])
     else:
-        set_summernote_placeholder(
-            ' '.join([gen_random_resume_beginning(), gen_random_job()])
-        )
+        return ' '.join([gen_random_resume_beginning(), gen_random_job()])
+
+def ad_error(request, msg=None):
+    return render(request, 'alerts/render_base.html', {
+        'response_error_title': 'Error',
+        'response_error_text': 'No such ad exist' 
+                                    if msg is None else msg
+    })
+
+
+##################################################
+# Ad creation/show/edit/delete/ views
+##################################################
 
 
 def add_ad(ad_type):
     assert(ad_type == "vacancy" or ad_type == "resume")
 
-    def save_skills(post, ad):
-        i = 1
-        last = post.get('skill1')
-        while last is not None:
-            Skill.objects.create(text=last, ad_id=ad).save()
-            i += 1
-            last = post.get('skill' + str(i))
-
-    def save_resp(post, ad):
-        i = 1
-        last = post.get('resp1')
-        while last is not None:
-            Responsibility.objects.create(text=last, vacancy_id=ad).save()
-            i += 1
-            last = post.get('resp' + str(i))
-
-    def save_projects(post, ad):
-        i = 1
-        last_text = post.get('project_text1')
-        last_link = post.get('project_link1')
-        while last_text is not None:
-            PetProject.objects.create(text=last_text, link=last_link, resume_id=ad).save()
-            i += 1
-            last_text = post.get('project_text' + str(i))
-            last_link = post.get('project_link' + str(i))
-
-    def save_all_additional(post, ad, ad_type):
-        save_skills(post, ad)
-        if ad_type == 'vacancy':
-            save_resp(post, ad)
-        elif ad_type =='resume':
-            save_projects(post, ad)
-
     def actual_view(request):
-        form = AdModelForm()
-
+        form = AdModelForm.get_form(
+            text_widget_attrs={
+                'placeholder': get_description_placeholder(ad_type)}
+        )
         if request.method == 'POST' and 'submit_button' in request.POST:
             data = request.POST.copy()
             data['ad_type'] = ad_type
@@ -128,89 +151,101 @@ def add_ad(ad_type):
                 return redirect('/account/')
 
         context = {
-            'form' : form,
-            ad_type : 'True',
-            'title' : 'New ' + ad_type,
+            'form': form,
+            ad_type: 'True',
+            'title': 'New ' + ad_type,
         }
-        set_description_placeholder(ad_type)
-        
+
         return render(request, 'ads/add_ad.html', context)
 
     return actual_view
-
-
-# def edit_ad(ad_type):
-#     assert(ad_type == "vacancy" or ad_type == "resume")
-#     def actual_view(request, ad_id):
-#         instance = Ad.objects.get(id=ad_id)
-#         if not instance:
-#             return render(request, 'alerts/render_base.html', {
-#                 'response_error_title' : 'No',
-#                 'response_error_text' : ad_type[0].upper() + ad_type[1:]  + \
-#                     ' you are trying to edit doesn`t exist'
-#             })
-    
-#         context = {}
-#         skills = Skill.objects.get(ad_id=instance)
-#         if skills is not None:
-#             context['skills'] = skills
-#         if ad_type == 'vacancy':
-#             resps = Responsibility.objects.get(vacancy_id=instance)
-#             if resps is not None:
-#                 context['resps'] = resps
-#         elif ad_type == 'resume':
-#             projects = PetProject.objects.get(resume_id=instance)
-#             if projects is not None:
-#                 context['projects'] = projects
 
 
 def show_ad(request, ad_id):
     try:
         ad = Ad.objects.get(id=ad_id)
     except Ad.DoesNotExist:
-        return render(request, 'alerts/render_base.html', {
-            'response_error_title' : 'Error',
-            'response_error_text' : 'No such ad exist'
-        })
+        return ad_error(request)
 
     def assign(context, var, name):
         if var:
             context[name] = var
 
-    context = {'ad' : ad,}
+    context = {'ad': ad, }
     assign(context, Skill.objects.filter(ad_id=ad_id), 'skills')
     assign(context, ad.text, 'description')
     user = ad.uid
-    emptify = lambda s: '' if s is None else s
+    def emptify(s): return '' if s is None else s
     if user.first_name or user.last_name:
-        assign(context, emptify(user.first_name) + ' ' + emptify(user.last_name), 'name')
+        assign(context, emptify(user.first_name) +
+               ' ' + emptify(user.last_name), 'name')
 
     if ad.ad_type == 'vacancy':
-        assign(context, Responsibility.objects.filter(vacancy_id=ad_id), 'resps')
+        assign(context, Responsibility.objects.filter(
+            vacancy_id=ad_id), 'resps')
     elif ad.ad_type == 'resume':
         assign(context, PetProject.objects.filter(resume_id=ad_id), 'projects')
 
     return render(request, 'ads/ad_view.html', context)
 
 
+def edit_ad(ad_type):
+    assert(ad_type == 'resume' or ad_type == 'vacancy')
+
+    def actual_view(request, ad_id):
+        try:
+            ad = Ad.objects.get(id=ad_id)
+        except Ad.DoesNotExist:
+            return error(request)
+        if ad_type != ad.ad_type:
+            return error(request)
+
+        form = AdModelForm.get_form(
+            text_widget_attrs={
+                'placeholder': get_description_placeholder(ad.ad_type)},
+            instance=ad
+        )
+        if request.method == 'POST' and 'submit_button' in request.POST:
+            data = request.POST.copy()
+            data['ad_type'] = ad_type
+            form = AdModelForm(data=data)
+            if form.is_valid():
+                ad.delete()
+                ad = form.save(commit=False)
+                ad.uid = request.user
+                ad.save()
+                save_all_additional(request.POST, ad, ad_type)
+                return redirect('/account/')
+        context = {
+            'form': form,
+            ad_type: 'True',
+            'title': 'Edit ' + ad_type,
+            'skills': Skill.objects.filter(ad_id=ad),
+        }
+        if ad_type == 'vacancy':
+            context['resps'] = Responsibility.objects.filter(vacancy_id=ad)
+        elif ad_type == 'resume':
+            context['projects'] = [
+                (resp.text, resp.link) for resp in
+                PetProject.objects.filter(resume_id=ad)
+            ]
+
+        return render(request, 'ads/edit_ad.html', context)
+
+    return actual_view
+
+
 def delete_ad(request, ad_id):
     try:
         ad = Ad.objects.get(id=ad_id)
     except Ad.DoesNotExist:
-        return render(request, 'alerts/render_base.html', {
-            'response_error_title' : 'Error',
-            'response_error_text' : 'No such ad exist'
-        })
+        return ad_error(request)
 
     if request.user != ad.uid:
-        return render(request, 'alerts/render_base.html', {
-            'response_error_title' : 'Error',
-            'response_error_text' : 'Na ah, you are not allowed to do this!'
-        })
-    
+        return ad_error(request, msg='Na ah, you are not allowed to do this!')
+
     if request.method == 'POST':
         ad.delete()
         return redirect('/account/')
 
-    return render(request, 'ads/delete_ad.html', {'ad' : ad})
-
+    return render(request, 'ads/delete_ad.html', {'ad': ad})
