@@ -110,6 +110,9 @@
         titleField.placeholder = '{% if vacancy %}Your vacancy title{% else %}Your resume title{% endif %}'
         salaryField.placeholder = '{% if vacancy %}Future employee`s salary{% else %}Expected salary{% endif %}'
         experienceField.placeholder = '{% if vacancy %}Expected experience(in months){% else %}Your experience{% endif %}'
+
+        {% block onload %}
+        {% endblock %}
     }
 
     skills = []
