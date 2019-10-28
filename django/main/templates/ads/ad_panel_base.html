@@ -1,0 +1,22 @@
+<a href="/show_ad/{{ ad.id }}" style="color: rgb(201, 167, 58);text-decoration: none;">
+    <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+        style="background-color:#292826; color: rgb(201, 167, 58);">
+        <div id='tooltip{{ ad.id }}' data-original-title='{{ ad.text|truncatechars_html:100 }}' data-placement='right'>
+            <h3>{{ ad.title }} <span class="badge badge-pill badge-warning ">{{ ad.city }}</span></h3>
+        </div>
+        <p>
+            {% if ad.salary %}
+            Salary: {{ ad.salary }} {{ ad.currency }}.
+            {% endif %}
+            {% if ad.experience_months %}
+            Experience: {{ ad.experience_months }} {{ ad.experience_type }}s.
+            {% endif %}
+        </p>
+        {% block manage %}
+        {% endblock %}
+    </div>
+</a>
+
+<script>
+    $("#tooltip{{ ad.id }}").tooltip({ html: true });
+</script>

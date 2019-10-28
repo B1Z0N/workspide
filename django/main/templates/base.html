@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
     <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
@@ -19,7 +18,6 @@
     <!-- Project specific styles -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
-
     <title>
 
         {% block title %}
@@ -56,13 +54,6 @@
             <p><a href="https://github.com/B1Z0N/">Fedurko Nikolaus</a> © 2019</p>
         </div>
     </footer>
-
-    <script>
-        
-        {% block script %}
-        {% endblock %}
-        
-    </script>
 </body>
 
 </html>

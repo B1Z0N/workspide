@@ -1,0 +1,18 @@
+{% extends "ads/ad_panel_base.html" %}
+
+{% block manage %}
+<div class="row justify-content-center">
+    <a href="/account/edit_{{ ad.ad_type }}/{{ ad.id }}/">
+        <button class="btn btn-primary mx-auto my-3 btn-sm significant-button">
+            Edit
+        </button>
+    </a>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+        <a href="/account/delete_ad/{{ ad.id }}/">
+            <button class="btn btn-danger mx-auto my-3 btn-sm significant-button">
+                Delete
+            </button>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "ads/add_ad.html" %}
+
+{% block onload %}
+    skill_input = document.getElementById("skill_text")
+    {% for skill in skills %}
+        skill_input.value = '{{ skill }}' 
+        pushSkill()
+    {% endfor%}
+    {% if vacancy %}
+        resp_input = document.getElementById("resp_text")
+        {% for resp in resps %}
+            resp_input.value = '{{ resp }}' 
+            pushResp()
+        {% endfor %}
+    {% endif %}
+    
+    {% if resume %}
+        project_text_input = document.getElementById("project_text")
+        project_link_input = document.getElementById("project_link")
+        {% for text, link in projects %}
+            project_text_input.value = '{{ text }}' 
+            project_link_input.value = '{{ link }}' 
+            pushProject()
+        {% endfor %}
+    {% endif %}
+{% endblock %}

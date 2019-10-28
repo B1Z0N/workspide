@@ -1,13 +1,8 @@
 TODO:
-    add functionality
-        email change form
-            add view
-            add template
-    
-    ... ... ...
-    
-    customize models to be concise and generic
-    add resume panel
-    add resume page
-    add feed
-    add search
+    add
+        search
+            filters
+            search itself
+        feed
+        ad edit
+        location

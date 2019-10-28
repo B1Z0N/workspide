@@ -6,9 +6,19 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm as Defaul
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import PasswordResetForm
 
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+
+from .models import Ad, Skill, PetProject, Responsibility
+
 
 User = get_user_model()
+validate = URLValidator()
 
+
+##################################################
+# Account management forms
+##################################################
 
 class UserCreationForm(UserCreationForm):
     """A form for creating new users. Includes all the required
@@ -63,3 +73,55 @@ class NameChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', )
+
+
+##################################################
+# Ad forms
+##################################################
+
+
+from django_summernote.widgets import SummernoteWidget
+
+
+class AdModelForm(forms.ModelForm):
+    class Meta:
+        model = Ad
+        widgets = {
+            'text': SummernoteWidget(),
+        }
+        fields = ('ad_type', 'title', 'city', 'text', 
+            'salary', 'currency', 'experience_months', 'experience_type' )
+    
+    @staticmethod
+    def get_form(text_widget_attrs=None, *args, **kwargs):
+        obj = AdModelForm(*args, **kwargs)
+        obj.fields['text'].widget = SummernoteWidget(attrs={
+            'summernote' : text_widget_attrs if text_widget_attrs is not None else {}
+        })
+        return obj
+
+
+class SKillModelForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = ('text', )
+
+
+class ResponsibilityModelForm(forms.ModelForm):
+    class Meta:
+        model = Responsibility
+        fields = ('text', )
+
+
+class PetProjectModelForm(forms.ModelForm):
+    class Meta:
+        model = PetProject
+        fields = ('text', 'link', )
+
+    def clean_link(self):
+        link = self.cleaned_data['link']
+        try:
+            validate(link)
+        except ValidationError:
+            self.add_error('link', 'Link is invalid')
+        return link
