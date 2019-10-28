@@ -199,7 +199,9 @@ def edit_ad(ad_type):
             return error(request)
         if ad_type != ad.ad_type:
             return error(request)
-
+        if request.user != ad.uid:
+            return ad_error(request, msg='Na ah, you are not allowed to do this!')
+            
         form = AdModelForm.get_form(
             text_widget_attrs={
                 'placeholder': get_description_placeholder(ad.ad_type)},
