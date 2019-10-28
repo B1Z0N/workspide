@@ -1,9 +1,8 @@
 TODO:
-    customize models to be concise and generic
-    add resume panel
-    add resume page
-    add feed
-    add search
-
-IDEAS:
-    add appropriate `focus()` to all input elements
+    add
+        search
+            filters
+            search itself
+        feed
+        ad edit
+        location
