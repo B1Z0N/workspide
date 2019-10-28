@@ -41,6 +41,8 @@ urlpatterns = [
     path('account/add_resume/', unauthorized_access(search_views.add_ad("resume")), name="add_resume"),
     path('account/add_vacancy/', unauthorized_access(search_views.add_ad("vacancy")), name="add_vacancy"),
     path('account/delete_ad/<int:ad_id>/', unauthorized_access(search_views.delete_ad), name='delete_ad'),
+    path('account/edit_resume/<int:ad_id>/', unauthorized_access(search_views.edit_ad('resume')), name='edit_resume'),
+    path('account/edit_vacancy/<int:ad_id>/', unauthorized_access(search_views.edit_ad('vacancy')), name='edit_vacancy'),
     path('show_ad/<int:ad_id>/', search_views.show_ad, name='show_ad'),
 
     path('search/<str:_type>/<str:_text>/', search_views.search, name='search_text'),
