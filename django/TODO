@@ -4,5 +4,6 @@ TODO:
             filters
             search itself
         feed
-        ad edit
-        location
+    problems
+        html in html editor displays on whole pager
+        cities field
