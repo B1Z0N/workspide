@@ -46,6 +46,7 @@ urlpatterns = [
     
     path('show_ad/<int:ad_id>/', search_views.show_ad, name='show_ad'),
     path('pide/<int:ad_id>/', search_views.pide, name='pide'),
+    path('pide_confirm/<int:pide_id>/', unauthorized_access(search_views.pide_confirm), name='pide_confirm'),
     path('feed/', unauthorized_access(search_views.feed), name='feed'),
 
     path('search/<str:_type>/<str:_text>/', search_views.search, name='search_text'),
