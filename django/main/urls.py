@@ -31,11 +31,11 @@ urlpatterns = [
     path('account/email_change_complete/<str:uidb64>/<str:emailb64>/<str:token>', unauthorized_access(account_views.email_change_complete), name='submit_deletion'),
     path('account/password_change/', unauthorized_access(account_views.password_change), name='password_change'),
     path('account/email_change/<str:uidb64>/<str:token>', unauthorized_access(account_views.email_change), name='email_change'),
-    path('account/password_reset/', unauthorized_access(
+    path('account/password_reset/', 
         auth_views.PasswordResetView.as_view(
             subject_template_name='emails/password_reset_subject.txt',
             html_email_template_name='emails/password_reset.html',
-        ))
+        )
     ),
 
     path('account/add_resume/', unauthorized_access(search_views.add_ad("resume")), name="add_resume"),
@@ -43,7 +43,10 @@ urlpatterns = [
     path('account/delete_ad/<int:ad_id>/', unauthorized_access(search_views.delete_ad), name='delete_ad'),
     path('account/edit_resume/<int:ad_id>/', unauthorized_access(search_views.edit_ad('resume')), name='edit_resume'),
     path('account/edit_vacancy/<int:ad_id>/', unauthorized_access(search_views.edit_ad('vacancy')), name='edit_vacancy'),
+    
     path('show_ad/<int:ad_id>/', search_views.show_ad, name='show_ad'),
+    path('pide/<int:ad_id>/', search_views.pide, name='pide'),
+    path('feed/', unauthorized_access(search_views.feed), name='feed'),
 
     path('search/<str:_type>/<str:_text>/', search_views.search, name='search_text'),
     path('search/<str:_type>/', search_views.empty_search, name='search_default'),
