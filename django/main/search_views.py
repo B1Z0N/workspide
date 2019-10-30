@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+
+from datetime import datetime
+from django.utils import timezone
 import random
 import json
 
@@ -283,8 +287,9 @@ def pide(request, ad_id):
             if form.is_valid():
                 pide = form.save(commit=False)
                 pide.ad_to = ad
+                pide.uid_from = request.user
                 pide.save() 
-                return ad_alert(request, 'Success')
+                return redirect('/feed/')
 
         return render(request, 'deals/deal_base.html', {'form': form})
 
@@ -299,11 +304,10 @@ def pide(request, ad_id):
 
 
 def feed(request):
-    pides = Pide.objects.filter(ad_to__uid=request.user) | Pide.objects.filter(ad_to__uid=request.user)
+    pides = Pide.objects.filter(ad_to__uid=request.user) | Pide.objects.filter(uid_from=request.user)
 
-    pides.order_by('pub_dtime')
+    pides = list(pides.order_by('-pub_dtime'))
 
-    # return ad_alert(request, str(pides))
     return render(request, 'deals/feed_base.html', {
         'pides' : pides,
     })
@@ -314,35 +318,39 @@ def pide_confirm(request, pide_id):
         if request.method == 'POST':
             if 'reject_btn' in request.POST:
                 pide.state = 'rejected'
+                pide.pub_dtime = timezone.now()
             elif 'accept_btn' in request.POST:
                 pide.state = 'accepted'
+                current_site = get_current_site(request)
+                get_link = lambda ad: f"<a href='http://{current_site}/show_ad/{ad.id}/'>'{ad.title}'</a>"
+
+                msg = f"Here is an email of {get_link(pide.ad_to)} {pide.ad_to.ad_type} owner, that you've pided:" 
+                if pide.ad_from:
+                    msg += msg[:-1] + f" with {get_link(pide.ad_from)} at {pide.pub_dtime}:"
+                msg += f"  {pide.ad_to.uid.email}"
                 send_mail(
                     subject='Pide success',
-                    message=f"""
-                        Here is an email of '{pide.ad_to.title}' {pide.ad_to.ad_type} owner,
-                        that you've pided with '{pide.ad_from.title}' at {pide.pub_dtime}:
-
-                        {pide.ad_to.uid.email}
-                        """,
-                    to_email=[pide.ad_from.uid.email]
+                    message=msg,
+                    to_email=[pide.uid_from.email]
                 )
+
+                msg = f"Here is an email of "
+                if pide.ad_from:
+                    msg += f"{get_link(pide.ad_from)} {pide.ad_from.ad_type} owner"
+                else:
+                    msg += "user"
+                msg += f""" that have pided you on {get_link(pide.ad_to)} at {pide.pub_dtime}:  {pide.uid_from.email}"""
                 send_mail(
                     subject='Pide success',
-                    message=f"""
-                        Here is an email of '{pide.ad_from.title}' {pide.ad_from.ad_type} owner,
-                        that have pided you on '{pide.ad_to.title}' at {pide.pub_dtime}:
-
-                        {pide.ad_from.uid.email}
-                        """,
+                    message=msg,
                     to_email=[pide.ad_to.uid.email]
                 )
+            pide.pub_dtime = timezone.now()
             pide.save()
             return redirect('/feed/')
         return render(request, 'deals/pide_confirm.html/', {
             'pide' : pide,
         })
-        
-
 
     try:
         pide = Pide.objects.get(id=pide_id)
@@ -351,6 +359,8 @@ def pide_confirm(request, pide_id):
     if pide.state == 'rejected':
         return ad_alert(request, 'This pide was rejected to you')
     elif pide.state == 'accepted':
-        return ad_alert(request, 'This pide was accepted, author`s contacts is in your mailbox now')
+        return ad_alert(request, 'This pide was accepted, author`s contacts is in pide author`s mailbox now')
     elif request.user == pide.ad_to.uid:
         return actual_view(request, pide)
+
+    return ad_alert(request, 'You have no rights to go here, take care')
