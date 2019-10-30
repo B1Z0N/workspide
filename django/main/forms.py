@@ -133,7 +133,7 @@ class PideModelForm(forms.ModelForm):
         widgets = {
             'comment': SummernoteWidget(),
         }
-        fields = ('ad_from', 'comment', )
+        fields = ('ad_from', 'comment', 'pub_dtime')
     
     def __init__(self, user=None, ad_type=None, 
                 text_widget_attrs=None, *args, **kwargs):
