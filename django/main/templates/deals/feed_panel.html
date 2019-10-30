@@ -1,28 +1,13 @@
-<a href="/pide/{{ pide.id }}" style="color: rgb(201, 167, 58); text-decoration: none;">
-    {% if pide.state == 'inited' %}
-        <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-            style="background-color:#292826; color: rgb(201, 167, 58);">
-            <div class="row">
-                <div class="col-9">
-                    <h1><em>Pide activation on {{ pide.ad1.title }} {{ pide.ad1.ad_type }}</em></h1>
-                </div>
-                <div class="col-3">
-                    {{ pide.pub_dtime }}
-                </div>
+<a href="/pide_confirm/{{ pide.id }}" style="color: rgb(201, 167, 58); text-decoration: none;">
+    <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+        style="background-color:#292826; color: rgb(201, 167, 58);">
+        <div class="row">
+            <div class="col-9">
+                <h1><em>You have a new pide on {{ pide.ad_to.title }} {{ pide.ad_to.ad_type }}</em></h1>
+            </div>
+            <div class="col-3">
+                {{ pide.pub_dtime }}
             </div>
         </div>
-    {% endif %}
-    {% if pide.state == 'confirmed' %}
-        <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-            style="background-color:rgb(173, 173, 173); color: #292826;">
-            <div class="row">
-                <div class="col-9">
-                    <h1><em>Pide on {{ pide.ad1.title }} {{ pide.ad1.ad_type }}</em></h1>
-                </div>
-                <div class="col-3">
-                    {{ pide.pub_dtime }}
-                </div>
-            </div>
-        </div>
-    {% endif %}
+    </div>
 </a>
