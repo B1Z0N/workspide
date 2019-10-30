@@ -6,7 +6,7 @@ import json
 
 from .forms import AdModelForm, PideModelForm
 from .models import User, Ad, Skill, PetProject, Responsibility, Pide
-
+from .email import send_mail
 
 ##################################################
 # Search views
@@ -299,6 +299,58 @@ def pide(request, ad_id):
 
 
 def feed(request):
-    feed_pides = Pide.objects.filter(ad_to__uid=request.user)
+    pides = Pide.objects.filter(ad_to__uid=request.user) | Pide.objects.filter(ad_to__uid=request.user)
 
-    return render(request, 'deals/feed_base.html', {'pides': feed_pides})
+    pides.order_by('pub_dtime')
+
+    # return ad_alert(request, str(pides))
+    return render(request, 'deals/feed_base.html', {
+        'pides' : pides,
+    })
+
+
+def pide_confirm(request, pide_id):
+    def actual_view(request, pide):
+        if request.method == 'POST':
+            if 'reject_btn' in request.POST:
+                pide.state = 'rejected'
+            elif 'accept_btn' in request.POST:
+                pide.state = 'accepted'
+                send_mail(
+                    subject='Pide success',
+                    message=f"""
+                        Here is an email of '{pide.ad_to.title}' {pide.ad_to.ad_type} owner,
+                        that you've pided with '{pide.ad_from.title}' at {pide.pub_dtime}:
+
+                        {pide.ad_to.uid.email}
+                        """,
+                    to_email=[pide.ad_from.uid.email]
+                )
+                send_mail(
+                    subject='Pide success',
+                    message=f"""
+                        Here is an email of '{pide.ad_from.title}' {pide.ad_from.ad_type} owner,
+                        that have pided you on '{pide.ad_to.title}' at {pide.pub_dtime}:
+
+                        {pide.ad_from.uid.email}
+                        """,
+                    to_email=[pide.ad_to.uid.email]
+                )
+            pide.save()
+            return redirect('/feed/')
+        return render(request, 'deals/pide_confirm.html/', {
+            'pide' : pide,
+        })
+        
+
+
+    try:
+        pide = Pide.objects.get(id=pide_id)
+    except Pide.DoesNotExist:
+        return ad_alert(request, 'No such pide exists')
+    if pide.state == 'rejected':
+        return ad_alert(request, 'This pide was rejected to you')
+    elif pide.state == 'accepted':
+        return ad_alert(request, 'This pide was accepted, author`s contacts is in your mailbox now')
+    elif request.user == pide.ad_to.uid:
+        return actual_view(request, pide)
