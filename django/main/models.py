@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
-
+from datetime import datetime
 
 ##################################################
 # Custom user management models
@@ -126,8 +126,11 @@ class Ad(models.Model):
     text = models.TextField(null=True, blank=True)
     salary = models.PositiveIntegerField(null=True, blank=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='usd')
+    
     experience_months = models.PositiveIntegerField(null=True, blank=True)
     experience_type = models.CharField(max_length=5, choices=EXPERIENCE_CHOICES, default='month')
+
+    pub_dtime = models.DateTimeField(default=datetime.now, blank=True)
 
     __str__ = print_ad_info
 
@@ -155,3 +158,22 @@ class Responsibility(models.Model):
 
     def __str__(self):
         return self.text
+
+
+PIDE_STATE_CHOICES = [
+    ('pending', 'pending'),
+    ('confirmed', 'confirmed')
+]
+
+
+class Pide(models.Model):
+    ad_from = models.ForeignKey(Ad, 
+        null=True, blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='ad_from')
+    ad_to = models.ForeignKey(Ad,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='ad_to')
+    comment = models.TextField(null=True, blank=True)
+    state = models.CharField(max_length=9, choices=PIDE_STATE_CHOICES, default='pending', blank=True)
