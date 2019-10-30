@@ -5,7 +5,7 @@ import random
 import json
 
 from .forms import AdModelForm, PideModelForm
-from .models import User, Ad, Skill, PetProject, Responsibility
+from .models import User, Ad, Skill, PetProject, Responsibility, Pide
 
 
 ##################################################
@@ -191,7 +191,7 @@ def show_ad(request, ad_id):
 
         return render(request, template_name, context)
 
-    def show_ad_to_owner(request, ad): return actual_view(
+    def show_anonymous_ad(request, ad): return actual_view(
         request, ad, 'ads/ad_view.html')
     def show_foreign_ad(request, ad): return actual_view(
         request, ad, 'ads/ad_foreign_view.html')
@@ -200,8 +200,8 @@ def show_ad(request, ad_id):
         ad = Ad.objects.get(id=ad_id)
     except Ad.DoesNotExist:
         return ad_alert(request)
-    if request.user == ad.uid:
-        return show_ad_to_owner(request, ad)
+    if request.user == ad.uid or not request.user.is_authenticated:
+        return show_anonymous_ad(request, ad)
     else:
         return show_foreign_ad(request, ad)
 
@@ -299,6 +299,6 @@ def pide(request, ad_id):
 
 
 def feed(request):
-    feed_pides = Pide.objects.filter(pided_ad__uid=request.user)
+    feed_pides = Pide.objects.filter(ad_to__uid=request.user)
 
     return render(request, 'deals/feed_base.html', {'pides': feed_pides})
