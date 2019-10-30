@@ -1,25 +1,52 @@
 <div class="conatainer">
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-            {% if pide.state == "pending" %}
+            {% if pide.state == "pending" and request.user == pide.ad_to.uid %}
             <a href="/pide_confirm/{{ pide.id }}" style="color: rgb(201, 167, 58); text-decoration: none;">
                 {% endif %}
-                <h1>
-                    <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-                        style="background-color:#292826; color: rgb(201, 167, 58);">
+                <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+                style="background-color:#292826; color: rgb(201, 167, 58);">
+                    <h3>
                         {% if pide.state == "pending" %}
-                        You have a new pide on "{{ pide.ad_to.title }}" {{ pide.ad_to.ad_type }}
+                            {% if pide.ad_to.uid == request.user %}
+                                You have a new pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a> {{ pide.ad_to.ad_type }}, click to take a look
+                            {% endif %}
+                            {% if pide.uid_from == request.user %}
+                                Your pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a> {{ pide.ad_to.ad_type }} 
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a> {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                is pending
+                            {% endif %}
                         {% endif %}
                         {% if pide.state == "accepted" %}
-                        Pide for "{{ pide.ad_to.title }}" {{ pide.ad_to.ad_type }} was accepted, check you mailbox for
-                        contacts
+                            {% if pide.ad_to.uid == request.user %}
+                                Pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a> {{ pide.ad_to.ad_type }} 
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a> {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                was accepted, check you mailbox for contacts
+                            {% endif %}
+                            {% if pide.uid_from == request.user %}
+                                Your pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a> {{ pide.ad_to.ad_type }} 
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a> {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                was accepted, check you mailbox for contacts
+                            {% endif %}
                         {% endif %}
                         {% if pide.state == "rejected" %}
-                        Pide for "{{ pide.ad_to.title }}" {{ pide.ad_to.ad_type }} was rejected
+                            {% if pide.uid_from == request.user %}
+                                Your pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a> {{ pide.ad_to.ad_type }} 
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a> {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                was rejected, cheer up, keep on trying!
+                            {% endif %}
                         {% endif %}
-                    </div>
-                </h1>
-                {% if pide.state == "pending" %}
+                    </h3>
+                </div>
+            {% if pide.state == "pending" and request.user == pide.ad_to.uid %}
             </a>
             {% endif %}
         </div>
