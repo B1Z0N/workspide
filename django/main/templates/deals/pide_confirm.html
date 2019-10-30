@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    From
+    {% include "ads/ad_panel_base.html" with pide.ad_from as ad %}
+    To
+    {% include "ads/ad_panel_base.html" with pide.ad_to as ad %}
+    {% if pide.comment %}
+    Comment
+    {{ pide.comment }}
+{% endif %}
+    <form class="form" method="post">
+        <div class="row">
+            <div class="col-6">
+                <input type="submit" name="accept_btn" value="Accept"
+                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+            </div>
+            <div class="col-6">
+                <input type="submit" name="reject_btn" value="Reject"
+                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+            </div>
+        </div>
+    </form>
+{% endblock %}
