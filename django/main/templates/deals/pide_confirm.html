@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
-    {% if pide.ad_to %}
-        <h1><em>Pide from</em></h1>
-        {% include "ads/ad_panel_base.html" with ad=pide.ad_from %}
-    {% endif %}
 
-    {% if pide.ad_from %}
-        <h1><em>To</em></h1>
+        {% if pide.ad_from %}
+            <h1><em>Pide from</em></h1>
+            {% include "ads/ad_panel_base.html" with ad=pide.ad_from %}
+            <h1><em>To your</em></h1>
+        {% else %}
+            <h1><em>Pide to your</em></h1>
+        {% endif %}
         {% include "ads/ad_panel_base.html" with ad=pide.ad_to %}
-    {% endif %}
 
-    {% if pide.comment %}
-        <h1><em>Comment</em></h1>
-        <div class="container custom-shadowed rounded p-5 mb-5 text-left mx-auto"
-        style="background-color:rgb(173, 173, 173); color: #292826;">
-            {{ pide.comment|safe }}
-        </div>
-    {% endif %}
-    <form class="form" method="post">
-        {% csrf_token %}
-        <div class="row">
-            <div class="col-6">
-                <input type="submit" name="accept_btn" value="Accept"
-                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+        {% if pide.comment %}
+            <h1><em>Comment</em></h1>
+            <div class="container custom-shadowed rounded p-5 mb-5 text-left mx-auto"
+            style="background-color:rgb(173, 173, 173); color: #292826;">
+                <h3>
+                    {{ pide.comment|safe }}
+                </h3>
             </div>
-            <div class="col-6">
-                <input type="submit" name="reject_btn" value="Reject"
-                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
+        {% endif %}
+        <form class="form" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-6">
+                    <input type="submit" name="accept_btn" value="Accept"
+                        class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+                </div>
+                <div class="col-6">
+                    <input type="submit" name="reject_btn" value="Reject"
+                        class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 {% endblock %}
