@@ -4,7 +4,7 @@ from django.conf import settings
 import random
 import json
 
-from .forms import AdModelForm
+from .forms import AdModelForm, PideModelForm
 from .models import User, Ad, Skill, PetProject, Responsibility
 
 
@@ -30,6 +30,10 @@ def empty_search(request, _type):
 ##################################################
 # Helper functions
 ##################################################
+
+def negate_ad(ad_type):
+    assert(ad_type == "vacancy" or ad_type == "resume")
+    return 'vacancy' if ad_type == 'resume' else 'resume'
 
 
 def save_skills(post, ad):
@@ -68,7 +72,6 @@ def save_all_additional(post, ad, ad_type):
         save_resp(post, ad)
     elif ad_type == 'resume':
         save_projects(post, ad)
-
 
 
 # just a summernote placeholder generator
@@ -116,11 +119,12 @@ def get_description_placeholder(ad_type):
     else:
         return ' '.join([gen_random_resume_beginning(), gen_random_job()])
 
-def ad_error(request, msg=None):
+
+def ad_alert(request, msg=None):
     return render(request, 'alerts/render_base.html', {
-        'response_error_title': 'Error',
-        'response_error_text': 'No such ad exist' 
-                                    if msg is None else msg
+        'response_error_title': 'Message',
+        'response_error_text': 'No such ad exist'
+        if msg is None else msg
     })
 
 
@@ -133,7 +137,7 @@ def add_ad(ad_type):
     assert(ad_type == "vacancy" or ad_type == "resume")
 
     def actual_view(request):
-        form = AdModelForm.get_form(
+        form = AdModelForm(
             text_widget_attrs={
                 'placeholder': get_description_placeholder(ad_type)}
         )
@@ -162,31 +166,44 @@ def add_ad(ad_type):
 
 
 def show_ad(request, ad_id):
-    try:
-        ad = Ad.objects.get(id=ad_id)
-    except Ad.DoesNotExist:
-        return ad_error(request)
-
     def assign(context, var, name):
         if var:
             context[name] = var
 
-    context = {'ad': ad, }
-    assign(context, Skill.objects.filter(ad_id=ad_id), 'skills')
-    assign(context, ad.text, 'description')
-    user = ad.uid
     def emptify(s): return '' if s is None else s
-    if user.first_name or user.last_name:
-        assign(context, emptify(user.first_name) +
-               ' ' + emptify(user.last_name), 'name')
 
-    if ad.ad_type == 'vacancy':
-        assign(context, Responsibility.objects.filter(
-            vacancy_id=ad_id), 'resps')
-    elif ad.ad_type == 'resume':
-        assign(context, PetProject.objects.filter(resume_id=ad_id), 'projects')
+    def actual_view(request, ad, template_name):
+        context = {'ad': ad, 'negated_type': negate_ad(ad.ad_type), }
+        assign(context, Skill.objects.filter(ad_id=ad_id), 'skills')
+        assign(context, ad.text, 'description')
+        user = ad.uid
 
-    return render(request, 'ads/ad_view.html', context)
+        if user.first_name or user.last_name:
+            assign(context, emptify(user.first_name) +
+                   ' ' + emptify(user.last_name), 'name')
+
+        if ad.ad_type == 'vacancy':
+            assign(context, Responsibility.objects.filter(
+                vacancy_id=ad_id), 'resps')
+        elif ad.ad_type == 'resume':
+            assign(context, PetProject.objects.filter(
+                resume_id=ad_id), 'projects')
+
+        return render(request, template_name, context)
+
+    def show_ad_to_owner(request, ad): return actual_view(
+        request, ad, 'ads/ad_view.html')
+    def show_foreign_ad(request, ad): return actual_view(
+        request, ad, 'ads/ad_foreign_view.html')
+
+    try:
+        ad = Ad.objects.get(id=ad_id)
+    except Ad.DoesNotExist:
+        return ad_alert(request)
+    if request.user == ad.uid:
+        return show_ad_to_owner(request, ad)
+    else:
+        return show_foreign_ad(request, ad)
 
 
 def edit_ad(ad_type):
@@ -200,8 +217,8 @@ def edit_ad(ad_type):
         if ad_type != ad.ad_type:
             return error(request)
         if request.user != ad.uid:
-            return ad_error(request, msg='Na ah, you are not allowed to do this!')
-            
+            return ad_alert(request, msg='Na ah, you are not allowed to do this!')
+
         form = AdModelForm.get_form(
             text_widget_attrs={
                 'placeholder': get_description_placeholder(ad.ad_type)},
@@ -241,13 +258,47 @@ def delete_ad(request, ad_id):
     try:
         ad = Ad.objects.get(id=ad_id)
     except Ad.DoesNotExist:
-        return ad_error(request)
+        return ad_alert(request)
 
     if request.user != ad.uid:
-        return ad_error(request, msg='Na ah, you are not allowed to do this!')
+        return ad_alert(request, msg='Na ah, you are not allowed to do this!')
 
     if request.method == 'POST':
         ad.delete()
         return redirect('/account/')
 
     return render(request, 'ads/delete_ad.html', {'ad': ad})
+
+
+def pide(request, ad_id):
+    def actual_view(request, ad):
+        form = PideModelForm(
+            user=request.user, ad_type=negate_ad(ad.ad_type)
+        )
+
+        if request.method == 'POST':
+            form = PideModelForm(data=request.POST,
+                                 user=request.user, ad_type=negate_ad(
+                                     ad.ad_type))
+            if form.is_valid():
+                pide = form.save(commit=False)
+                pide.ad_to = ad
+                pide.save() 
+                return ad_alert(request, 'Success')
+
+        return render(request, 'deals/deal_base.html', {'form': form})
+
+    try:
+        ad = Ad.objects.get(id=ad_id)
+    except Ad.DoesNotExist:
+        return ad_alert(request)
+    if request.user == ad.uid:
+        return ad_alert(request, 'You are not allowed to pide your own ad')
+    else:
+        return actual_view(request, ad)
+
+
+def feed(request):
+    feed_pides = Pide.objects.filter(pided_ad__uid=request.user)
+
+    return render(request, 'deals/feed_base.html', {'pides': feed_pides})
