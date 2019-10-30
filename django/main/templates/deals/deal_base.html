@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pide it!
+{% endblock %}
+
+{% block content %}
+{% load widget_tweaks %}
+<div class="container mt-5 p-3 rounded connect-options" style="background-color: #292826; color: #F9D342;">
+    <h1><em>Pide it!</em></h1>
+    <form class="form" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            {% if request.user.is_authenticated %}
+                {{ form.ad_from|add_class:"custom-select" }}
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.comment }}
+        </div>
+        <input type="submit" name="pide_btn" value="Pide the deal!"
+            class="btn btn-primary mx-auto my-3 btn-lg significant-button"/>
+        <!-- {{ form.non_field_errors }} -->
+    </form>
+</div>
+{% endblock %}
