@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
+{% block style %}
+    a, a:hover {
+        color: gray; 
+        font-style: italic;
+    } 
+{% endblock %}
+
 {% block content %}
     {% for pide in pides %}
-        {% include "deals/feed_panel.html" %}
+        {% if pide.state != "rejected" or pide.uid_from == request.user %}
+            {% include "deals/feed_panel.html" %}
+        {% endif %}
     {% endfor %}
 {% endblock %}
