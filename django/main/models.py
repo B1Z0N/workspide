@@ -160,6 +160,13 @@ class Responsibility(models.Model):
         return self.text
 
 
+PIDE_STATE_CHOICES = [
+    ('pending', 'pending'),
+    ('accepted', 'accepted'),
+    ('rejected', 'rejected'),
+]
+
+
 class Pide(models.Model):
     ad_from = models.ForeignKey(Ad, 
         null=True, blank=True,
@@ -170,4 +177,13 @@ class Pide(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='ad_to')
     comment = models.TextField(null=True, blank=True)
+    state = models.CharField(max_length=8, choices=PIDE_STATE_CHOICES, default='pending', blank=True)
+
     pub_dtime = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        s = f' --{self.state}>> ' + str(self.ad_to.title)
+        if self.ad_from:
+            return str(self.ad_from.title) + s
+        else:
+            return s
