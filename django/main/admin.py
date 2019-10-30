@@ -7,7 +7,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django_summernote.admin import SummernoteModelAdmin
 
 from .forms import UserChangeForm, UserCreationForm
-from .models import User, Ad, Skill, PetProject, Responsibility
+from .models import User, Ad, Skill, PetProject, Responsibility, Pide
 
 
 class UserAdmin(BaseUserAdmin):
@@ -47,9 +47,13 @@ admin.site.unregister(Group)
 admin.site.register(Skill)
 admin.site.register(PetProject)
 admin.site.register(Responsibility)
-# register Ad model
+# register Pide and Ad models
 # Apply summernote to all TextField in Ad model.
 class AdModelAdmin(SummernoteModelAdmin):
     summernote_fields = '__all__'
 
+class PideModelAdmin(SummernoteModelAdmin):
+    summernote_fields = ('pide',)
+
 admin.site.register(Ad, AdModelAdmin)
+admin.site.register(Pide, PideModelAdmin)
