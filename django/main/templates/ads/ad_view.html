@@ -65,12 +65,16 @@
 </div>
 {% endif %}
 
-{% if name %}
 <div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-    style="background-color:rgb(173, 173, 173); color: #292826;">
-    <h1><em>By {{ name }} at {{ ad.pub_dtime }}</em></h1>
+style="background-color:rgb(173, 173, 173); color: #292826;">
+    <h1><em>
+        {% if name %}
+            Posted by {{ name }} at {{ ad.pub_dtime }}
+        {% else %}
+            Posted at {{ ad.pub_dtime }}
+        {% endif %}
+    </em></h1>
 </div>
-{% endif %}
 
 {% block footer %}
 {% endblock%}
