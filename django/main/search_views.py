@@ -23,7 +23,7 @@ def search(request, _type, _text):
 
     return render(request, 'search.html', {
         'search_type': _type,
-        'search_text': _text
+        'search_text': _text,
     })
 
 
@@ -288,6 +288,10 @@ def pide(request, ad_id):
                 pide = form.save(commit=False)
                 pide.ad_to = ad
                 pide.uid_from = request.user
+                pide.uid_from.not_read += 1
+                pide.ad_to.uid.not_read += 1
+                pide.uid_from.save()
+                pide.ad_to.uid.save()
                 pide.save() 
                 return redirect('/feed/')
 
@@ -305,11 +309,16 @@ def pide(request, ad_id):
 
 def feed(request):
     pides = Pide.objects.filter(ad_to__uid=request.user) | Pide.objects.filter(uid_from=request.user)
-
-    pides = list(pides.order_by('-pub_dtime'))
-
+    _pides =[]
+    for pide in pides.order_by('-pub_dtime'):
+        if request.user.not_read:
+            _pides.append((pide, 'marked'))
+            request.user.not_read -= 1
+        else:
+            _pides.append((pide, 'usual'))
+    request.user.save()
     return render(request, 'deals/feed_base.html', {
-        'pides' : pides,
+        'pides' : _pides,
     })
 
 
@@ -317,9 +326,13 @@ def pide_confirm(request, pide_id):
     def actual_view(request, pide):
         if request.method == 'POST':
             if 'reject_btn' in request.POST:
+                if pide.ad_to.uid.not_read:
+                    pide.ad_to.uid.not_read -= 1
+                pide.uid_from.not_read += 1
                 pide.state = 'rejected'
                 pide.pub_dtime = timezone.now()
             elif 'accept_btn' in request.POST:
+                pide.uid_from.not_read += 1
                 pide.state = 'accepted'
                 current_site = get_current_site(request)
                 get_link = lambda ad: f"<a href='http://{current_site}/show_ad/{ad.id}/'>'{ad.title}'</a>"
@@ -346,6 +359,8 @@ def pide_confirm(request, pide_id):
                     to_email=[pide.ad_to.uid.email]
                 )
             pide.pub_dtime = timezone.now()
+            pide.uid_from.save()
+            pide.ad_to.uid.save()
             pide.save()
             return redirect('/feed/')
         return render(request, 'deals/pide_confirm.html/', {
