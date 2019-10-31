@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
-
+from datetime import datetime
+from django.utils import timezone
 
 ##################################################
 # Custom user management models
@@ -46,6 +47,8 @@ class User(AbstractBaseUser):
     )
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
+
+    not_read = models.PositiveIntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)  # a superuser
@@ -126,8 +129,11 @@ class Ad(models.Model):
     text = models.TextField(null=True, blank=True)
     salary = models.PositiveIntegerField(null=True, blank=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='usd')
+    
     experience_months = models.PositiveIntegerField(null=True, blank=True)
     experience_type = models.CharField(max_length=5, choices=EXPERIENCE_CHOICES, default='month')
+
+    pub_dtime = models.DateTimeField(default=timezone.now, blank=True)
 
     __str__ = print_ad_info
 
@@ -155,3 +161,37 @@ class Responsibility(models.Model):
 
     def __str__(self):
         return self.text
+
+
+PIDE_STATE_CHOICES = [
+    ('pending', 'pending'),
+    ('accepted', 'accepted'),
+    ('rejected', 'rejected'),
+]
+
+
+class Pide(models.Model):
+    uid_from = models.ForeignKey(User,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='uid_from'
+    )
+    ad_from = models.ForeignKey(Ad, 
+        null=True, blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='ad_from')
+    ad_to = models.ForeignKey(Ad,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='ad_to')
+    comment = models.TextField(null=True, blank=True)
+    state = models.CharField(max_length=8, choices=PIDE_STATE_CHOICES, default='pending', blank=True)
+
+    pub_dtime = models.DateTimeField(default=timezone.now, blank=True)
+
+    def __str__(self):
+        s = f' --{self.state}>> ' + str(self.ad_to.title)
+        if self.ad_from:
+            return str(self.ad_from.title) + s
+        else:
+            return s

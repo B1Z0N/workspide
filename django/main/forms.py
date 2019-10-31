@@ -9,7 +9,7 @@ from django.contrib.auth.views import PasswordResetForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
-from .models import Ad, Skill, PetProject, Responsibility
+from .models import Ad, Skill, PetProject, Responsibility, Pide
 
 
 User = get_user_model()
@@ -86,19 +86,14 @@ from django_summernote.widgets import SummernoteWidget
 class AdModelForm(forms.ModelForm):
     class Meta:
         model = Ad
-        widgets = {
-            'text': SummernoteWidget(),
-        }
         fields = ('ad_type', 'title', 'city', 'text', 
-            'salary', 'currency', 'experience_months', 'experience_type' )
+            'salary', 'currency', 'experience_months', 'experience_type', 'pub_dtime')
     
-    @staticmethod
-    def get_form(text_widget_attrs=None, *args, **kwargs):
-        obj = AdModelForm(*args, **kwargs)
-        obj.fields['text'].widget = SummernoteWidget(attrs={
+    def __init__(self, text_widget_attrs=None, *args, **kwargs):
+        super(AdModelForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget = SummernoteWidget(attrs={
             'summernote' : text_widget_attrs if text_widget_attrs is not None else {}
         })
-        return obj
 
 
 class SKillModelForm(forms.ModelForm):
@@ -125,3 +120,30 @@ class PetProjectModelForm(forms.ModelForm):
         except ValidationError:
             self.add_error('link', 'Link is invalid')
         return link
+
+
+class PideModelForm(forms.ModelForm):
+    ad_from = forms.ModelChoiceField(
+        queryset=Ad.objects.none(), 
+        empty_label='Choose your ad',
+        required=False,
+    )
+    class Meta:
+        model = Pide
+        widgets = {
+            'comment': SummernoteWidget(),
+        }
+        fields = ('ad_from', 'comment', 'pub_dtime', )
+    
+    def __init__(self, user=None, ad_type=None, 
+                text_widget_attrs=None, *args, **kwargs):
+        super(PideModelForm, self).__init__(*args, **kwargs)
+        if user is not None and ad_type is not None:
+            self.fields['ad_from'].queryset = Ad.objects.filter(uid=user, ad_type=ad_type) 
+        else:
+            self.fields['ad_from'] = None
+
+        self.fields['comment'].widget = SummernoteWidget(attrs={
+            'summernote' : text_widget_attrs if text_widget_attrs is not None else {}
+        })
+

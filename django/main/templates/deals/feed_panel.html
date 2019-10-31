@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+        {% if color == "marked" %}
+            <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+            style="background-color:rgb(173, 173, 173); color: #292826;">
+        {% endif %}
+        {% if color == "usual" %}
+            <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+            style="background-color:#292826; color: rgb(201, 167, 58);">
+        {% endif %}
+                    <h3>
+                        
+                        
+                        {% if pide.state == "pending" %}
+                            {% if pide.ad_to.uid == request.user %}
+                                You have a new pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a>
+                                {{ pide.ad_to.ad_type }}, click to take a look
+                            {% endif %}
+                            {% if pide.uid_from == request.user %}
+                                Your pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a>
+                                {{ pide.ad_to.ad_type }}
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a>
+                                    {{ pide.ad_from.ad_type }}
+                                {% endif %} 
+                                is pending
+                            {% endif %}
+                        {% endif %}
+                        
+                        
+                        {% if pide.state == "accepted" %}
+                            {% if pide.ad_to.uid == request.user %}
+                                Pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a>
+                                {{ pide.ad_to.ad_type }}
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a>
+                                    {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                 was accepted, check you mailbox for contacts
+                            {% endif %}
+                            {% if pide.uid_from == request.user %}
+                                Your pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a>
+                                {{ pide.ad_to.ad_type }}
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a>
+                                    {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                was accepted, check you mailbox for contacts
+                            {% endif %}
+                        {% endif %}
+                        
+                        
+                        {% if pide.state == "rejected" %}
+                            {% if pide.uid_from == request.user %}
+                                Your pide on <a href="/show_ad/{{ pide.ad_to.id }}/">"{{ pide.ad_to.title }}"</a>
+                                {{ pide.ad_to.ad_type }}
+                                {% if pide.ad_from %}
+                                    with <a href="/show_ad/{{ pide.ad_from.id }}/">"{{ pide.ad_from.title }}"</a>
+                                    {{ pide.ad_from.ad_type }}
+                                {% endif %}
+                                was rejected, cheer up, keep on trying!
+                            {% endif %}
+                        {% endif %}
+                    </h3>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            {% if color == "marked" %}
+            <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+                style="background-color:rgb(173, 173, 173); color: #292826;">
+                {% endif %}
+                {% if color == "usual" %}
+                <div class="container custom-shadowed rounded my-3 mx-auto p-3"
+                    style="background-color:#292826; color: rgb(201, 167, 58);">
+                    {% endif %}
+                    {{ pide.pub_dtime }}
+                    {% if pide.state == "pending" and pide.ad_to.uid == request.user%}
+                    <p>
+                        <a href="/pide_confirm/{{ pide.id }}" style="color: rgb(201, 167, 58); text-decoration: none;">
+                            <button class="btn btn-primary mx-auto mt-3 btn-sm significant-button">
+                                Answer the pide
+                            </button>
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>

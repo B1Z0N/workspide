@@ -42,7 +42,7 @@ class MailSender:
     def __init__(self, template_path='emails/base.html'):
             self.EMAIL_TEMPLATE = get_template(template_path)
 
-    def __call__(self, subject, message, link, to_email):
+    def __call__(self, subject, message, to_email, link=None):
         message = self.EMAIL_TEMPLATE.render(
             {
                 'message' : message, 

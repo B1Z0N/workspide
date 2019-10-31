@@ -3,6 +3,9 @@ TODO:
         search
             filters
             search itself
-        feed
-        ad edit
-        location
+    problems
+        html in html editor displays on whole page
+        cities field
+        timezone
+    ideas
+        add different random quotes for site to be user-friendly and creative

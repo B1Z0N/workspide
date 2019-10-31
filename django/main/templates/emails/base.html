@@ -246,7 +246,11 @@
                                                     <p
                                                         style="font-size: 17px; line-height: 1.5; text-align: left; mso-line-height-alt: 26px; mso-ansi-font-size: 18px; margin: 0;">
                                                         <span
-                                                            style="font-size: 17px; mso-ansi-font-size: 18px;">{{ message }}</span>
+                                                            style="font-size: 17px; mso-ansi-font-size: 18px;">
+                                                            {% autoescape off %}
+                                                            {{ message }}
+                                                            {% endautoescape %}
+                                                        </span>
                                                     </p>
                                                     <p
                                                         style="font-size: 14px; line-height: 1.5; text-align: left; mso-line-height-alt: 21px; margin: 0;">
@@ -254,10 +258,13 @@
                                                     <p
                                                         style="font-size: 17px; line-height: 1.5; text-align: left; mso-line-height-alt: 26px; mso-ansi-font-size: 18px; margin: 0;">
                                                         <span style="font-size: 17px; mso-ansi-font-size: 18px;">Please,
-                                                            don't respond to this email. By the way, <a
-                                                                href="{{ link }}" rel="noopener"
+                                                            don't respond to this email.
+                                                            {% if link %}
+                                                            By the way, <a href="{{ link }}" rel="noopener"
                                                                 style="text-decoration: underline; color: #0068A5;"
-                                                                target="_blank">here is the link</a>.</span></p>
+                                                                target="_blank">here is the link</a>.
+                                                            {% endif %}
+                                                        </span></p>
                                                 </div>
                                             </div>
                                             <!--[if mso]></td></tr></table><![endif]-->

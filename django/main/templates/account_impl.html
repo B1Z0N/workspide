@@ -38,14 +38,14 @@
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col">
                         <form class="form" method="post">
                             {% csrf_token %}
                             <input name="email_change_btn" value="Change email" type="submit"
                                 class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
                         </form>
                     </div>
-                    <div class="col-6">
+                    <div class="col">
                         <form class="form" method="post">
                             {% csrf_token %}
                             <input name="pass_change_btn" value="Change password" type="submit"
