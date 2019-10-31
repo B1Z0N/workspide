@@ -34,12 +34,15 @@
 
             <a href="/">
                 {% load static %}
-                <img src="{% static "img/logo5.png" %}" width="64" />
+                <img src="{% static "img/logo5.png" %}" width="60" />
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
                 aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
+                {% if request.user.not_read %}
+                <span class="badge badge-pill badge-warning"> {{ request.user.not_read }}</span>
+                {% endif %}
             </button>
 
             <div class="collapse navbar-collapse mr-auto" id="main-navbar">
@@ -49,6 +52,15 @@
                     </li>
                     <li class="nav-item mr-auto">
                         <a class="nav-link" href="/account/">Account</a>
+                    </li>
+                    <li class="nav-item mr-auto">
+
+                        <a class="nav-link" href="/feed/">
+                            Feed 
+                            {% if request.user.not_read %}
+                            <span class="badge badge-pill badge-warning"> {{ request.user.not_read }}</span>
+                            {% endif %}
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -109,11 +121,13 @@
         <p>
             <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
                 style="background-color: rgb(201, 167, 58);">
-                <div class="small-logo img-link">
-                    <a href="/">
-                        <img src='{% static "img/logo5.png" %}' width="64" />
-                    </a>
-                    <strong><em>WorkSpide - work meeting your needs</em></strong>
+                <div class="container  mb-5">
+                    <div class="small-logo img-link">
+                        <a href="/">
+                            <img src='{% static "img/logo5.png" %}' width="64" />
+                        </a>
+                        <strong><em>WorkSpide - work meeting your needs</em></strong>
+                    </div>
                 </div>
                 <div class="row justify-content-around my-auto py-auto after-small-logo">
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
