@@ -37,12 +37,14 @@
         <p>
             <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
                 style="background-color: rgb(201, 167, 58);">
-                <div class="small-logo img-link">
-                    <a href="/">
-                        {% load static %}
-                        <img src="{% static "img/logo5.png" %}" width="40px" />
-                    </a>
-                    <strong><em>WorkSpide - work meeting your needs</em></strong>
+                <div class="container  mb-5">
+                    <div class="small-logo img-link">
+                        <a href="/">
+                            {% load static %}
+                            <img src="{% static "img/logo5.png" %}" width="40px" />
+                        </a>
+                        <strong><em>WorkSpide - work meeting your needs</em></strong>
+                    </div>
                 </div>
                 {% block content %}
                 {% endblock %}
