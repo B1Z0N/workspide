@@ -4,13 +4,18 @@
     a, a:hover {
         color: gray; 
         font-style: italic;
-    } 
+    }
 {% endblock %}
 
 {% block content %}
-    {% for pide in pides %}
+    {% for pide, color in pides %}
         {% if pide.state != "rejected" or pide.uid_from == request.user %}
-            {% include "deals/feed_panel.html" %}
+            {% if pide.state == "pending" and request.user == pide.ad_to.uid %}
+                    {% include "deals/feed_panel.html" %}
+                </a>
+            {% else %}
+                {% include "deals/feed_panel.html" %}
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endblock %}
