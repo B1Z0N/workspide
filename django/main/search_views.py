@@ -217,13 +217,13 @@ def edit_ad(ad_type):
         try:
             ad = Ad.objects.get(id=ad_id)
         except Ad.DoesNotExist:
-            return error(request)
+            return ad_alert(request)
         if ad_type != ad.ad_type:
-            return error(request)
+            return ad_alert(request)
         if request.user != ad.uid:
             return ad_alert(request, msg='Na ah, you are not allowed to do this!')
 
-        form = AdModelForm.get_form(
+        form = AdModelForm(
             text_widget_attrs={
                 'placeholder': get_description_placeholder(ad.ad_type)},
             instance=ad
