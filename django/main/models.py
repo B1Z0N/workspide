@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
 from datetime import datetime
+from django.utils import timezone
 
 ##################################################
 # Custom user management models
@@ -46,6 +47,8 @@ class User(AbstractBaseUser):
     )
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
+
+    not_read = models.PositiveIntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)  # a superuser
@@ -130,7 +133,7 @@ class Ad(models.Model):
     experience_months = models.PositiveIntegerField(null=True, blank=True)
     experience_type = models.CharField(max_length=5, choices=EXPERIENCE_CHOICES, default='month')
 
-    pub_dtime = models.DateTimeField(default=datetime.now, blank=True)
+    pub_dtime = models.DateTimeField(default=timezone.now, blank=True)
 
     __str__ = print_ad_info
 
@@ -168,6 +171,11 @@ PIDE_STATE_CHOICES = [
 
 
 class Pide(models.Model):
+    uid_from = models.ForeignKey(User,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='uid_from'
+    )
     ad_from = models.ForeignKey(Ad, 
         null=True, blank=True,
         on_delete=models.DO_NOTHING,
@@ -179,7 +187,7 @@ class Pide(models.Model):
     comment = models.TextField(null=True, blank=True)
     state = models.CharField(max_length=8, choices=PIDE_STATE_CHOICES, default='pending', blank=True)
 
-    pub_dtime = models.DateTimeField(default=datetime.now, blank=True)
+    pub_dtime = models.DateTimeField(default=timezone.now, blank=True)
 
     def __str__(self):
         s = f' --{self.state}>> ' + str(self.ad_to.title)
