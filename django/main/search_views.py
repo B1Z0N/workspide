@@ -70,13 +70,20 @@ def save_projects(post, ad):
         last_link = post.get('project_link' + str(i))
 
 
-def save_all_additional(post, ad, ad_type):
+def save_all_additional(post, ad):
     save_skills(post, ad)
-    if ad_type == 'vacancy':
+    if ad.ad_type == 'vacancy':
         save_resp(post, ad)
-    elif ad_type == 'resume':
+    elif ad.ad_type == 'resume':
         save_projects(post, ad)
 
+
+def delete_all_additional(ad):
+    Skill.objects.filter(ad_id=ad).delete()
+    if ad.ad_type == 'vacancy':
+        Responsibility.objects.filter(vacancy_id=ad).delete()
+    elif ad.ad_type == 'resume':
+        PetProject.objects.filter(resume_id=ad).delete()
 
 # just a summernote placeholder generator
 def get_description_placeholder(ad_type):
@@ -154,7 +161,7 @@ def add_ad(ad_type):
                 ad.uid = request.user
 
                 ad.save()
-                save_all_additional(request.POST, ad, ad_type)
+                save_all_additional(request.POST, ad)
 
                 return redirect('/account/')
 
@@ -204,6 +211,12 @@ def show_ad(request, ad_id):
         ad = Ad.objects.get(id=ad_id)
     except Ad.DoesNotExist:
         return ad_alert(request)
+    if ad.is_archived:
+        return ad_alert(request, f"""
+                Current {ad.ad_type} is archived, you still 
+                can view some info about it in your feed if 
+                you were having a pide with it.
+            """)
     if request.user == ad.uid or not request.user.is_authenticated:
         return show_anonymous_ad(request, ad)
     else:
@@ -231,13 +244,13 @@ def edit_ad(ad_type):
         if request.method == 'POST' and 'submit_button' in request.POST:
             data = request.POST.copy()
             data['ad_type'] = ad_type
-            form = AdModelForm(data=data)
+            form = AdModelForm(instance=ad, data=data)
             if form.is_valid():
-                ad.delete()
+                delete_all_additional(ad)
                 ad = form.save(commit=False)
                 ad.uid = request.user
                 ad.save()
-                save_all_additional(request.POST, ad, ad_type)
+                save_all_additional(request.POST, ad)
                 return redirect('/account/')
         context = {
             'form': form,
