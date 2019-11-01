@@ -268,7 +268,8 @@ def delete_ad(request, ad_id):
         return ad_alert(request, msg='Na ah, you are not allowed to do this!')
 
     if request.method == 'POST':
-        ad.delete()
+        ad.is_archived = True
+        ad.save()
         return redirect('/account/')
 
     return render(request, 'ads/delete_ad.html', {'ad': ad})
