@@ -3,6 +3,8 @@ TODO:
         search
             filters
             search itself
+        docker
+        remote database connection
     problems
         html in html editor displays on whole page
         cities field
