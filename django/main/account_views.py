@@ -131,8 +131,9 @@ def account(request):
             instance.save()
             name_form = NameChangeForm(instance=instance)
 
-    resumes = Ad.objects.filter(uid=request.user, ad_type='resume')
-    vacancies = Ad.objects.filter(uid=request.user, ad_type='vacancy')
+    ads = Ad.objects.filter(uid=request.user, is_archived=False)
+    resumes = ads.filter(ad_type='resume')
+    vacancies = ads.filter(ad_type='vacancy')
 
     return render(request, 'account.html', {
         'name_form': name_form,
