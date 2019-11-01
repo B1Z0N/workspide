@@ -178,8 +178,14 @@ def delete_account(request, uidb64, token):
 
     if user is None or not account_deletion_token.check_token(user, token):
         return render(request, 'alerts/render_base.html', {
-            'response_error_title': 'Deletion failure',
+            'response_error_title': 'Account deletion failure',
             'response_error_text': 'Oops, acc deletion link is invalid',
+        })
+
+    if user != request.user:
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title': 'Account deletion failure',
+            'response_error_text': 'You need to be logged in to delete account',
         })
 
     if request.method == 'POST' and 'account_delete_btn' in request.POST:
@@ -223,6 +229,12 @@ def email_change(request, uidb64, token):
         return render(request, 'alerts/render_base.html', {
             'response_error_title': 'Email change failure',
             'response_error_text': 'Oops, email change link is invalid',
+        })
+
+    if request.user != user:
+        return render(request, 'alerts/render_base.html', {
+            'response_error_title': 'Email change failure',
+            'response_error_text': 'You need to be logged in to change your email',
         })
 
     if request.method == 'POST':
