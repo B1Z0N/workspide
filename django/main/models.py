@@ -110,6 +110,7 @@ AD_CHOICES = [
 ]
 
 
+
 def print_ad_info(self):
     sal = ''
     if self.salary and self.currency:
@@ -134,6 +135,8 @@ class Ad(models.Model):
     experience_type = models.CharField(max_length=5, choices=EXPERIENCE_CHOICES, default='month')
 
     pub_dtime = models.DateTimeField(default=timezone.now, blank=True)
+
+    is_archived = models.BooleanField(default=False)
 
     __str__ = print_ad_info
 
@@ -178,11 +181,11 @@ class Pide(models.Model):
     )
     ad_from = models.ForeignKey(Ad, 
         null=True, blank=True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         related_name='ad_from')
     ad_to = models.ForeignKey(Ad,
         blank=True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         related_name='ad_to')
     comment = models.TextField(null=True, blank=True)
     state = models.CharField(max_length=8, choices=PIDE_STATE_CHOICES, default='pending', blank=True)
