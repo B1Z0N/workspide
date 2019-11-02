@@ -8,10 +8,15 @@ from django.utils import timezone
 import random
 import json
 
-from .forms import AdModelForm, PideModelForm
-from .models import User, Ad, Skill, PetProject, Responsibility, Pide
+from .forms import AdModelForm, PideModelForm, FiltersForm
+from .models import User, Ad, Skill, PetProject, Responsibility, Pide, \
+                CURRENCY_CHOICES,
 from .email import send_mail
 
+from djmoney.money import Money
+from djmoney.contrib.exchange.models import convert_money
+
+from django.db.models import F, Q, When
 ##################################################
 # Search views
 ##################################################
@@ -20,10 +25,33 @@ from .email import send_mail
 def search(request, _type, _text):
     if _type != 'jobs' and _type != 'employees':
         raise Http404()
+    form = FiltersForm()
+    search_results = False
+
+    if request.method == 'POST':
+        form = FiltersForm(request.POST)
+        if form.is_valid():
+            search_currency = form.cleaned_data['currency']
+            salary_from = form.cleaned_data['salary_from']
+            salary_to = form.cleaned_data['salary_to']
+            
+            def convert_currency(num, currency_from, currency_to):
+                return convert_money(Money(num, currency_from), currency_to)
+            
+            def for_currency(current_currency):
+                nonlocal search_currency, salary_from, salary_to
+                return Ad.objects.filter(
+                    currency=current_currency, 
+                    salary__gt=convert_currency(salary_from, search_currency, current_currency), 
+                    salary__lt=convert_currency(salary_to, search_currency, current_currency)
+                )
+            search_results_for_salary = for_currency('UAH') | for_currency('USD') | for_currency('EUR')
+
 
     return render(request, 'search.html', {
         'search_type': _type,
         'search_text': _text,
+        'search_results' : search_results,
     })
 
 
