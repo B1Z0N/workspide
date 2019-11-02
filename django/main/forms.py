@@ -87,7 +87,7 @@ class AdModelForm(forms.ModelForm):
     class Meta:
         model = Ad
         fields = ('ad_type', 'title', 'city', 'text', 
-            'salary', 'currency', 'experience_months', 'experience_type', 'pub_dtime')
+            'salary', 'currency', 'experience', 'experience_type', 'pub_dtime')
     
     def __init__(self, text_widget_attrs=None, *args, **kwargs):
         super(AdModelForm, self).__init__(*args, **kwargs)
@@ -147,3 +147,30 @@ class PideModelForm(forms.ModelForm):
             'summernote' : text_widget_attrs if text_widget_attrs is not None else {}
         })
 
+
+class FiltersForm(forms.Form):
+    salary_from = forms.IntegerField()
+    salary_to = forms.IntegerField()
+    
+    CURRENCY = [
+        ('USD', 'USD'),
+        ('UAH', 'UAH'),
+        ('EUR', 'EUR'),
+    ]
+    currency = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple, 
+        choices=CURRENCY,
+    )
+
+    # experience_from = forms.IntegerField()
+    # experience_to = forms.IntegerField()
+    
+    # EXP_TYPE =[
+    #     ('months', 'months'),
+    #     ('years', 'years'),
+    # ]
+    # experience_type = forms.MultipleChoiceField(
+    #     widget=forms.CheckboxSelectMultiple, 
+    #     choices=EXP_TYPE,
+    # )
+    
