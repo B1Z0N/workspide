@@ -131,7 +131,7 @@ class Ad(models.Model):
     salary = models.PositiveIntegerField(null=True, blank=True)
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='usd')
     
-    experience_months = models.PositiveIntegerField(null=True, blank=True)
+    experience = models.PositiveIntegerField(null=True, blank=True)
     experience_type = models.CharField(max_length=5, choices=EXPERIENCE_CHOICES, default='month')
 
     pub_dtime = models.DateTimeField(default=timezone.now, blank=True)

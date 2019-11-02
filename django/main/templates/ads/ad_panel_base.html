@@ -8,8 +8,8 @@
             {% if ad.salary %}
             Salary: {{ ad.salary }} {{ ad.currency }}.
             {% endif %}
-            {% if ad.experience_months %}
-            Experience: {{ ad.experience_months }} {{ ad.experience_type }}s.
+            {% if ad.experience %}
+            Experience: {{ ad.experience }} {{ ad.experience_type }}s.
             {% endif %}
         </p>
         {% block manage %}
