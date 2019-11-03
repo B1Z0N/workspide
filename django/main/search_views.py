@@ -31,9 +31,78 @@ def compare_experience(exp1, type1, exp2, type2, operation):
         to_months(exp2) if type2.startswith('year') else exp2,
     )
 
+
+def salary_filters(form, search_results):
+    salary_to = form.cleaned_data['salary_to']
+    salary_from = form.cleaned_data['salary_from']
+    if salary_from is not None:
+        salary_from = Money(salary_from, salary_to.currency)
+    salary_search_results = []
+
+    for ad in search_results:
+        if ad.salary is not None:
+            should_add = True
+            if salary_from is not None:
+                should_add = should_add and compare_money(salary_from, ad.salary, operator.le)
+            if salary_to is not None:
+               should_add = should_add and compare_money(salary_to, ad.salary, operator.ge)
+                
+            if should_add:
+                salary_search_results.append(ad)
+        elif form.cleaned_data['without_salary'] is True:
+            salary_search_results.append(ad)
+
+    return form, salary_search_results
+
+
+def experience_filters(form, search_results):
+    experience_from = form.cleaned_data['experience_from']
+    experience_to = form.cleaned_data['experience_to']
+    experience_type = form.cleaned_data['experience_type']
+    experience_search_results = []
+    for ad in search_results:
+        if ad.experience is not None:
+            should_add = True
+            if experience_from is not None:
+                should_add = should_add and compare_experience(
+                    experience_from, experience_type, 
+                    ad.experience, ad.experience_type, operator.le
+                )
+            if experience_to is not None:
+                should_add = should_add and compare_experience(
+                    experience_to, experience_type, 
+                    ad.experience, ad.experience_type, operator.ge
+                )
+
+            if should_add:
+                experience_search_results.append(ad)
+        elif form.cleaned_data['without_experience'] is True:
+            experience_search_results.append(ad)
+
+    return form, experience_search_results
+
+
+def general_search_results(form, search_ad_type):
+    order_by = form.cleaned_data['order_by']
+    city = form.cleaned_data['city']
+    if city:
+        search_results = Ad.objects.filter(
+            is_archived=False, 
+            ad_type=search_ad_type,
+            city=city,
+        ).order_by(order_by)
+    else:
+        search_results = Ad.objects.filter(
+            is_archived=False, 
+            ad_type=search_ad_type,
+        ).order_by(order_by)
+
+    return form, search_results
+
+
 def search(request, _type, _text):
-    if _type != 'jobs' and _type != 'employees':
-        raise Http404()
+    assert(_type == 'jobs' or _type == 'employees')
+
     search_ad_type = 'resume' if _type == 'employees' else 'vacancy'
     form = FiltersForm()
     search_results = []
@@ -41,32 +110,11 @@ def search(request, _type, _text):
     if request.method == 'POST':
         form = FiltersForm(request.POST)
         if form.is_valid():
-            order_by = form.cleaned_data['order_by']
-            sorted_search_results = \
-                Ad.objects.filter(is_archived=False, ad_type=search_ad_type).order_by(order_by)
-
-            salary_to = form.cleaned_data['salary_to']
-            salary_from = Money(form.cleaned_data['salary_from'], salary_to.currency)
-            salary_search_results = []
-            for ad in sorted_search_results:
-                if ad.salary is not None and \
-                    compare_money(salary_from, ad.salary, operator.le) and \
-                    compare_money(salary_to, ad.salary, operator.ge):
-                    "then"
-                    salary_search_results.append(ad)
-
-            experience_from = form.cleaned_data['experience_from']
-            experience_to = form.cleaned_data['experience_to']
-            experience_type = form.cleaned_data['experience_type']
-            experience_search_results = []
-            for ad in salary_search_results:
-                if ad.experience is not None and \
-                    compare_experience(experience_from, experience_type, ad.experience, ad.experience_type, operator.le) and \
-                    compare_experience(experience_to, experience_type, ad.experience, ad.experience_type, operator.ge):
-                    "then"
-                    experience_search_results.append(ad)
-
-            search_results = experience_search_results                   
+            form, search_results = salary_filters(
+                *experience_filters(
+                    *general_search_results(form, search_ad_type)
+                )
+            )
 
     return render(request, 'search.html', {
         'search_type': _type,
@@ -90,9 +138,8 @@ def negate_ad(ad_type):
 
 
 def save_skills(post, ad):
-    iexp2
-    last = post.g2t('skill1')
-    while las2 is not None:
+    last = post.get('skill1')
+    while last is not None:
         Skill.objects.create(text=last, ad_id=ad).save()
         i += 1
         last = post.get('skill' + str(i))
