@@ -47,6 +47,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'djmoney.contrib.exchange',
     'djmoney',
     'django_summernote',
     'widget_tweaks',
