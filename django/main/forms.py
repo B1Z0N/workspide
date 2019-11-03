@@ -158,9 +158,11 @@ from djmoney.forms import MoneyField, MoneyWidget
 class FiltersForm(forms.Form):
     salary_from = forms.FloatField()
     salary_to = MoneyField(widget=CustomMoneyWidget, default_currency='USD')
+    without_salary = forms.BooleanField()
 
     experience_from = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
     experience_to = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
+    without_experience = forms.BooleanField()
 
     EXP_TYPE = [
         ('months', 'months'),
@@ -178,4 +180,16 @@ class FiltersForm(forms.Form):
 
     ]
     order_by = forms.ChoiceField(choices=ORDER_BY_TYPE)
-    
+
+    city = forms.CharField(max_length=20)
+
+    def __init__(self, *args, **kwargs):
+        super(FiltersForm, self).__init__(*args, **kwargs)
+        self.fields['city'].required = False
+        self.fields['salary_from'].required = False
+        self.fields['salary_to'].required = False
+        self.fields['experience_from'].required = False
+        self.fields['experience_to'].required = False
+        self.fields['without_experience'].required = False
+        self.fields['without_salary'].required = False
+        
