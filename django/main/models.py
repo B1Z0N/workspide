@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
 from datetime import datetime
-from django.utils import timezone
 
+from django.utils import timezone
+from djmoney.models.fields import MoneyField
 ##################################################
 # Custom user management models
 ##################################################
@@ -92,15 +93,9 @@ class User(AbstractBaseUser):
 ##################################################
 
 
-CURRENCY_CHOICES = [
-    ('uah', 'uah'),
-    ('usd', 'usd'),
-    ('eur', 'eur'),
-]
-
 EXPERIENCE_CHOICES = [
-    ('month', 'months'),
-    ('year', 'years'),
+    ('months', 'months'),
+    ('years', 'years'),
 ]
 
 
@@ -113,9 +108,9 @@ AD_CHOICES = [
 
 def print_ad_info(self):
     sal = ''
-    if self.salary and self.currency:
-        sal = ', ' + str(self.salary) + ' ' + self.currency
-    exp = ', ' + str(self.experience_months) + ' months' if self.experience_months else ''
+    if self.salary:
+        sal = ', ' + str(self.salary)
+    exp = ', ' + str(self.experience) + ' months' if self.experience else ''
     return self.ad_type + ': ' + self.title + sal + exp
 
 
@@ -128,11 +123,16 @@ class Ad(models.Model):
     city = models.CharField(max_length=20)
     title = models.CharField(max_length=30)
     text = models.TextField(null=True, blank=True)
-    salary = models.PositiveIntegerField(null=True, blank=True)
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='usd')
+
+    salary = MoneyField(
+        max_digits=14, 
+        decimal_places=2, 
+        default_currency='USD', 
+        null=True, blank=True
+    )
     
     experience = models.PositiveIntegerField(null=True, blank=True)
-    experience_type = models.CharField(max_length=5, choices=EXPERIENCE_CHOICES, default='month')
+    experience_type = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='month')
 
     pub_dtime = models.DateTimeField(default=timezone.now, blank=True)
 
