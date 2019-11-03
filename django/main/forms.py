@@ -81,13 +81,19 @@ class NameChangeForm(forms.ModelForm):
 
 
 from django_summernote.widgets import SummernoteWidget
+from djmoney.forms.widgets import MoneyWidget
 
+class CustomMoneyWidget(MoneyWidget):
+    template_name = 'widgets/money.html'
 
 class AdModelForm(forms.ModelForm):
     class Meta:
         model = Ad
+        widgets = {
+            'salary' : CustomMoneyWidget
+        }
         fields = ('ad_type', 'title', 'city', 'text', 
-            'salary', 'currency', 'experience', 'experience_type', 'pub_dtime')
+            'salary', 'experience', 'experience_type', 'pub_dtime')
     
     def __init__(self, text_widget_attrs=None, *args, **kwargs):
         super(AdModelForm, self).__init__(*args, **kwargs)
@@ -148,29 +154,28 @@ class PideModelForm(forms.ModelForm):
         })
 
 
+from djmoney.forms import MoneyField, MoneyWidget
 class FiltersForm(forms.Form):
-    salary_from = forms.IntegerField()
-    salary_to = forms.IntegerField()
-    
-    CURRENCY = [
-        ('USD', 'USD'),
-        ('UAH', 'UAH'),
-        ('EUR', 'EUR'),
-    ]
-    currency = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple, 
-        choices=CURRENCY,
-    )
+    salary_from = forms.FloatField()
+    salary_to = MoneyField(widget=CustomMoneyWidget, default_currency='USD')
 
-    # experience_from = forms.IntegerField()
-    # experience_to = forms.IntegerField()
-    
-    # EXP_TYPE =[
-    #     ('months', 'months'),
-    #     ('years', 'years'),
-    # ]
-    # experience_type = forms.MultipleChoiceField(
-    #     widget=forms.CheckboxSelectMultiple, 
-    #     choices=EXP_TYPE,
-    # )
+    experience_from = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
+    experience_to = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
+
+    EXP_TYPE = [
+        ('months', 'months'),
+        ('years', 'years'),
+    ]
+    experience_type = forms.ChoiceField(choices=EXP_TYPE)
+
+    ORDER_BY_TYPE = [
+        ('pub_dtime', 'date(older first)'),
+        ('-pub_dtime', 'date(newer first)'),
+        ('salary', 'salary(lowest first)'),
+        ('-salary', 'salary(highest first)'),
+        ('experience', 'experience(smallest first)'),
+        ('-experience', 'experience(biggest first)'),
+
+    ]
+    order_by = forms.ChoiceField(choices=ORDER_BY_TYPE)
     
