@@ -9,49 +9,70 @@ import random
 import json
 
 from .forms import AdModelForm, PideModelForm, FiltersForm
-from .models import User, Ad, Skill, PetProject, Responsibility, Pide, \
-                CURRENCY_CHOICES,
+from .models import User, Ad, Skill, PetProject, Responsibility, Pide
 from .email import send_mail
 
 from djmoney.money import Money
 from djmoney.contrib.exchange.models import convert_money
 
-from django.db.models import F, Q, When
+import operator
+
 ##################################################
 # Search views
 ##################################################
 
+def compare_money(money1, money2, operation):
+    return operation(money1, Money(money2.amount, money1.currency))
+
+def compare_experience(exp1, type1, exp2, type2, operation):
+    to_months = lambda in_years: 12 * in_years
+    return operation(
+        to_months(exp1) if type1.startswith('year') else exp1,
+        to_months(exp2) if type2.startswith('year') else exp2,
+    )
 
 def search(request, _type, _text):
     if _type != 'jobs' and _type != 'employees':
         raise Http404()
+    search_ad_type = 'resume' if _type == 'employees' else 'vacancy'
     form = FiltersForm()
-    search_results = False
+    search_results = []
 
     if request.method == 'POST':
         form = FiltersForm(request.POST)
         if form.is_valid():
-            search_currency = form.cleaned_data['currency']
-            salary_from = form.cleaned_data['salary_from']
-            salary_to = form.cleaned_data['salary_to']
-            
-            def convert_currency(num, currency_from, currency_to):
-                return convert_money(Money(num, currency_from), currency_to)
-            
-            def for_currency(current_currency):
-                nonlocal search_currency, salary_from, salary_to
-                return Ad.objects.filter(
-                    currency=current_currency, 
-                    salary__gt=convert_currency(salary_from, search_currency, current_currency), 
-                    salary__lt=convert_currency(salary_to, search_currency, current_currency)
-                )
-            search_results_for_salary = for_currency('UAH') | for_currency('USD') | for_currency('EUR')
+            order_by = form.cleaned_data['order_by']
+            sorted_search_results = \
+                Ad.objects.filter(is_archived=False, ad_type=search_ad_type).order_by(order_by)
 
+            salary_to = form.cleaned_data['salary_to']
+            salary_from = Money(form.cleaned_data['salary_from'], salary_to.currency)
+            salary_search_results = []
+            for ad in sorted_search_results:
+                if ad.salary is not None and \
+                    compare_money(salary_from, ad.salary, operator.le) and \
+                    compare_money(salary_to, ad.salary, operator.ge):
+                    "then"
+                    salary_search_results.append(ad)
+
+            experience_from = form.cleaned_data['experience_from']
+            experience_to = form.cleaned_data['experience_to']
+            experience_type = form.cleaned_data['experience_type']
+            experience_search_results = []
+            for ad in salary_search_results:
+                if ad.experience is not None and \
+                    compare_experience(experience_from, experience_type, ad.experience, ad.experience_type, operator.le) and \
+                    compare_experience(experience_to, experience_type, ad.experience, ad.experience_type, operator.ge):
+                    "then"
+                    experience_search_results.append(ad)
+
+            search_results = experience_search_results                   
 
     return render(request, 'search.html', {
         'search_type': _type,
         'search_text': _text,
         'search_results' : search_results,
+        'form' : form,
     })
 
 
@@ -69,9 +90,9 @@ def negate_ad(ad_type):
 
 
 def save_skills(post, ad):
-    i = 1
-    last = post.get('skill1')
-    while last is not None:
+    iexp2
+    last = post.g2t('skill1')
+    while las2 is not None:
         Skill.objects.create(text=last, ad_id=ad).save()
         i += 1
         last = post.get('skill' + str(i))
