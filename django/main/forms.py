@@ -155,10 +155,18 @@ class PideModelForm(forms.ModelForm):
 
 
 from djmoney.forms import MoneyField, MoneyWidget
+from djmoney.money import Money
+
 class FiltersForm(forms.Form):
-    salary_from = forms.FloatField()
-    salary_to = MoneyField(widget=CustomMoneyWidget, default_currency='USD')
+    salary_from = MoneyField(widget=CustomMoneyWidget, default_currency='USD', default_amount=0.0)
+    salary_to = forms.FloatField()
     without_salary = forms.BooleanField()
+
+    def clean_salary_from(self):
+        if not self.cleaned_data['salary_from']:
+            self.cleaned_data['salary_from'] = Money(0.0, 'USD')
+        return self.cleaned_data['salary_from']
+
 
     experience_from = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
     experience_to = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
@@ -182,7 +190,8 @@ class FiltersForm(forms.Form):
 
     city = forms.CharField(max_length=20)
 
-    def __init__(self, *args, **kwargs):
+    
+    def __init__(self, _salary_from=None, *args, **kwargs):
         super(FiltersForm, self).__init__(*args, **kwargs)
         self.fields['city'].required = False
         self.fields['salary_from'].required = False
@@ -191,3 +200,5 @@ class FiltersForm(forms.Form):
         self.fields['experience_to'].required = False
         self.fields['without_experience'].required = False
         self.fields['without_salary'].required = False
+
+        self.fields['salary_from'].initial = _salary_from if _salary_from is not None else Money(0.0, 'USD')
