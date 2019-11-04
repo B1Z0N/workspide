@@ -177,7 +177,6 @@ class FiltersForm(forms.Form):
         ('-salary', 'salary(highest first)'),
         ('experience', 'experience(smallest first)'),
         ('-experience', 'experience(biggest first)'),
-
     ]
     order_by = forms.ChoiceField(choices=ORDER_BY_TYPE)
 
@@ -192,4 +191,3 @@ class FiltersForm(forms.Form):
         self.fields['experience_to'].required = False
         self.fields['without_experience'].required = False
         self.fields['without_salary'].required = False
-        

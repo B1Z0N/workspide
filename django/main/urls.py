@@ -49,7 +49,7 @@ urlpatterns = [
     path('pide_confirm/<int:pide_id>/', unauthorized_access(search_views.pide_confirm), name='pide_confirm'),
     path('feed/', unauthorized_access(search_views.feed), name='feed'),
 
-    path('search/<str:_type>/<str:_text>/', search_views.search, name='search_text'),
-    path('search/<str:_type>/', search_views.empty_search, name='search_default'),
-
+    path('search/type/<str:_type>/text/<str:_text>/salary/<str:_salary_from>/<str:_salary_to>/<str:_currency>/without_salary/<str:_without_salary>/experience/<str:_experience_from>/<str:_experience_to>/<str:_experience_type>/without_experience/<str:_without_experience>/city/<str:_city>/order_by/<str:_order_by>/', search_views.search, name='filtered_search'),
+    path('search/type/<str:_type>/', search_views.search, name="empty_search"),
+    path('search/type/<str:_type>/text/<str:_text>/', search_views.search, name="text_search"),
 ]
