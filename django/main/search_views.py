@@ -100,25 +100,54 @@ def general_search_results(form, search_ad_type):
     return form, search_results
 
 
-def search(request, _type, _text):
+def search(
+    request, _type, _text='None', 
+    _salary_from='None', _salary_to='None', _currency='USD', _without_salary='True',
+    _experience_from='None', _experience_to='None', _experience_type='months', _without_experience='True',
+    _city='None', _order_by='-pub_dtime'):
     assert(_type == 'jobs' or _type == 'employees')
 
-    search_ad_type = 'resume' if _type == 'employees' else 'vacancy'
-    form = FiltersForm()
+    search_type = 'resume' if _type == 'employees' else 'vacancy'
+    search_text = '' if _text == 'None' else _text
+    form = FiltersForm(initial={
+        'salary_from' : float(_salary_from) if _salary_from != 'None' else None,
+        'salary_to' : Money(float(_salary_to), _currency) if _salary_to != 'None' else None,
+        'without_salary' : True if _without_salary == 'True' else False,
+        'experience_from' : _experience_from if _experience_from != 'None' else None,
+        'experience_to' : _experience_to if _experience_to != 'None' else None,
+        'experience_type' : _experience_type,
+        'without_experience' : True if _without_experience == 'True' else False,
+        'city' : '' if _city == 'None' else _city, 
+        'order_by' : _order_by,
+    })
     search_results = []
 
     if request.method == 'POST':
         form = FiltersForm(request.POST)
         if form.is_valid():
-            form, search_results = salary_filters(
-                *experience_filters(
-                    *general_search_results(form, search_ad_type)
-                )
+            return redirect('/'.join(
+                    [
+                        '/search',
+                        'type', str(_type), 
+                        'text', str(search_text) if search_text else 'None',
+                        'salary', str(form.cleaned_data['salary_from']), *((str(form.cleaned_data['salary_to'].amount), str(form.cleaned_data['salary_to'].currency)) if form.cleaned_data['salary_to'] is not None else ('None', 'None')),
+                        'without_salary', str(form.cleaned_data['without_salary']),
+                        'experience', str(form.cleaned_data['experience_from']), str(form.cleaned_data['experience_to']), str(form.cleaned_data['experience_type']),
+                        'without_experience', str(form.cleaned_data['without_experience']),
+                        'city', str(form.cleaned_data['city']) if form.cleaned_data['city'] else 'None',
+                        'order_by', str(form.cleaned_data['order_by']),
+                    ]
+                ))
+    elif form.is_valid():
+        form, search_results = salary_filters(
+            *experience_filters(
+                *general_search_results(form, search_type)
             )
+        )
 
     return render(request, 'search.html', {
         'search_type': _type,
-        'search_text': _text,
+        'search_text': search_text,
         'search_results' : search_results,
         'form' : form,
     })
