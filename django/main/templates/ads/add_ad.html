@@ -25,14 +25,11 @@
         <h1><em>Additional data</em></h1>
 
         <div class="row my-3">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <div class="col-6">
                 {{ form.salary|add_class:"form-control" }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                {{ form.currency|add_class:"custom-select" }}
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                {{ form.experience_months|add_class:"form-control" }}
+                {{ form.experience|add_class:"form-control" }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                     {{ form.experience_type|add_class:"custom-select" }}
@@ -103,13 +100,13 @@
 </div>
 <script>
     var titleField = document.getElementById('id_title')
-    var salaryField = document.getElementById('id_salary')
-    var experienceField = document.getElementById('id_experience_months')
+    var salaryField = document.getElementById('id_salary_0')
+    var experienceField = document.getElementById('id_experience')
 
     window.onload = () => {
         titleField.placeholder = '{% if vacancy %}Your vacancy title{% else %}Your resume title{% endif %}'
         salaryField.placeholder = '{% if vacancy %}Future employee`s salary{% else %}Expected salary{% endif %}'
-        experienceField.placeholder = '{% if vacancy %}Expected experience(in months){% else %}Your experience{% endif %}'
+        experienceField.placeholder = '{% if vacancy %}Expected experience{% else %}Your experience{% endif %}'
 
         {% block onload %}
         {% endblock %}

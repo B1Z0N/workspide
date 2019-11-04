@@ -81,13 +81,19 @@ class NameChangeForm(forms.ModelForm):
 
 
 from django_summernote.widgets import SummernoteWidget
+from djmoney.forms.widgets import MoneyWidget
 
+class CustomMoneyWidget(MoneyWidget):
+    template_name = 'widgets/money.html'
 
 class AdModelForm(forms.ModelForm):
     class Meta:
         model = Ad
+        widgets = {
+            'salary' : CustomMoneyWidget
+        }
         fields = ('ad_type', 'title', 'city', 'text', 
-            'salary', 'currency', 'experience_months', 'experience_type', 'pub_dtime')
+            'salary', 'experience', 'experience_type', 'pub_dtime')
     
     def __init__(self, text_widget_attrs=None, *args, **kwargs):
         super(AdModelForm, self).__init__(*args, **kwargs)
@@ -147,3 +153,52 @@ class PideModelForm(forms.ModelForm):
             'summernote' : text_widget_attrs if text_widget_attrs is not None else {}
         })
 
+
+from djmoney.forms import MoneyField, MoneyWidget
+from djmoney.money import Money
+
+class FiltersForm(forms.Form):
+    salary_from = MoneyField(widget=CustomMoneyWidget, default_currency='USD', default_amount=0.0)
+    salary_to = forms.FloatField()
+    without_salary = forms.BooleanField()
+
+    def clean_salary_from(self):
+        if not self.cleaned_data['salary_from']:
+            self.cleaned_data['salary_from'] = Money(0.0, 'USD')
+        return self.cleaned_data['salary_from']
+
+
+    experience_from = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
+    experience_to = forms.IntegerField(widget=forms.NumberInput(attrs={'min' : '0'}))
+    without_experience = forms.BooleanField()
+
+    EXP_TYPE = [
+        ('months', 'months'),
+        ('years', 'years'),
+    ]
+    experience_type = forms.ChoiceField(choices=EXP_TYPE)
+
+    ORDER_BY_TYPE = [
+        ('pub_dtime', 'date(older first)'),
+        ('-pub_dtime', 'date(newer first)'),
+        ('salary', 'salary(lowest first)'),
+        ('-salary', 'salary(highest first)'),
+        ('experience', 'experience(smallest first)'),
+        ('-experience', 'experience(biggest first)'),
+    ]
+    order_by = forms.ChoiceField(choices=ORDER_BY_TYPE)
+
+    city = forms.CharField(max_length=20)
+
+    
+    def __init__(self, _salary_from=None, *args, **kwargs):
+        super(FiltersForm, self).__init__(*args, **kwargs)
+        self.fields['city'].required = False
+        self.fields['salary_from'].required = False
+        self.fields['salary_to'].required = False
+        self.fields['experience_from'].required = False
+        self.fields['experience_to'].required = False
+        self.fields['without_experience'].required = False
+        self.fields['without_salary'].required = False
+
+        self.fields['salary_from'].initial = _salary_from if _salary_from is not None else Money(0.0, 'USD')

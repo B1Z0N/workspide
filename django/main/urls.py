@@ -9,10 +9,10 @@ from . import search_views, account_views
 def unauthorized_access(func):
     def _(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return render(request, 'alerts/render_base.html', 
-            context= {
-                'response_error_title' : 'Unauthorized access',
-                'response_error_text' : 'Unauthorized access, go login or register',
+            return render(request, 'alerts/render_base.html',
+            context={
+                'response_error_title': 'Unauthorized access',
+                'response_error_text': 'Unauthorized access, go login or register',
             })
         else:
             return func(request, *args, **kwargs)
@@ -21,35 +21,70 @@ def unauthorized_access(func):
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
-    
+
     path('signup/register/', account_views.register, name='register'),
-    path('signup/activate_mail/<str:uidb64>/<str:token>', account_views.activate_mail, name='activate_mail'),
-    path('signup/', include('django.contrib.auth.urls')), # mainly here for password reset
-    
+    path('signup/activate_mail/<str:uidb64>/<str:token>',
+         account_views.activate_mail, name='activate_mail'),
+    # mainly here for password reset
+    path('signup/', include('django.contrib.auth.urls')),
+
     path('account/', unauthorized_access(account_views.account), name='account'),
-    path('account/delete/<str:uidb64>/<str:token>',unauthorized_access(account_views.delete_account), name='submit_deletion'),
-    path('account/email_change_complete/<str:uidb64>/<str:emailb64>/<str:token>', unauthorized_access(account_views.email_change_complete), name='submit_deletion'),
-    path('account/password_change/', unauthorized_access(account_views.password_change), name='password_change'),
-    path('account/email_change/<str:uidb64>/<str:token>', unauthorized_access(account_views.email_change), name='email_change'),
-    path('account/password_reset/', 
+    path('account/delete/<str:uidb64>/<str:token>',
+         unauthorized_access(account_views.delete_account), name='submit_deletion'),
+    path('account/email_change_complete/<str:uidb64>/<str:emailb64>/<str:token>',
+         unauthorized_access(account_views.email_change_complete), name='submit_deletion'),
+    path('account/password_change/',
+         unauthorized_access(account_views.password_change), name='password_change'),
+    path('account/email_change/<str:uidb64>/<str:token>',
+         unauthorized_access(account_views.email_change), name='email_change'),
+    path('account/password_reset/',
         auth_views.PasswordResetView.as_view(
             subject_template_name='emails/password_reset_subject.txt',
             html_email_template_name='emails/password_reset.html',
         )
     ),
 
-    path('account/add_resume/', unauthorized_access(search_views.add_ad("resume")), name="add_resume"),
-    path('account/add_vacancy/', unauthorized_access(search_views.add_ad("vacancy")), name="add_vacancy"),
-    path('account/delete_ad/<int:ad_id>/', unauthorized_access(search_views.delete_ad), name='delete_ad'),
-    path('account/edit_resume/<int:ad_id>/', unauthorized_access(search_views.edit_ad('resume')), name='edit_resume'),
-    path('account/edit_vacancy/<int:ad_id>/', unauthorized_access(search_views.edit_ad('vacancy')), name='edit_vacancy'),
-    
+    path('account/add_resume/',
+         unauthorized_access(search_views.add_ad("resume")), name="add_resume"),
+    path('account/add_vacancy/',
+         unauthorized_access(search_views.add_ad("vacancy")), name="add_vacancy"),
+    path('account/delete_ad/<int:ad_id>/',
+         unauthorized_access(search_views.delete_ad), name='delete_ad'),
+    path('account/edit_resume/<int:ad_id>/',
+         unauthorized_access(search_views.edit_ad('resume')), name='edit_resume'),
+    path('account/edit_vacancy/<int:ad_id>/',
+         unauthorized_access(search_views.edit_ad('vacancy')), name='edit_vacancy'),
+
     path('show_ad/<int:ad_id>/', search_views.show_ad, name='show_ad'),
     path('pide/<int:ad_id>/', search_views.pide, name='pide'),
-    path('pide_confirm/<int:pide_id>/', unauthorized_access(search_views.pide_confirm), name='pide_confirm'),
+    path('pide_confirm/<int:pide_id>/',
+         unauthorized_access(search_views.pide_confirm), name='pide_confirm'),
     path('feed/', unauthorized_access(search_views.feed), name='feed'),
 
-    path('search/<str:_type>/<str:_text>/', search_views.search, name='search_text'),
-    path('search/<str:_type>/', search_views.empty_search, name='search_default'),
 
+
+    path(
+        '/'.join([
+            'search',
+            'type_<str:_type>',
+            'text_<str:_text>',
+            '_'.join([
+                'salary',
+                '<str:_salary_from>',
+                '<str:_salary_to>',
+                '<str:_currency>',
+            ]),
+            'without_salary_<str:_without_salary>',
+            '_'.join([
+                'experience',
+                '<str:_experience_from>',
+                '<str:_experience_to>',
+                '<str:_experience_type>',
+            ]),
+            'without_experience_<str:_without_experience>',
+            'city_<str:_city>',
+            'order_by_<str:_order_by>/',
+            ]), search_views.search, name = 'filtered_search'),
+
+    path('search/type_<str:_type>/text_<str:_text>/', search_views.search, name="text_search"),
 ]

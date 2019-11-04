@@ -1,11 +1,15 @@
 TODO:
     add
-        search
-            filters
-            search itself
+        pagination
+        loading screen
+        remote database connection
+        docker
+        search with ElasticEngine
+        equivalents of django requests in form of MySql requests
     problems
         html in html editor displays on whole page
+        html is going out of page on small screens
+    ideas
         cities field
         timezone
-    ideas
         add different random quotes for site to be user-friendly and creative

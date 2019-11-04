@@ -56,7 +56,7 @@
                     <li class="nav-item mr-auto">
 
                         <a class="nav-link" href="/feed/">
-                            Feed 
+                            Feed
                             {% if request.user.not_read %}
                             <span class="badge badge-pill badge-warning"> {{ request.user.not_read }}</span>
                             {% endif %}
@@ -87,25 +87,46 @@
                                 </p>
                                 <div class="container mb-3 rounded connect-options py-3 mx-auto text-left"
                                     style="background-color: rgb(173, 173, 173); color: #292826;">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Dolor sed viverra ipsum nunc aliquet
-                                    bibendum enim. In massa tempor nec feugiat. Nunc aliquet bibendum enim facilisis
-                                    gravida. Nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Amet luctus
-                                    venenatis lectus magna fringilla. Volutpat maecenas volutpat blandit aliquam etiam
-                                    erat
-                                    velit scelerisque in. Egestas egestas fringilla phasellus faucibus scelerisque
-                                    eleifend.
-                                    Sagittis orci a scelerisque purus semper eget duis. Nulla pharetra diam sit amet
-                                    nisl
-                                    suscipit. Sed adipiscing diam donec adipiscing tristique risus nec feugiat in. Fusce
-                                    ut
-                                    placerat orci nulla. Pharetra vel turpis nunc eget lorem dolor. Tristique senectus
-                                    et
-                                    netus et malesuada.
+                                    {% load widget_tweaks %}
+                                    <form method="post" class="form">
+                                        {% csrf_token %}
+                                        <div class="container">
+                                            <div class="row text-center">
+                                                Salary from
+                                                {{ form.salary_from|add_class:"form-control" }}
+                                                and to
+                                                {{ form.salary_to|add_class:"form-control" }}
+                                                <div class="form-check">
+                                                    {{ form.without_salary|add_class:"form-check-input" }}
+                                                    <label class="form-check-label" for="id_without_salary">
+                                                        Without salary
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                Experience from
+                                                {{ form.experience_from|add_class:"form-control" }}
+                                                and to
+                                                {{ form.experience_to|add_class:"form-control" }}
+                                                {{ form.experience_type|add_class:"custom-select mt-4" }}
+                                                <div class="form-check">
+                                                    {{ form.without_experience|add_class:"form-check-input" }}
+                                                    <label class="form-check-label" for="id_without_experience">
+                                                        Without experience
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">          
+                                                City
+                                                {{ form.city|add_class:"form-control" }}
+                                                Order by
+                                                {{ form.order_by|add_class:"custom-select" }}
+                                            </div>
+                                            <input type="submit" value="Apply" name="filter_btn"
+                                                class="btn btn-primary significant-button mx-auto my-3" />
+                                        </div>
+                                    </form>
                                 </div>
-                                <button class="btn btn-primary significant-button mx-auto my-3" type="submit">
-                                    <h3>Apply</h3>
-                                </button>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -129,29 +150,19 @@
                         <strong><em>WorkSpide - work meeting your needs</em></strong>
                     </div>
                 </div>
-                <div class="row justify-content-around my-auto py-auto after-small-logo">
-                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <h2>
-                            some search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results some search results some search
-                            results some search results some search results some search results some search results some
-                            search results some search results some search results
-                        </h2>
-                    </div>
-                </div>
+                {% if form.errors %}
+                {{ form.non_field_errors }}
+                <ul>
+                    {% for field in form %}
+                    {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% for ad in search_results %}
+                    {% include "ads/ad_search_panel.html" %}
+                {% empty %}
+                Try searching, it is empty here for now
+                {% endfor %}
             </div>
         </p>
     </div>
@@ -170,6 +181,8 @@
         var searchText = "{{ search_text }}"
 
         var searchBar = document.getElementById("search-bar")
+        var salaryFromText = document.getElementById("id_salary_from_0")
+        var salaryFromSelect = document.getElementById("id_salary_from_1")
         window.onload = () => {
 
             if (searchType == null) {
@@ -179,6 +192,13 @@
                 if (searchText != '')
                     searchBar.setAttribute("value", searchText)
             }
+            {% if salary_from is not None %}
+                salaryFromSelect.value = '{{ salary_from.currency }}'
+                {% if salary_from.amount != 0 %}
+                    salaryFromText.value = '{{ salary_from.amount }}'
+                {% endif %}
+            {% endif %}
+            // alert('{{ salary_from.amount }}')
         }
 
         handleEnterKey = (e) => {
@@ -186,7 +206,9 @@
                 e.preventDefault() // Ensure it is only this code that runs
 
                 searchText = searchBar.value
-                searchLink = '/search/' + searchType + '/' + searchText
+                currentLink = window.location.href
+                if (searchText === '') searchText = 'None' 
+                searchLink = currentLink.replace(/text_[^\/]*/, 'text_' + searchText)
                 window.location.replace(searchLink)
             }
         }

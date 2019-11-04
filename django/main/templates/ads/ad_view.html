@@ -5,6 +5,13 @@
 {{ ad.title }}
 {% endblock %}
 
+{% block style %}
+    .html-inject {
+        overflow-x: scroll;
+        white-space: nowrap;
+    }
+{% endblock %}
+
 {% block content %}
 <div class="mt-5">
 <p>
@@ -18,7 +25,9 @@
     <h1><em>Description</em></h1>
     {% load widget_tweaks %}
     <h3>
-        {{ description|safe }}
+        <div class="html-inject">
+            {{ description|safe }}
+        </div>
     </h3>
 </div>
 {% endif %}
@@ -65,12 +74,16 @@
 </div>
 {% endif %}
 
-{% if name %}
 <div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-    style="background-color:rgb(173, 173, 173); color: #292826;">
-    <h1><em>By {{ name }} at {{ ad.pub_dtime }}</em></h1>
+style="background-color:rgb(173, 173, 173); color: #292826;">
+    <h1><em>
+        {% if name %}
+            Posted by {{ name }} at {{ ad.pub_dtime }}
+        {% else %}
+            Posted at {{ ad.pub_dtime }}
+        {% endif %}
+    </em></h1>
 </div>
-{% endif %}
 
 {% block footer %}
 {% endblock%}
