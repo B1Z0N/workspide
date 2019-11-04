@@ -8,92 +8,98 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 rounded logging-in" style="background-color: #292826;">
         <div class="container significant-info">
             <p>
-                <h1 class="text-center mt-5 operation-title"><em>Account settings for {{ user.email }}</em></h1>
+                <h1 class="text-center mt-5 operation-title"><em>Account settings for</em></h1>
+                <h2><em>{{ user.email }}</em></h2>
             </p>
-            <div class="container">
-                {% load widget_tweaks %}
-                <form class="form" method="post">
-                    {% csrf_token %}
-                    <div class="form-group text-center mt-4 justify-content-around" id="user-data">
-                        {{ name_form.first_name|add_class:"form-control mt-3" }}
-                        {{ name_form.last_name|add_class:"form-control mt-3" }}
-                        {% if email_form.errors %}
-                        {{ name_form.non_field_errors }}
-                        <ul>
-                            {% for field in name_form %}
-                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                        <div class="row">
-                            <div class="col-6">
-                                <input name="name_btn" value="Save" type="submit"
-                                    class="btn btn-primary m-3 btn-lg significant-button" />
-                            </div>
-                            <div class="col-6">
-                                <input name="name_reset_btn" value="Reset" type="submit"
-                                    class="btn btn-primary m-3 btn-lg significant-button" />
-                            </div>
+        </div>
+        <div class="container">
+            {% load widget_tweaks %}
+            <form class="form" method="post">
+                {% csrf_token %}
+                <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+                    {{ name_form.first_name|add_class:"form-control mt-3" }}
+                    {{ name_form.last_name|add_class:"form-control mt-3" }}
+                    {% if email_form.errors %}
+                    {{ name_form.non_field_errors }}
+                    <ul>
+                        {% for field in name_form %}
+                        {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-6">
+                            <input name="name_btn" value="Save" type="submit"
+                                class="btn btn-primary m-3 btn-lg significant-button" />
+                        </div>
+                        <div class="col-6">
+                            <input name="name_reset_btn" value="Reset" type="submit"
+                                class="btn btn-primary m-3 btn-lg significant-button" />
                         </div>
                     </div>
-                </form>
-                <div class="row">
-                    <div class="col">
-                        <form class="form" method="post">
-                            {% csrf_token %}
-                            <input name="email_change_btn" value="Change email" type="submit"
-                                class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                        </form>
-                    </div>
-                    <div class="col">
-                        <form class="form" method="post">
-                            {% csrf_token %}
-                            <input name="pass_change_btn" value="Change password" type="submit"
-                                class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                        </form>
-                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <input name="email_change_btn" value="Change email" type="submit"
+                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                    </form>
+                </div>
+                <div class="col">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        <input name="pass_change_btn" value="Change password" type="submit"
+                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
-            <h1><em>Resumes</em></h1>
-            {% for resume in resumes %}
-                {% include "ads/ad_panel_manage.html" with ad=resume %}
-            {% endfor%}
-            <div class="container mx-auto py-3">
-                <a href="add_resume/">
-                    {% load static %}
-                    <img src="{% static "img/plus_icon.png" %}" width="35" />
-                </a>
-            </div>
+    </div>
+    <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+        <h1><em>Resumes</em></h1>
+        {% for resume in resumes %}
+        {% include "ads/ad_panel_manage.html" with ad=resume %}
+        {% endfor%}
+        <div class="container mx-auto py-3">
+            <a href="add_resume/">
+                {% load static %}
+                <img src="{% static "img/plus_icon.png" %}" width="35" />
+            </a>
         </div>
-        <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
-            <h1><em>Vacancies</em></h1>
-            {% for vacancy in vacancies %}
-                {% include "ads/ad_panel_manage.html" with ad=vacancy %}
-            {% endfor%}
-            <div class="container mx-auto py-3">
-                <a href="add_vacancy/">
-                    {% load static %}
-                    <img src="{% static "img/plus_icon.png" %}" width="35" />
-                </a>
-            </div>
+    </div>
+    <div class="col-12 mb-3 p-3 rounded connect-options" style="background-color: rgb(173, 173, 173);">
+        <h1><em>Vacancies</em></h1>
+        {% for vacancy in vacancies %}
+        {% include "ads/ad_panel_manage.html" with ad=vacancy %}
+        {% endfor%}
+        <div class="container mx-auto py-3">
+            <a href="add_vacancy/">
+                {% load static %}
+                <img src="{% static "img/plus_icon.png" %}" width="35" />
+            </a>
         </div>
     </div>
 </div>
+</div>
 <div class="row">
-    <div class="col-6 my-auto pt-5 second-option">
+    <div class="col pt-5 second-option">
         <form class="form" method="post">
             {% csrf_token %}
-            <input style="border-color: #292826; color: #292826;" name="delete_account_btn" value="Delete account"
-                type="submit" class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+            <div class="container text-center">
+                <input style="border-color: #292826; color: #292826;" name="delete_account_btn" value="Delete account"
+                    type="submit" class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+            </div>
         </form>
     </div>
-    <div class="col-6 my-auto pt-5 second-option">
+    <div class="col pt-5 second-option">
         <a href="/signup/logout/">
             {% csrf_token %}
-            <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
-                class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+            <div class="container text-center">
+                <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
+                    class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+            </div>
         </a>
     </div>
 </div>
