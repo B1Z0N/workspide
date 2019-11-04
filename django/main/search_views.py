@@ -35,18 +35,18 @@ def compare_experience(exp1, type1, exp2, type2, operation):
 def salary_filters(form, search_results):
     salary_to = form.cleaned_data['salary_to']
     salary_from = form.cleaned_data['salary_from']
-    if salary_from is not None:
-        salary_from = Money(salary_from, salary_to.currency)
+    if salary_to is not None:
+        salary_to = Money(salary_to, salary_from.currency)
     salary_search_results = []
 
     for ad in search_results:
         if ad.salary is not None:
             should_add = True
-            if salary_from is not None:
+            if salary_from.amount != 0.0:
                 should_add = should_add and compare_money(salary_from, ad.salary, operator.le)
             if salary_to is not None:
                should_add = should_add and compare_money(salary_to, ad.salary, operator.ge)
-                
+
             if should_add:
                 salary_search_results.append(ad)
         elif form.cleaned_data['without_salary'] is True:
@@ -82,7 +82,7 @@ def experience_filters(form, search_results):
     return form, experience_search_results
 
 
-def general_search_results(form, search_ad_type):
+def general_search_results(form, search_ad_type, search_text):
     order_by = form.cleaned_data['order_by']
     city = form.cleaned_data['city']
     if city:
@@ -90,11 +90,13 @@ def general_search_results(form, search_ad_type):
             is_archived=False, 
             ad_type=search_ad_type,
             city=city,
+            title__icontains=search_text,
         ).order_by(order_by)
     else:
         search_results = Ad.objects.filter(
             is_archived=False, 
             ad_type=search_ad_type,
+            title__icontains=search_text,
         ).order_by(order_by)
 
     return form, search_results
@@ -109,47 +111,65 @@ def search(
 
     search_type = 'resume' if _type == 'employees' else 'vacancy'
     search_text = '' if _text == 'None' else _text
-    form = FiltersForm(initial={
-        'salary_from' : float(_salary_from) if _salary_from != 'None' else None,
-        'salary_to' : Money(float(_salary_to), _currency) if _salary_to != 'None' else None,
-        'without_salary' : True if _without_salary == 'True' else False,
-        'experience_from' : _experience_from if _experience_from != 'None' else None,
-        'experience_to' : _experience_to if _experience_to != 'None' else None,
-        'experience_type' : _experience_type,
-        'without_experience' : True if _without_experience == 'True' else False,
-        'city' : '' if _city == 'None' else _city, 
-        'order_by' : _order_by,
-    })
     search_results = []
 
     if request.method == 'POST':
-        form = FiltersForm(request.POST)
+        put_salary = None
+        form = FiltersForm(data=request.POST)
         if form.is_valid():
             return redirect('/'.join(
                     [
                         '/search',
-                        'type', str(_type), 
-                        'text', str(search_text) if search_text else 'None',
-                        'salary', str(form.cleaned_data['salary_from']), *((str(form.cleaned_data['salary_to'].amount), str(form.cleaned_data['salary_to'].currency)) if form.cleaned_data['salary_to'] is not None else ('None', 'None')),
-                        'without_salary', str(form.cleaned_data['without_salary']),
-                        'experience', str(form.cleaned_data['experience_from']), str(form.cleaned_data['experience_to']), str(form.cleaned_data['experience_type']),
-                        'without_experience', str(form.cleaned_data['without_experience']),
-                        'city', str(form.cleaned_data['city']) if form.cleaned_data['city'] else 'None',
-                        'order_by', str(form.cleaned_data['order_by']),
+                        'type_' + str(_type), 
+                        'text_' + (str(search_text) if search_text else 'None'),
+                        '_'.join([
+                            'salary', 
+                            str(form.cleaned_data['salary_from'].amount), 
+                            str(form.cleaned_data['salary_to']), 
+                            str(form.cleaned_data['salary_from'].currency),
+                        ]),
+                        'without_salary_' + str(form.cleaned_data['without_salary']),
+                        '_'.join([
+                            'experience', 
+                            str(form.cleaned_data['experience_from']), 
+                            str(form.cleaned_data['experience_to']), 
+                            str(form.cleaned_data['experience_type']),
+                        ]),
+                        'without_experience_' + str(form.cleaned_data['without_experience']),
+                        'city_' + (str(form.cleaned_data['city']) if form.cleaned_data['city'] else 'None'),
+                        'order_by_' + str(form.cleaned_data['order_by']),
                     ]
                 ))
-    elif form.is_valid():
-        form, search_results = salary_filters(
-            *experience_filters(
-                *general_search_results(form, search_type)
+    else:
+        put_salary = Money(_salary_from, _currency) if _salary_from != 'None' else Money(0.0, _currency)
+        data = {
+            'salary_from' : put_salary,
+            'salary_to' : float(_salary_to) if _salary_to != 'None' else None,
+            'without_salary' : True if _without_salary == 'True' else False,
+            'experience_from' : int(_experience_from) if _experience_from != 'None' else None,
+            'experience_to' : int(_experience_to) if _experience_to != 'None' else None,
+            'experience_type' : _experience_type,
+            'without_experience' : True if _without_experience == 'True' else False,
+            'city' : '' if _city == 'None' else _city, 
+            'order_by' : _order_by,
+        }
+        form = FiltersForm(data=data)
+        if form.is_valid():
+            form.cleaned_data['salary_from'] = put_salary
+            form, search_results = salary_filters(
+               *experience_filters(
+                   *general_search_results(form, search_type, search_text)
+               )
             )
-        )
 
     return render(request, 'search.html', {
+        'form' : form,
         'search_type': _type,
         'search_text': search_text,
+        
         'search_results' : search_results,
-        'form' : form,
+
+        'salary_from' : put_salary,
     })
 
 
@@ -167,6 +187,7 @@ def negate_ad(ad_type):
 
 
 def save_skills(post, ad):
+    i = 1
     last = post.get('skill1')
     while last is not None:
         Skill.objects.create(text=last, ad_id=ad).save()
