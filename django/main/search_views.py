@@ -166,7 +166,7 @@ def search(
             )
 
             page  = request.GET.get('page', 1)
-            search_results = Paginator(search_results, 1)
+            search_results = Paginator(search_results, 10)
             try:
                 ads = search_results.page(page)
             except PageNotAnInteger:
