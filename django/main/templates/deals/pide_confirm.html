@@ -20,7 +20,7 @@
                 </h3>
             </div>
         {% endif %}
-        <form class="form" method="post">
+        <form class="form" method="post"  onsubmit="startSpinning()">
             {% csrf_token %}
             <div class="row">
                 <div class="col-6">

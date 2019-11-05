@@ -10,7 +10,7 @@
     <h1><em>{{ title }}</em></h1>
 
 
-    <form id="general-form" class="form" method="post">
+    <form id="general-form" class="form" method="post"  onsubmit="startSpinning()">
         {% csrf_token %}
         <div class="mb-3">
             {{ form.title|add_class:"form-control mt-4" }}

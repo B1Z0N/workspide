@@ -55,6 +55,16 @@
             border-color: darkcyan;
             background-color: #f9d342;
         }
+
+        .custom-spinning-image {
+            -webkit-animation:spin 1s linear infinite;
+            -moz-animation:spin 1s linear infinite;
+            animation:spin 1s linear infinite;
+        }
+        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+        
     </style>
 </head>
 
@@ -68,7 +78,7 @@
 
             <a href="/">
                 {% load static %}
-                <img src="{% static "img/logo5.png" %}" width="60" />
+                <img id="small-logo" src="{% static "img/logo5.png" %}" width="60" />
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
@@ -156,7 +166,7 @@
                                                 Order by
                                                 {{ form.order_by|add_class:"custom-select" }}
                                             </div>
-                                            <input type="submit" value="Apply" name="filter_btn"
+                                            <input type="submit" value="Apply" name="filter_btn" onclick="startSpinning()"
                                                 class="btn btn-primary significant-button mx-auto my-3" />
                                         </div>
                                     </form>
@@ -255,6 +265,15 @@
     </footer>
 
     <script>
+        smallLogo =  document.getElementById('small-logo')
+        var startSpinning = () => {
+           smallLogo.classList += "custom-spinning-image"
+        }
+
+        var stopSpinning = () => {
+            smallLogo.classList = ''
+        }
+
         var searchType = "{{ search_type }}"
         var searchText = "{{ search_text }}"
 
@@ -282,6 +301,8 @@
         handleEnterKey = (e) => {
             if (e.keyCode === 13) {
                 e.preventDefault() // Ensure it is only this code that runs
+                
+                startSpinning()
 
                 searchText = searchBar.value
                 currentLink = window.location.href

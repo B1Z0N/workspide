@@ -25,9 +25,16 @@
         
     </title>
     <style>
-        
         {% block style %}
         {% endblock%}
+        .custom-spinning-image {
+            -webkit-animation:spin 1s linear infinite;
+            -moz-animation:spin 1s linear infinite;
+            animation:spin 1s linear infinite;
+        }
+        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
         
     </style>
 </head>
@@ -41,7 +48,7 @@
                     <div class="small-logo img-link">
                         <a href="/">
                             {% load static %}
-                            <img src="{% static "img/logo5.png" %}" width="40px" />
+                            <img id="small-logo" src="{% static "img/logo5.png" %}" width="40px" />
                         </a>
                         <strong><em>WorkSpide - work meeting your needs</em></strong>
                     </div>
@@ -61,5 +68,16 @@
         </div>
     </footer>
 </body>
+
+<script>
+    smallLogo =  document.getElementById('small-logo')
+    var startSpinning = () => {
+       smallLogo.classList += "custom-spinning-image"
+    }
+
+    var stopSpinning = () => {
+        smallLogo.classList = ''
+    }
+</script>
 
 </html>
