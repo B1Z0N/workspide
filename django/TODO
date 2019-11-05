@@ -1,7 +1,5 @@
 TODO:
     add
-        pagination
-        loading screen
         remote database connection
         docker
         search with ElasticEngine
