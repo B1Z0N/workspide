@@ -17,9 +17,12 @@ from djmoney.contrib.exchange.models import convert_money
 
 import operator
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 ##################################################
 # Search views
 ##################################################
+
 
 def compare_money(money1, money2, operation):
     return operation(money1, Money(money2.amount, money1.currency))
@@ -161,6 +164,17 @@ def search(
                    *general_search_results(form, search_type, search_text)
                )
             )
+
+            page  = request.GET.get('page', 1)
+            search_results = Paginator(search_results, 1)
+            try:
+                ads = search_results.page(page)
+            except PageNotAnInteger:
+                ads = search_results.page(1)
+            except EmptyPage:
+                ads = search_results.page(search_results.num_pages)
+            
+            search_results = ads
 
     return render(request, 'search.html', {
         'form' : form,
