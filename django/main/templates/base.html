@@ -36,6 +36,21 @@
         @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
         @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
         
+        .custom-spinning-image-faster {
+            -webkit-animation:spin 2s linear infinite;
+            -moz-animation:spin 2s linear infinite;
+            animation:spin 2s linear infinite;
+        }
+
+        .centered-big-logo {
+            height: 200px;
+            width: 200px;
+            position: fixed;
+            left: 50%;
+            margin-left: -100px;
+            top: 50%;
+            margin-top: -100px;
+        }
     </style>
 </head>
 
@@ -58,7 +73,8 @@
             </div>
         </p>
     </div>
-
+    <img id="big-hidden-logo" src='{% static "img/logo5.png" %}' width="250" 
+        class="centered-big-logo" style="display: none;">
 
 
     <footer class="page-footer font-small teal after-all-page container-fluid">
@@ -71,6 +87,8 @@
 
 <script>
     smallLogo =  document.getElementById('small-logo')
+    bigHiddenLogo = document.getElementById('big-hidden-logo')
+    
     var startSpinning = () => {
        smallLogo.classList += "custom-spinning-image"
     }
@@ -78,6 +96,17 @@
     var stopSpinning = () => {
         smallLogo.classList = ''
     }
+
+    var startBigSpinning = () => {  
+        bigHiddenLogo.style.display = ''
+        bigHiddenLogo.classList += ' custom-spinning-image-faster'
+    }
+    
+    var stopBigSpinning = () => {
+        bigHiddenLogo.style.display = 'none'
+        bigHiddenLogo.classList = 'centered-big-logo'
+    }
+    
 </script>
 
 </html>

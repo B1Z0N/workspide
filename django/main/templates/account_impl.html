@@ -14,7 +14,7 @@
         </div>
         <div class="container">
             {% load widget_tweaks %}
-            <form class="form" method="post">
+            <form class="form" method="post" onsubmit="startBigSpinning()">
                 {% csrf_token %}
                 <div class="form-group text-center mt-4 justify-content-around" id="user-data">
                     {{ name_form.first_name|add_class:"form-control mt-3" }}
@@ -41,7 +41,7 @@
             </form>
             <div class="row">
                 <div class="col">
-                    <form class="form" method="post">
+                    <form class="form" method="post" onsubmit="startBigSpinning()">
                         {% csrf_token %}
                         <input name="email_change_btn" value="Change email" type="submit"
                             class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
@@ -85,7 +85,7 @@
 </div>
 <div class="row">
     <div class="col pt-5 second-option">
-        <form class="form" method="post">
+        <form class="form" method="post" onsubmit="startBigSpinning()">
             {% csrf_token %}
             <div class="container text-center">
                 <input style="border-color: #292826; color: #292826;" name="delete_account_btn" value="Delete account"
