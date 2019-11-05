@@ -17,7 +17,7 @@ Login
             <p>
                 <h3 class="text-center mt-5 operation-title">Login</h3>
             </p>
-            <form class="form" method="post">
+            <form class="form" method="post" onsubmit="startSpinning();">
                 {% load widget_tweaks %}
                 {% csrf_token %}
                 <div class="form-group text-center mt-4 justify-content-around" id="user-data">

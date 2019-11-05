@@ -9,7 +9,7 @@ Password change
     <form class="form" method="post" style="font-size: 30px;">
         {% load widget_tweaks %}
         {% csrf_token %}
-        <div class="form-group text-center mt-4 justify-content-around" id="user-data">
+        <div class="form-group text-center mt-4 justify-content-around" id="user-data"  onsubmit="startSpinning()">
             {{ form.email|add_class:"form-control mt-3"|attr:"placeholder:New email" }}
             <input name="email_change_btn" value="Change" type="submit"
                 class="btn btn-primary m-3 btn-lg significant-button mx-3" />

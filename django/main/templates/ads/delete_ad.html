@@ -2,7 +2,7 @@
 
 {% block alert %}
 <h1>
-    <form class="form" method="post">
+    <form class="form" method="post" onsubmit="startSpinning()">
         {% load widget_tweaks %}
         <div class="form-group text-center mt-4 justify-content-around" id="user-data">
             {% csrf_token %}
