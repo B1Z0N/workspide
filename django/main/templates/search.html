@@ -21,6 +21,40 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>Search</title>
     <style>
+        .page-link {
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            line-height: 1.25;
+
+            color: #f9d342;
+            background-color: #292826;
+            border-color: black;
+        }
+
+        .page-item.disabled .page-link {
+            pointer-events: none;
+            cursor: auto;
+
+            background-color: gray;
+            color: #292826;
+            border-color: black;
+        }
+
+        .page-item.active .page-link {
+            z-index: 1;
+
+            color: #292826;
+            background-color: white;
+        }
+
+        .page-link:focus,
+        .page-link:hover {
+            text-decoration: none;
+            border-color: darkcyan;
+            background-color: #f9d342;
+        }
     </style>
 </head>
 
@@ -116,7 +150,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="row mt-4">          
+                                            <div class="row mt-4">
                                                 City
                                                 {{ form.city|add_class:"form-control" }}
                                                 Order by
@@ -151,18 +185,62 @@
                     </div>
                 </div>
                 {% if form.errors %}
-                {{ form.non_field_errors }}
-                <ul>
-                    {% for field in form %}
-                    {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                    <h3>
+                        {{ form.non_field_errors }}
+                        <ul>
+                            {% for field in form %}
+                                {% if field.errors %}
+                                    <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </h3>
+                {% else %}
+
+                    {% for ad in search_results %}
+                        {% include "ads/ad_search_panel.html" %}
+                    {% empty %}
+                        Try searching, it is empty here for now
                     {% endfor %}
-                </ul>
+
+                    {% if search_results.has_other_pages %}
+                        {% load proper_paginate %}
+                        {% load url_replace %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center search-pagination-list">
+                                {% if search_results.number == 1 %}
+                                    <li class="page-item disabled"><span class="page-link">⇤</span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' 1 %}">⇤</a></li>
+                                {% endif %}
+                                {% if search_results.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' search_results.previous_page_number %}">&laquo;</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                                {% endif %}
+
+                                {% for i in search_results.paginator|proper_paginate:search_results.number %}
+                                    {% if search_results.number == i %}
+                                        <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if search_results.has_next %}    
+                                    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' search_results.next_page_number %}">&raquo;</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                {% endif %} 
+                                {% if search_results.number == search_results.paginator.num_pages %}
+                                    <li class="page-item disabled"><span class="page-link">⇥</span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' search_results.paginator.num_pages %}">⇥</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
                 {% endif %}
-                {% for ad in search_results %}
-                    {% include "ads/ad_search_panel.html" %}
-                {% empty %}
-                Try searching, it is empty here for now
-                {% endfor %}
             </div>
         </p>
     </div>
@@ -193,10 +271,10 @@
                     searchBar.setAttribute("value", searchText)
             }
             {% if salary_from is not None %}
-                salaryFromSelect.value = '{{ salary_from.currency }}'
-                {% if salary_from.amount != 0 %}
-                    salaryFromText.value = '{{ salary_from.amount }}'
-                {% endif %}
+            salaryFromSelect.value = '{{ salary_from.currency }}'
+            {% if salary_from.amount != 0 %}
+            salaryFromText.value = '{{ salary_from.amount }}'
+            {% endif %}
             {% endif %}
             // alert('{{ salary_from.amount }}')
         }
@@ -207,7 +285,7 @@
 
                 searchText = searchBar.value
                 currentLink = window.location.href
-                if (searchText === '') searchText = 'None' 
+                if (searchText === '') searchText = 'None'
                 searchLink = currentLink.replace(/text_[^\/]*/, 'text_' + searchText)
                 window.location.replace(searchLink)
             }

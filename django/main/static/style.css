@@ -1,7 +1,17 @@
-
-@font-face { font-family: Moon; src: '../static/fonts/MOON 2.0 FREE/Moon2.0-Regular.otf'; } 
-@font-face { font-family: Moon; font-weight: bold; src: '../static/fonts/MOON 2.0 FREE/Moon2.0-Bold.otf'; } 
-@font-face { font-family: Moon; font-weight: lighter; src: '../static/fonts/MOON 2.0 FREE/Moon2.0-Light.otf'; } 
+@font-face {
+  font-family: Moon;
+  src: "../static/fonts/MOON 2.0 FREE/Moon2.0-Regular.otf";
+}
+@font-face {
+  font-family: Moon;
+  font-weight: bold;
+  src: "../static/fonts/MOON 2.0 FREE/Moon2.0-Bold.otf";
+}
+@font-face {
+  font-family: Moon;
+  font-weight: lighter;
+  src: "../static/fonts/MOON 2.0 FREE/Moon2.0-Light.otf";
+}
 
 body {
   font-family: Moon;
@@ -21,9 +31,9 @@ body {
 }
 
 .custom-shadowed {
-    -moz-box-shadow: 0 0 15px rgb(0, 0, 75);
-    -webkit-box-shadow: 0 0 15px rgb(0, 0, 75);
-    box-shadow: 0 0 15px rgb(0, 0, 75);
+  -moz-box-shadow: 0 0 15px rgb(0, 0, 75);
+  -webkit-box-shadow: 0 0 15px rgb(0, 0, 75);
+  box-shadow: 0 0 15px rgb(0, 0, 75);
 }
 
 .small-logo {
@@ -33,12 +43,13 @@ body {
   top: 10px;
 }
 
-div.img-link a, 
-div.img-link a:hover, div.img-link a:visited {
-  border:none;
-  outline:none;
-  text-decoration:none;
-  color:inherit;
+div.img-link a,
+div.img-link a:hover,
+div.img-link a:visited {
+  border: none;
+  outline: none;
+  text-decoration: none;
+  color: inherit;
 }
 
 .after-small-logo {
