@@ -120,8 +120,8 @@ class Ad(models.Model):
         on_delete=models.CASCADE
         )
     ad_type = models.CharField(max_length=7, choices=AD_CHOICES, default='resume')
-    city = models.CharField(max_length=20)
-    title = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    title = models.CharField(max_length=50)
     text = models.TextField(null=True, blank=True)
 
     salary = MoneyField(
