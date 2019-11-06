@@ -95,13 +95,22 @@ def general_search_results(form, search_ad_type, search_text):
             city=city,
             title__icontains=search_text,
         ).order_by(order_by)
+        """ 
+            SELECT * FROM Ad WHERE is_archived = False, ad_type = search_ad_type, 
+                    city = city, title LIKE %search_text% ORDER BY order_by ASC
+        """
+        # `DESC` if order_by starts with `-` else `ASC`  
     else:
         search_results = Ad.objects.filter(
             is_archived=False, 
             ad_type=search_ad_type,
             title__icontains=search_text,
         ).order_by(order_by)
-
+        """ 
+            SELECT * FROM Ad WHERE is_archived = False, ad_type = search_ad_type, 
+                    title LIKE %search_text% ORDER BY order_by ASC
+        """
+        # `DESC` if order_by starts with `-` else `ASC` 
     return form, search_results
 
 
@@ -185,10 +194,6 @@ def search(
 
         'salary_from' : put_salary,
     })
-
-
-def empty_search(request, _type):
-    return search(request, _type, "")
 
 
 ##################################################
@@ -346,6 +351,7 @@ def show_ad(request, ad_id):
     def actual_view(request, ad, template_name):
         context = {'ad': ad, 'negated_type': negate_ad(ad.ad_type), }
         assign(context, Skill.objects.filter(ad_id=ad_id), 'skills')
+        # SELECT * FROM Skill WHERE ad_id_id = ad_id
         assign(context, ad.text, 'description')
         user = ad.uid
 
@@ -356,9 +362,11 @@ def show_ad(request, ad_id):
         if ad.ad_type == 'vacancy':
             assign(context, Responsibility.objects.filter(
                 vacancy_id=ad_id), 'resps')
+            # SELECT * FROM Responsibility WHERE vacancy_id_id = ad_id
         elif ad.ad_type == 'resume':
             assign(context, PetProject.objects.filter(
                 resume_id=ad_id), 'projects')
+            # SELECT * FROM PetProject WHERE resume_id_id = ad_id            
 
         return render(request, template_name, context)
 
@@ -389,6 +397,7 @@ def edit_ad(ad_type):
     def actual_view(request, ad_id):
         try:
             ad = Ad.objects.get(id=ad_id)
+            # SELECT * FROM Ad WHERE id = ad_id
         except Ad.DoesNotExist:
             return ad_alert(request)
         if ad_type != ad.ad_type:
@@ -417,13 +426,16 @@ def edit_ad(ad_type):
             ad_type: 'True',
             'title': 'Edit ' + ad_type,
             'skills': Skill.objects.filter(ad_id=ad),
+            # SELECT * FROM Skill WHERE ad_id_id = ad.id
         }
         if ad_type == 'vacancy':
             context['resps'] = Responsibility.objects.filter(vacancy_id=ad)
+            # SELECT * FROM Responsibility vacancy_id_id = ad.id
         elif ad_type == 'resume':
             context['projects'] = [
                 (resp.text, resp.link) for resp in
                 PetProject.objects.filter(resume_id=ad)
+                # SELECT * FROM PetProject resume_id_id = ad.id
             ]
 
         return render(request, 'ads/edit_ad.html', context)
@@ -434,6 +446,7 @@ def edit_ad(ad_type):
 def delete_ad(request, ad_id):
     try:
         ad = Ad.objects.get(id=ad_id)
+        # SELECT * FROM Ad WHERE id = ad_id
     except Ad.DoesNotExist:
         return ad_alert(request)
 
@@ -473,6 +486,7 @@ def pide(request, ad_id):
 
     try:
         ad = Ad.objects.get(id=ad_id)
+        # SELECT * FROM Ad WHERE id = ad_id 
     except Ad.DoesNotExist:
         return ad_alert(request)
     if request.user == ad.uid:
@@ -482,7 +496,11 @@ def pide(request, ad_id):
 
 
 def feed(request):
-    pides = Pide.objects.filter(ad_to__uid=request.user) | Pide.objects.filter(uid_from=request.user)
+    pides = \
+        Pide.objects.filter(ad_to__uid=request.user) |\
+        Pide.objects.filter(uid_from=request.user)
+        # SELET * FROM Pide WHERE uid_from_id = request.user.id
+
     _pides =[]
     for pide in pides.order_by('-pub_dtime'):
         if request.user.not_read:
@@ -543,6 +561,7 @@ def pide_confirm(request, pide_id):
 
     try:
         pide = Pide.objects.get(id=pide_id)
+        # SELECT * FROM Pide WHERE id = pide_id
     except Pide.DoesNotExist:
         return ad_alert(request, 'No such pide exists')
     if pide.state == 'rejected':
