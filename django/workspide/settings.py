@@ -100,11 +100,11 @@ DATABASES = {
     # database, configured locally
     'default': {
         'ENGINE': 'django.db.backends.mysql', # database engine
-        'NAME': 'workspide', # database name
-        'USER': 'wsadmin', # database user
-        'PASSWORD': 'wspass', # database password
-        'HOST': 'localhost',   # Or an IP Address of database
-        'PORT': '3306', # default database port
+        'NAME': 'ka7518', # database name
+        'USER': 'ka7518', # database user
+        'PASSWORD': 'KJSbkGUjNa4JrM', # database password
+        'HOST': 'zanner.org.ua',   # Or an IP Address of database
+        'PORT': '33321', # default database port
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }

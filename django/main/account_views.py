@@ -132,6 +132,7 @@ def account(request):
             name_form = NameChangeForm(instance=instance)
 
     ads = Ad.objects.filter(uid=request.user, is_archived=False)
+    # SELECT * FROM Ad WHERE uid_id = request.user.id, is_archived = False
     resumes = ads.filter(ad_type='resume')
     vacancies = ads.filter(ad_type='vacancy')
 
@@ -150,6 +151,7 @@ def activate_mail(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64)
         user = User.objects.get(pk=uid)
+        # SELECT * FROM User WHERE id = uid
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
@@ -173,6 +175,7 @@ def delete_account(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64)
         user = User.objects.get(pk=uid)
+        # SELECT * FROM User WHERE id = uid
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
@@ -222,6 +225,7 @@ def email_change(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64)
         user = User.objects.get(pk=uid)
+        # SELECT * FROM User WHERE id = uid
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
@@ -271,6 +275,7 @@ def email_change_complete(request, uidb64, emailb64, token):
         uid = urlsafe_base64_decode(uidb64)
         email = urlsafe_base64_decode(emailb64).decode("utf-8")
         user = User.objects.get(pk=uid)
+        # SELECT * FROM User WHERE id = uid
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
