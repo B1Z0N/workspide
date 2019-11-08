@@ -145,7 +145,7 @@ class PideModelForm(forms.ModelForm):
                 text_widget_attrs=None, *args, **kwargs):
         super(PideModelForm, self).__init__(*args, **kwargs)
         if user is not None and ad_type is not None:
-            self.fields['ad_from'].queryset = Ad.objects.filter(uid=user, ad_type=ad_type) 
+            self.fields['ad_from'].queryset = Ad.objects.filter(uid=user, ad_type=ad_type, is_archived=False) 
         else:
             self.fields['ad_from'] = None
 
