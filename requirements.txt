@@ -1,8 +1,14 @@
+beautifulsoup4==4.8.1
 Django==2.2.7
 django-money==0.15.1
 django-summernote==0.8.11.4
 django-widget-tweaks==1.4.5
+gunicorn==19.9.0
+html-sanitizer==1.7.3
+lxml==4.4.1
 mysqlclient==1.4.5
+pkg-resources==0.0.0
 py-moneyed==0.8.0
 pytz==2019.3
+soupsieve==1.9.5
 sqlparse==0.3.0
