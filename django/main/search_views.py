@@ -470,7 +470,7 @@ def delete_ad(request, ad_id):
 def pide(request, ad_id):
     def actual_view(request, ad):
         form = PideModelForm(
-            user=request.user, ad_type=negate_ad(ad.ad_type)
+            user=request.user, ad_type=negate_ad(ad.ad_type),
         )
 
         if request.method == 'POST':

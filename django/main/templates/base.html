@@ -86,25 +86,41 @@
 </body>
 
 <script>
+
+    let freezeClic = false; // just modify that variable to disable all clics events
+
+    document.addEventListener("click", freezeClicFn, true);
+
+    function freezeClicFn(e) {
+        if (freezeClic) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    }
+
     smallLogo =  document.getElementById('small-logo')
     bigHiddenLogo = document.getElementById('big-hidden-logo')
     
     var startSpinning = () => {
        smallLogo.classList += "custom-spinning-image"
+       freezeClic = true
     }
 
     var stopSpinning = () => {
         smallLogo.classList = ''
+        freezeClic = false
     }
 
     var startBigSpinning = () => {  
         bigHiddenLogo.style.display = ''
         bigHiddenLogo.classList += ' custom-spinning-image-faster'
+        freezeClic = true
     }
     
     var stopBigSpinning = () => {
         bigHiddenLogo.style.display = 'none'
         bigHiddenLogo.classList = 'centered-big-logo'
+        freezeClic = false
     }
     
 </script>
