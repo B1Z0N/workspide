@@ -19,6 +19,10 @@ import operator
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from html_sanitizer import Sanitizer
+sanitizer = Sanitizer()
+sanitizer.tags = set(sanitizer.tags).union(['p', 'span', 'i', 'u', 'hr', 'ol', 'li', 'br', 'blockquote', 'ul', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+
 ##################################################
 # Search views
 ##################################################
@@ -324,6 +328,7 @@ def add_ad(ad_type):
             if form.is_valid():
                 ad = form.save(commit=False)
                 ad.uid = request.user
+                ad.text = sanitizer.sanitize(ad.text)
 
                 ad.save()
                 save_all_additional(request.POST, ad)
@@ -418,6 +423,7 @@ def edit_ad(ad_type):
                 delete_all_additional(ad)
                 ad = form.save(commit=False)
                 ad.uid = request.user
+                ad.text = sanitizer.sanitize(ad.text)
                 ad.save()
                 save_all_additional(request.POST, ad)
                 return redirect('/account/')
@@ -475,6 +481,7 @@ def pide(request, ad_id):
                 pide = form.save(commit=False)
                 pide.ad_to = ad
                 pide.uid_from = request.user
+                pide.comment = sanitizer.sanitize(pide.comment)
                 pide.uid_from.not_read += 1
                 pide.ad_to.uid.not_read += 1
                 pide.uid_from.save()
