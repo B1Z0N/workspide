@@ -47,6 +47,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'html_sanitizer',
     'djmoney.contrib.exchange',
     'djmoney',
     'django_summernote',
@@ -164,9 +165,8 @@ SUMMERNOTE_CONFIG = {
         'toolbar': [
             ['style', ['style']],
             ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
             ['hr', ['hr']], 
-            ['para', ['ul', 'ol', 'paragraph']],
+            ['para', ['ul', 'ol']],
             ['view', ['fullscreen', 'codeview', 'help']],
         ],
     },
