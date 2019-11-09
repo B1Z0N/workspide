@@ -21,7 +21,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'workspide@gmail.com'
-EMAIL_HOST_PASSWORD = 'dpoK8iN2vmGAU3'
+EMAIL_HOST_PASSWORD = os.environ['WORKSPIDE_EMAIL_PASSWORD']
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -36,13 +36,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'syz7c@4d1$rxpjxtuuusm0cau+f(a+*7u+7o!%&b!oi97_-9w9'
+SECRET_KEY = os.environ['WORKSPIDE_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'localhost', 'www.workspide.tk' ]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 
@@ -101,11 +105,11 @@ DATABASES = {
     # database, configured locally
     'default': {
         'ENGINE': 'django.db.backends.mysql', # database engine
-        'NAME': 'ka7518', # database name
-        'USER': 'ka7518', # database user
-        'PASSWORD': 'KJSbkGUjNa4JrM', # database password
-        'HOST': 'zanner.org.ua',   # Or an IP Address of database
-        'PORT': '33321', # default database port
+        'NAME': os.environ['WORKSPIDE_DB_NAME'], # database name
+        'USER': os.environ['WORKSPIDE_DB_USER_NAME'], # database user
+        'PASSWORD': os.environ['WORKSPIDE_DB_PASSWORD'], # database password
+        'HOST': os.environ['WORKSPIDE_DB_HOST'],   # Or an IP Address of database
+        'PORT': os.environ['WORKSPIDE_DB_PORT'], # default database port
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
@@ -147,6 +151,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 SUMMERNOTE_THEME = 'bs4'
 
