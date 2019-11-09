@@ -1,0 +1,57 @@
+@font-face {
+  font-family: Moon;
+  src: "../static/fonts/MOON 2.0 FREE/Moon2.0-Regular.otf";
+}
+@font-face {
+  font-family: Moon;
+  font-weight: bold;
+  src: "../static/fonts/MOON 2.0 FREE/Moon2.0-Bold.otf";
+}
+@font-face {
+  font-family: Moon;
+  font-weight: lighter;
+  src: "../static/fonts/MOON 2.0 FREE/Moon2.0-Light.otf";
+}
+
+body {
+  font-family: Moon;
+}
+
+.after-all-page {
+  top: 100%;
+}
+.significant-info {
+  color: #f9d342;
+}
+.significant-button {
+  background-color: rgb(201, 167, 58);
+  border-color: #f9d342;
+  color: #292826;
+  border-color: #292826;
+}
+
+.custom-shadowed {
+  -moz-box-shadow: 0 0 15px rgb(0, 0, 75);
+  -webkit-box-shadow: 0 0 15px rgb(0, 0, 75);
+  box-shadow: 0 0 15px rgb(0, 0, 75);
+}
+
+.small-logo {
+  position: absolute;
+
+  left: 10px;
+  top: 10px;
+}
+
+div.img-link a,
+div.img-link a:hover,
+div.img-link a:visited {
+  border: none;
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.after-small-logo {
+  padding-top: 40px;
+}
