@@ -184,7 +184,6 @@ SUMMERNOTE_CONFIG = {
 }
 
 
-
 ##################################################
 # Production or development settings
 ##################################################
@@ -206,4 +205,9 @@ if mode == 'production':
 else:
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
+
     ALLOWED_HOSTS = []
+    
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False 
+    CSRF_COOKIE_SECURE = False 
