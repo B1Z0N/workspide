@@ -30,31 +30,25 @@
                     <div class="row">
                         <div class="col-6">
                             <input name="name_btn" value="Save" type="submit"
-                                class="btn btn-primary m-3 btn-lg significant-button" />
+                                class="btn btn-primary m-3  significant-button" />
                         </div>
                         <div class="col-6">
                             <input name="name_reset_btn" value="Reset" type="submit"
-                                class="btn btn-primary m-3 btn-lg significant-button" />
+                                class="btn btn-primary m-3  significant-button" />
                         </div>
                     </div>
                 </div>
             </form>
-            <div class="row">
-                <div class="col">
-                    <form class="form" method="post" onsubmit="startBigSpinning()">
-                        {% csrf_token %}
-                        <input name="email_change_btn" value="Change email" type="submit"
-                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                    </form>
-                </div>
-                <div class="col">
-                    <form class="form" method="post">
-                        {% csrf_token %}
-                        <input name="pass_change_btn" value="Change password" type="submit"
-                            class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-                    </form>
-                </div>
+            <div class="conatiner second-option mb-5">
+                <a href="/signup/logout/">
+                    {% csrf_token %}
+                    <div class="container text-center">
+                        <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
+                            class="btn btn-primary significant-button" />
+                    </div>
+                </a>
             </div>
+
         </div>
     </div>
     <div class="col-12 m-4 p-3 rounded connect-options custom-shadowed" style="background-color: rgb(173, 173, 173);">
@@ -82,26 +76,37 @@
         </div>
     </div>
 </div>
-</div>
+
+
 <div class="row">
-    <div class="col pt-5 second-option">
+    <div class="col">
+        <form class="form" method="post" onsubmit="startBigSpinning()">
+            {% csrf_token %}
+            <div class="container text-center">
+                <input name="email_change_btn" value="Change email" type="submit"
+                    class="btn btn-primary btn-lg m-3 mb-5 significant-button" />
+            </div>
+        </form>
+    </div>
+    <div class="col">
+        <form class="form" method="post" onsubmit="startBigSpinning()">
+            {% csrf_token %}
+            <div class="container text-center">
+                <input name="pass_change_btn" value="Change password" type="submit"
+                    class="btn btn-primary btn-lg m-3 mb-5 significant-button" />
+            </div>
+        </form>
+    </div>
+    <div class="col">
         <form class="form" method="post" onsubmit="startBigSpinning()">
             {% csrf_token %}
             <div class="container text-center">
                 <input style="border-color: #292826; color: #292826;" name="delete_account_btn" value="Delete account"
-                    type="submit" class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
+                    type="submit" class="btn btn-primary btn-lg m-3 mb-5 significant-button" />
             </div>
         </form>
     </div>
-    <div class="col pt-5 second-option">
-        <a href="/signup/logout/">
-            {% csrf_token %}
-            <div class="container text-center">
-                <input style="border-color: #292826; color: #292826;" value="Logout" type="submit"
-                    class="btn btn-primary m-3 mb-5 btn-lg significant-button" />
-            </div>
-        </a>
-    </div>
+</div>
 </div>
 <script>
     var currentFirstName = '{% if user.first_name is None %}empty{% else %}{{ user.first_name }}{% endif %}'
