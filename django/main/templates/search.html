@@ -119,7 +119,6 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="popup-filters-label">Filters</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -186,7 +185,7 @@
         <p>
             <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
                 style="background-color: rgb(201, 167, 58);">
-                <div class="container  mb-5">
+                <div class="container mb-5">
                     <div class="small-logo img-link">
                         <a href="/">
                             <img src='{% static "img/logo5.png" %}' width="64" />
@@ -210,7 +209,16 @@
                     {% for ad in search_results %}
                         {% include "ads/ad_search_panel.html" %}
                     {% empty %}
-                        Try searching, it is empty here for now
+                    <div class="container custom-shadowed rounded text-center"
+                        style="background-color:#292826; color: rgb(201, 167, 58); position: relative; top: 50px; margin-bottom: 100px; padding: 30px">
+                        <h1>
+                            {% block alert %}
+                            <h1>
+                                Try searching, it is empty here for now
+                            </h1>
+                            {% endblock %}
+                        </h1>
+                    </div>
                     {% endfor %}
 
                     {% if search_results.has_other_pages %}
