@@ -245,6 +245,7 @@ def edit_ad(ad_type):
             ad_type: 'True',
             'title': 'Edit ' + ad_type,
             'skills': Skill.objects.filter(ad_id=ad),
+            'currency' : ad.salary.currency,
             # SELECT * FROM Skill WHERE ad_id_id = ad.id
         }
         if ad_type == 'vacancy':
