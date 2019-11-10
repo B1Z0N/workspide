@@ -188,13 +188,14 @@ SUMMERNOTE_CONFIG = {
 # Production or development settings
 ##################################################
 mode = os.environ.get('WORKSPIDE_MODE')
+_allowed = os.environ.get('WORKSPIDE_ALLOWED_HOSTS')
+if _allowed:
+    _allowed = _allowed.split()
+else:
+    _allowed = []
+
 if mode == 'production':
     DEBUG = False
-    _allowed = os.environ.get('WORKSPIDE_ALLOWED_HOSTS')
-    if _allowed:
-        _allowed = _allowed.split()
-    else:
-        _allowed = []
     
     ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', *_allowed]
 
@@ -206,7 +207,7 @@ else:
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
 
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = _allowed
     
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False 
