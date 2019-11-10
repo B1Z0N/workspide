@@ -25,14 +25,16 @@
         <h1><em>Additional data</em></h1>
 
         <div class="row my-3">
-            <div class="col-6">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                 {{ form.salary|add_class:"form-control" }}
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                {{ form.experience|add_class:"form-control" }}
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="col mt-1">
+                    {{ form.experience|add_class:"form-control" }}
+                </div>
+                <div class="col mt-1">
                     {{ form.experience_type|add_class:"custom-select" }}
+                </div>
             </div>
         </div>
 
@@ -42,13 +44,13 @@
 
         <input id="skill_text" type="text" maxlength="50" placeholder="Skill description" class="form-control mt-4" />
         <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col">
                 <input type="button" name="add_skill_btn" onclick="pushSkill()" value="Add"
-                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+                    class="btn btn-primary mx-auto my-3 significant-button" />
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col">
                 <input type="button" name="remove_skill_btn" onclick="popSkill()" value="Remove"
-                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
+                    class="btn btn-danger mx-auto my-3 significant-button" />
             </div>
         </div>
 
@@ -61,13 +63,13 @@
         {% csrf_token %}
         <input id="resp_text" type="text" maxlength="50" placeholder="Responsibility text" class="form-control mt-4" />
         <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col">
                 <input type="button" name="add_resp_btn" onclick="pushResp()" value="Add"
-                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+                    class="btn btn-primary mx-auto my-3 significant-button" />
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col">
                 <input type="button" name="remove_resp_btn" onclick="popResp()" value="Remove"
-                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
+                    class="btn btn-danger mx-auto my-3 significant-button" />
             </div>
         </div>
         {% endif %}
@@ -83,31 +85,38 @@
         <input id="project_link" type="url" maxlength="50" placeholder="Link to your project"
             class="form-control mt-4" />
         <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col">
                 <input type="button" name="add_project_btn" onclick="pushProject()" value="Add"
-                    class="btn btn-primary mx-auto my-3 btn-lg significant-button" />
+                    class="btn btn-primary mx-auto my-3 significant-button" />
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col">
                 <input type="button" name="remove_project_btn" onclick="popProject()" value="Remove"
-                    class="btn btn-danger mx-auto my-3 btn-lg significant-button" />
+                    class="btn btn-danger mx-auto my-3 significant-button" />
             </div>
         </div>
         {% endif %}
 
         <input id="general-submit-btn" name="submit_button" value="Submit" type="submit"
-            class="btn btn-primary mt-3 mb-3 btn-lg" />
+            class="btn btn-primary mt-3 mb-3" />
     </form>
 </div>
 <script>
     var titleField = document.getElementById('id_title')
     var salaryField = document.getElementById('id_salary_0')
     var experienceField = document.getElementById('id_experience')
+    
+    currencySelect = document.getElementById('id_salary_1')
 
     window.onload = () => {
         titleField.placeholder = '{% if vacancy %}Your vacancy title{% else %}Your resume title{% endif %}'
         salaryField.placeholder = '{% if vacancy %}Future employee`s salary{% else %}Expected salary{% endif %}'
         experienceField.placeholder = '{% if vacancy %}Expected experience{% else %}Your experience{% endif %}'
 
+        {% if currency %}
+            currencySelect.value = '{{ currency }}'
+        {% else %}
+            currencySelect.value = 'USD'
+        {% endif %}
         {% block onload %}
         {% endblock %}
     }
