@@ -135,10 +135,14 @@
                                         {% csrf_token %}
                                         <div class="container">
                                             <div class="row text-center">
-                                                Salary from
-                                                {{ form.salary_from|add_class:"form-control" }}
-                                                and to
-                                                {{ form.salary_to|add_class:"form-control" }}
+                                                Salary from and to
+                                                <div class="row">
+                                                    {{ form.salary_from|add_class:"form-control" }}
+                                                    <div class="col mt-1">
+                                                        {{ form.salary_to|add_class:"form-control" }}
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-check">
                                                     {{ form.without_salary|add_class:"form-check-input" }}
                                                     <label class="form-check-label" for="id_without_salary">
@@ -147,11 +151,10 @@
                                                 </div>
                                             </div>
                                             <div class="row mt-4">
-                                                Experience from
+                                                Experience from and to
                                                 {{ form.experience_from|add_class:"form-control" }}
-                                                and to
-                                                {{ form.experience_to|add_class:"form-control" }}
-                                                {{ form.experience_type|add_class:"custom-select mt-4" }}
+                                                {{ form.experience_to|add_class:"form-control mt-1" }}
+                                                {{ form.experience_type|add_class:"custom-select mt-1" }}
                                                 <div class="form-check">
                                                     {{ form.without_experience|add_class:"form-check-input" }}
                                                     <label class="form-check-label" for="id_without_experience">
