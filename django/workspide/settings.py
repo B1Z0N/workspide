@@ -38,9 +38,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['WORKSPIDE_SECRET_KEY']
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -146,6 +143,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 SUMMERNOTE_THEME = 'bs4'
 
 SUMMERNOTE_CONFIG = {
@@ -199,6 +198,11 @@ if mode == 'production':
         _allowed = []
     
     ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', *_allowed]
+
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 else:
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
