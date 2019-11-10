@@ -14,6 +14,9 @@ from html_sanitizer import Sanitizer
 sanitizer = Sanitizer()
 sanitizer.tags = set(sanitizer.tags).union(['p', 'span', 'i', 'u', 'hr', 'ol', 'li', 'br', 'blockquote', 'ul', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
 
+def negate_ad(ad_type):
+    assert(ad_type == "vacancy" or ad_type == "resume")
+    return 'vacancy' if ad_type == 'resume' else 'resume'
 
 def pide(request, ad_id):
     def actual_view(request, ad):

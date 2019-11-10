@@ -5,7 +5,6 @@ Password change
 {% endblock %}
 
 {% block alert %}
-<h1>
     <form class="form" method="post" style="font-size: 30px;">
         {% load widget_tweaks %}
         {% csrf_token %}
@@ -27,5 +26,4 @@ Password change
         <input name="reset_password_btn" value="Reset password" type="submit"
             class="btn btn-primary m-3 mx-3 btn-lg significant-button" />
     </a>
-</h1>
 {% endblock %}

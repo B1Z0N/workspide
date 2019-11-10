@@ -23,16 +23,12 @@
         {% endif %}
     {% empty %}
         <div class="container custom-shadowed rounded p-5 m-5 text-center mx-auto"
-        style="background-color:#292826; color: rgb(201, 167, 58);">
-            <h1>
+        style="background-color:#292826; color: rgb(201, 167, 58); position: relative; top: 20px; margin-bottom: 100px; padding: 30px">
                 {% block alert %}
-                <h1>
                     Seems like it is empty here, you could try 
                     piding some resume or vacancy, or just wait 
                     till someone pides yours=)
-                </h1>
                 {% endblock %}
-            </h1>
         </div>
     {% endfor %}
 {% endblock %}
