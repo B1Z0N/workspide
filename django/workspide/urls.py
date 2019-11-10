@@ -25,6 +25,9 @@ urlpatterns = [
 
 from django.conf import settings
 from django.conf.urls.static import static
- 
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'main.error_views.handler404'
+handler500 = 'main.error_views.handler500'
