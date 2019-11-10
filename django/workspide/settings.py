@@ -101,6 +101,7 @@ DATABASES = {
         'HOST': os.environ['WORKSPIDE_DB_HOST'],   # Or an IP Address of database
         'PORT': os.environ['WORKSPIDE_DB_PORT'], # default database port
         'OPTIONS': {'charset': 'utf8mb4'},
+        'CONN_MAX_AGE': 30,
     }
 }
 
