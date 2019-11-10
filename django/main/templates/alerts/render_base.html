@@ -11,7 +11,7 @@
     <h1>
         {% block alert %}
         <h1>
-            {{ response_error_text }}
+            {{ response_error_text|safe }}
         </h1>
         {% endblock %}
     </h1>
