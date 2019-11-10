@@ -21,7 +21,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'workspide@gmail.com'
-EMAIL_HOST_PASSWORD = 'dpoK8iN2vmGAU3'
+EMAIL_HOST_PASSWORD = os.environ['WORKSPIDE_EMAIL_PASSWORD']
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -36,10 +36,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'syz7c@4d1$rxpjxtuuusm0cau+f(a+*7u+7o!%&b!oi97_-9w9'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.environ['WORKSPIDE_SECRET_KEY']
 
 ALLOWED_HOSTS = []
 
@@ -101,14 +98,15 @@ DATABASES = {
     # database, configured locally
     'default': {
         'ENGINE': 'django.db.backends.mysql', # database engine
-        'NAME': 'ka7518', # database name
-        'USER': 'ka7518', # database user
-        'PASSWORD': 'KJSbkGUjNa4JrM', # database password
-        'HOST': 'zanner.org.ua',   # Or an IP Address of database
-        'PORT': '33321', # default database port
+        'NAME': os.environ['WORKSPIDE_DB_NAME'], # database name
+        'USER': os.environ['WORKSPIDE_DB_USER_NAME'], # database user
+        'PASSWORD': os.environ['WORKSPIDE_DB_PASSWORD'], # database password
+        'HOST': os.environ['WORKSPIDE_DB_HOST'],   # Or an IP Address of database
+        'PORT': os.environ['WORKSPIDE_DB_PORT'], # default database port
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -185,3 +183,23 @@ SUMMERNOTE_CONFIG = {
     'lazy': True,
 
 }
+
+
+
+##################################################
+# Production or development settings
+##################################################
+mode = os.environ.get('WORKSPIDE_MODE')
+if mode == 'production':
+    DEBUG = False
+    _allowed = os.environ.get('WORKSPIDE_ALLOWED_HOSTS')
+    if _allowed:
+        _allowed = _allowed.split()
+    else:
+        _allowed = []
+    
+    ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', *_allowed]
+else:
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
+    ALLOWED_HOSTS = []
