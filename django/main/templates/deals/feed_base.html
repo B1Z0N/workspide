@@ -23,13 +23,15 @@
         {% endif %}
     {% empty %}
         <div class="container custom-shadowed rounded p-5 m-5 text-center mx-auto"
-        style="background-color:rgb(173, 173, 173); position: relative; top: 20px; margin-bottom: 100px; padding: 30px">
-                {% block alert %}
-                    Hello from your feed, this is the place where all your pides(deals)
-                    will take place. Seems like it is empty here, you could try 
-                    piding(making a deal) some resume or vacancy, or just wait 
-                    till someone pides yours=)
-                {% endblock %}
+        style="background-color: gray; position: relative; top: 20px; margin-bottom: 100px; padding: 30px">
+        {% block alert %}
+		    <h3>
+                Hello from your feed, this is the place where all your pides(deals)
+                will take place. Seems like it is empty here, you could try 
+                piding(making a deal) some resume or vacancy, or just wait 
+                till someone pides yours=)
+		    </h3>
+		{% endblock %}
         </div>
     {% endfor %}
 {% endblock %}
