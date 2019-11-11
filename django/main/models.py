@@ -49,7 +49,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
 
-    not_read = models.PositiveIntegerField(default=0)
+    not_read = models.PositiveIntegerField(default=1)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)  # a superuser

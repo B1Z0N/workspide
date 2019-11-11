@@ -66,6 +66,8 @@ def feed(request):
             request.user.not_read -= 1
         else:
             _pides.append((pide, 'usual'))
+    if not _pides:
+        request.user.not_read = 0
     request.user.save()
     return render(request, 'deals/feed_base.html', {
         'pides' : _pides,
