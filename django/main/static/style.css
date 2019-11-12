@@ -118,8 +118,8 @@ div.img-link a:visited {
 .page-link:focus,
 .page-link:hover {
   text-decoration: none;
-  border-color: darkcyan;
-  background-color: #f9d342;
+  border-color: gray;
+  background-color: black;
 }
 
 .custom-spinning-image {
