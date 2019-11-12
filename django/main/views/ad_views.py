@@ -146,7 +146,7 @@ def add_ad(ad_type):
                 ad.save()
                 save_all_additional(request.POST, ad)
 
-                return redirect('/account/')
+                return redirect('/show_ad/' + str(ad.id))
 
         context = {
             'form': form,
@@ -239,7 +239,7 @@ def edit_ad(ad_type):
                 ad.text = sanitizer.sanitize(ad.text)
                 ad.save()
                 save_all_additional(request.POST, ad)
-                return redirect('/account/')
+                return redirect('/show_ad/' + str(ad.id))
         context = {
             'form': form,
             ad_type: 'True',
