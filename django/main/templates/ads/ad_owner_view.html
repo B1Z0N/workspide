@@ -1,0 +1,13 @@
+{% extends 'ads/ad_view.html' %}
+
+{% block footer %}
+<a href="/account/edit_{{ ad.ad_type }}/{{ ad.id }}" style="text-decoration: none;">
+    <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-catching">
+        <h1>
+            <p>
+                <span class="badge badge-pill ordinary-badge"><em>Edit</em></span>
+            </p>
+        </h1>
+    </div>
+</a>
+{% endblock %}

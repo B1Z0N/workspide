@@ -192,6 +192,9 @@ def show_ad(request, ad_id):
         request, ad, 'ads/ad_view.html')
     def show_foreign_ad(request, ad): return actual_view(
         request, ad, 'ads/ad_foreign_view.html')
+    def show_owner_ad(request, ad): return actual_view(
+        request, ad, 'ads/ad_owner_view.html'
+    )
 
     try:
         ad = Ad.objects.get(id=ad_id)
@@ -203,7 +206,9 @@ def show_ad(request, ad_id):
                 can view some info about it in your feed if 
                 you were having a pide with it.
             """)
-    if request.user == ad.uid or not request.user.is_authenticated:
+    if request.user == ad.uid:
+        return show_owner_ad(request, ad)
+    elif not request.user.is_authenticated:
         return show_anonymous_ad(request, ad)
     else:
         return show_foreign_ad(request, ad)
