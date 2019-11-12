@@ -4,13 +4,6 @@
     Feed
 {% endblock%}
 
-{% block style %}
-    a, a:hover {
-        color: gray; 
-        font-style: italic;
-    }
-{% endblock %}
-
 {% block content %}
     {% for pide, color in pides %}
         {% if pide.state != "rejected" or pide.uid_from == request.user %}
@@ -22,8 +15,8 @@
             {% endif %}
         {% endif %}
     {% empty %}
-        <div class="container custom-shadowed rounded p-5 m-5 text-center mx-auto"
-        style="background-color: gray; position: relative; top: 20px; margin-bottom: 100px; padding: 30px">
+        <div class="container custom-shadowed rounded p-5 m-5 text-center mx-auto eye-catching" 
+        style="top: 20px; margin-bottom: 100px; padding: 30px">
         {% block alert %}
 		    <h3>
                 Hello from your feed, this is the place where all your pides(deals)

@@ -21,56 +21,12 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>Search</title>
     <style>
-        .page-link {
-            position: relative;
-            display: block;
-            padding: 0.5rem 0.75rem;
-            margin-left: -1px;
-            line-height: 1.25;
-
-            color: #f9d342;
-            background-color: #292826;
-            border-color: black;
-        }
-
-        .page-item.disabled .page-link {
-            pointer-events: none;
-            cursor: auto;
-
-            background-color: gray;
-            color: #292826;
-            border-color: black;
-        }
-
-        .page-item.active .page-link {
-            z-index: 1;
-
-            color: #292826;
-            background-color: white;
-        }
-
-        .page-link:focus,
-        .page-link:hover {
-            text-decoration: none;
-            border-color: darkcyan;
-            background-color: #f9d342;
-        }
-
-        .custom-spinning-image {
-            -webkit-animation:spin 1s linear infinite;
-            -moz-animation:spin 1s linear infinite;
-            animation:spin 1s linear infinite;
-        }
-        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-        
     </style>
 </head>
 
 <body>
     <div class="container">
-        <nav class="custom-shadowed navbar navbar-expand-md navbar-dark bg-dark rounded-bottom">
+        <nav class="custom-shadowed navbar navbar-expand-md rounded-bottom eye-catching">
             <form class="form-inline my-2 my-md-0 p-3" style="width: 65%;">
                 <input class="form-control" id="search-bar" onkeypress="handleEnterKey(event)" autofocus type="text"
                     style="width: 100%;">
@@ -92,25 +48,30 @@
             <div class="collapse navbar-collapse mr-auto" id="main-navbar">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active mr-auto">
-                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link ordinary-text" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item mr-auto">
-                        <a class="nav-link" href="/account/">Account</a>
+                        {% if user.is_authenticated %}
+                            <a class="nav-link ordinary-text" href="/account/">Account</a>
+                        {% else %}
+                            <a class="nav-link ordinary-text" href="/signup/login/">Login</a>
+                        {% endif %}
                     </li>
-                    <li class="nav-item mr-auto">
-
-                        <a class="nav-link" href="/feed/">
-                            Feed
-                            {% if request.user.not_read %}
-                            <span class="badge badge-pill badge-warning"> {{ request.user.not_read }}</span>
-                            {% endif %}
-                        </a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item mr-auto">
+                            <a class="nav-link ordinary-text" href="/feed/">
+                                Feed
+                                {% if request.user.not_read %}
+                                <span class="badge badge-pill badge-warning"> {{ request.user.not_read }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
 
             <button type="button" class="btn btn-primary significant-button ml-auto" data-toggle="modal"
-                data-target="#popup-filters" style="border-color: #292826;">
+                data-target="#popup-filters">
                 Filters
             </button>
 
@@ -123,13 +84,12 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body" style="background-color: #292826;">
+                        <div class="modal-body secondarybg">
                             <div class="container significant-info text-center">
                                 <p>
                                     <h3 class="text-center mt-5 operation-title">Filters</h3>
                                 </p>
-                                <div class="container mb-3 rounded connect-options py-3 mx-auto text-left"
-                                    style="background-color: rgb(173, 173, 173); color: #292826;">
+                                <div class="container mb-3 rounded connect-options py-3 mx-auto text-left ordinary-text">
                                     {% load widget_tweaks %}
                                     <form method="post" class="form">
                                         {% csrf_token %}
@@ -186,8 +146,7 @@
         </nav>
 
         <p>
-            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
-                style="background-color: rgb(201, 167, 58);">
+            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded mainbg">
                 <div class="container mb-5">
                     <div class="small-logo img-link">
                         <a href="/">
@@ -212,16 +171,16 @@
                     {% for ad in search_results %}
                         {% include "ads/ad_search_panel.html" %}
                     {% empty %}
-                    <div class="container custom-shadowed rounded text-center"
-                        style="background-color:#292826; color: rgb(201, 167, 58); position: relative; top: 50px; margin-bottom: 100px; padding: 30px">
-                        <h1>
-                            {% block alert %}
-                            <h4>
-                                Try searching, it is empty here for now
-                            </h4>
-                            {% endblock %}
-                        </h1>
-                    </div>
+                        <div class="container custom-shadowed rounded text-center eye-catching" 
+                        style="position: relative; top: 50px; margin-bottom: 100px; padding: 30px">
+                            <h1>
+                                {% block alert %}
+                                <h4>
+                                    Try searching, it is empty here for now
+                                </h4>
+                                {% endblock %}
+                            </h1>
+                        </div>
                     {% endfor %}
 
                     {% if search_results.has_other_pages %}

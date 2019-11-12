@@ -11,9 +11,8 @@ Login
 {% include "alerts/already_authorized.html" %}
 {% else %}
 <div class="row justify-content-around py-auto after-small-logo">
-    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed"
-        style="background-color: #292826;">
-        <div class="container significant-info">
+    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded logging-in custom-shadowed eye-catching">
+        <div class="container">
             <p>
                 <h3 class="text-center mt-5 operation-title">Login</h3>
             </p>
@@ -35,30 +34,17 @@ Login
                 </div>
             </form>
             <div class="container my-5 mx-auto">
-                <a href="/account/password_reset/" style="color: aqua;">Forgot password?</a>
+                <a href="/account/password_reset/">Forgot password?</a>
             </div>
         </div>
     </div>
-    <div class="d-flex flex-wrap align-content-center p-3 second-option my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed"
-        style="background-color: #292826;">
-        <!-- <div class="col-12 m-3 mx-auto rounded connect-options img-link" style="background-color: rgb(173, 173, 173);">
-            <h3>Connect with: </h3>
-            <a href="#">
-                {% load static %}
-                <img class="m-3" src='{% static "img/github_logo.svg" %}' width=64>
-            </a>
-            <a href="#">
-                {% load static %}
-                <img class="m-3" src='{% static "img/google_logo.png" %}' width=64>
-            </a>
-        </div> -->
+    <div class="d-flex flex-wrap align-content-center p-3 second-option my-3 col-lg-4 col-md-12 col-sm-12 col-xs-12 rounded custom-shadowed eye-catching">
         <div class="container my-auto">
-            <h3 class="significant-info">Or</h3>
+            <h3>Or</h3>
         </div>
         <div class="container m-3">
             <a href="/signup/register/">
-                <button type="button" class="mx-auto btn btn-primary significant-button second-option"
-                    style="border-color: #292826; color: #292826;">
+                <button type="button" class="mx-auto btn btn-primary significant-button second-option">
                     <h1 class="operation-title">Register</h1>
                     <span class="badge badge-default user-note">(for new users)</span>
                 </button>

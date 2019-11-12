@@ -1,10 +1,9 @@
-<a href="/show_ad/{{ ad.id }}" style="color: rgb(201, 167, 58);text-decoration: none;">
+<a href="/show_ad/{{ ad.id }}" style="text-decoration: none;">
     <div class="container">
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-                    style="background-color:#292826; color: rgb(201, 167, 58);">
-                        <h3>{{ ad.title }} <span class="badge badge-pill badge-warning ">{{ ad.city }}</span></h3>
+                <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-dark-context">
+                        <h3>{{ ad.title }} <span class="badge badge-pill ordinary-badge">{{ ad.city }}</span></h3>
                     <p>
                         {% if ad.salary %}
                         Salary: {{ ad.salary }}.
@@ -16,8 +15,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-                    style="background-color:#292826; color: rgb(201, 167, 58);">
+                <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-dark-context">
                     {{ ad.pub_dtime }}
                 </div>
             </div>

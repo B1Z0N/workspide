@@ -24,8 +24,7 @@
 </div>
 
 {% if description %}
-<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-    style="background-color:rgb(173, 173, 173); color: #292826;">
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto eye-light-context">
     <h3><em>Description</em></h3>
     {% load widget_tweaks %}
         <div class="html-inject">
@@ -35,23 +34,21 @@
 {% endif %}
 
 {% if skills %}
-<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-    style="background-color:#292826; color: rgb(201, 167, 58);">
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto eye-dark-context">
     <h3><em>Skills</em></h3>
     {% for skill in skills %}
-    <div class="col-12 mb-3 p-3 rounded connect-options" style="color: #292826;background-color: rgb(173, 173, 173);">
-            {{skill.text}}
-    </div>
+        <div class="col-12 mb-3 p-3 rounded connect-options eye-light-context">
+                {{skill.text}}
+        </div>
     {% endfor %}
 </div>
 {% endif %}
 
 {% if resps %}
-<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-    style="background-color:#292826; color: rgb(201, 167, 58);">
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto eye-dark-context">
     <h3><em>Responsibilties</em></h3>
     {% for resp in resps %}
-    <div class="col-12 mb-3 p-3 rounded connect-options" style="color: #292826;background-color: rgb(173, 173, 173);">
+    <div class="col-12 mb-3 p-3 rounded connect-options eye-light-context">
             {{resp.text}}
     </div>
     {% endfor %}
@@ -59,19 +56,17 @@
 {% endif %}
 
 {% if projects %}
-<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-    style="background-color:#292826; color: rgb(201, 167, 58);">
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto eye-dark-context">
     <h3><em>Projects</em></h3>
     {% for project in projects %}
-    <div class="col-12 mb-3 p-3 rounded connect-options" style="color: #292826;background-color: rgb(173, 173, 173);">
+    <div class="col-12 mb-3 p-3 rounded connect-options eye-light-context">
             {{project.text}}(<a href="{{project.link}}">link</a>)
     </div>
     {% endfor %}
 </div>
 {% endif %}
 
-<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto"
-style="background-color:rgb(173, 173, 173); color: #292826;">
+<div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto eye-light-context">
     <h3><em>
         {% if name %}
             Posted by {{ name }} at {{ ad.pub_dtime }}

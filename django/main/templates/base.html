@@ -27,38 +27,13 @@
     <style>
         {% block style %}
         {% endblock%}
-        .custom-spinning-image {
-            -webkit-animation:spin 1s linear infinite;
-            -moz-animation:spin 1s linear infinite;
-            animation:spin 1s linear infinite;
-        }
-        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-        
-        .custom-spinning-image-faster {
-            -webkit-animation:spin 2s linear infinite;
-            -moz-animation:spin 2s linear infinite;
-            animation:spin 2s linear infinite;
-        }
-
-        .centered-big-logo {
-            height: 200px;
-            width: 200px;
-            position: fixed;
-            left: 50%;
-            margin-left: -100px;
-            top: 50%;
-            margin-top: -100px;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <p>
-            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded"
-                style="background-color: rgb(201, 167, 58);">
+            <div class="custom-shadowed position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center rounded mainbg">
                 <div class="container  mb-5">
                     <div class="small-logo img-link">
                         <a href="/">
