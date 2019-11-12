@@ -2,12 +2,10 @@
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
         {% if color == "marked" %}
-            <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-            style="background-color:rgb(173, 173, 173); color: #292826;">
+            <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-light-context">
         {% endif %}
         {% if color == "usual" %}
-            <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-            style="background-color:#292826; color: rgb(201, 167, 58);">
+            <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-dark-context">
         {% endif %}
                     <h3>
                         
@@ -67,17 +65,15 @@
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
             {% if color == "marked" %}
-            <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-                style="background-color:rgb(173, 173, 173); color: #292826;">
+            <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-light-context">
                 {% endif %}
                 {% if color == "usual" %}
-                <div class="container custom-shadowed rounded my-3 mx-auto p-3"
-                    style="background-color:#292826; color: rgb(201, 167, 58);">
+                <div class="container custom-shadowed rounded my-3 mx-auto p-3 eye-dark-context">
                     {% endif %}
                     {{ pide.pub_dtime }}
                     {% if pide.state == "pending" and pide.ad_to.uid == request.user%}
                     <p>
-                        <a href="/pide_confirm/{{ pide.id }}" style="color: rgb(201, 167, 58); text-decoration: none;">
+                        <a href="/pide_confirm/{{ pide.id }}">
                             <button class="btn btn-primary mx-auto mt-3 btn-sm significant-button">
                                 Answer the pide
                             </button>
