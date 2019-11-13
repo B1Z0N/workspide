@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 
+{% block style %}
+    .html-inject {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    div {
+        word-wrap:break-word
+    }
+{% endblock %}
+
 {% block content %}
 
         {% if pide.ad_from %}
@@ -12,13 +23,13 @@
         {% include "ads/ad_panel_base.html" with ad=pide.ad_to %}
 
         {% if pide.comment %}
-            <h1><em>Comment</em></h1>
-            <div class="container custom-shadowed rounded p-5 mb-5 text-left mx-auto"
-            style="background-color:rgb(173, 173, 173); color: #292826;">
-                <h3>
+        <div class="container custom-shadowed rounded p-5 m-5 text-left mx-auto eye-light-context">
+            <h3><em>Comment</em></h3>
+            {% load widget_tweaks %}
+                <div class="html-inject">
                     {{ pide.comment|safe }}
-                </h3>
-            </div>
+                </div>
+        </div>
         {% endif %}
         <form class="form" method="post"  onsubmit="startBigSpinning()">
             {% csrf_token %}
