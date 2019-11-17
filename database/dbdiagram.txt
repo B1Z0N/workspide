@@ -1,0 +1,69 @@
+Table "main_user" {
+  "id" integer [pk, not null, increment]
+  "password" varchar(128) [not null]
+  "last_login" datetime(6)
+  "email" varchar(50) [unique, not null]
+  "first_name" varchar(30)
+  "last_name" varchar(30)
+  "not_read" integer [not null]
+  "is_active" bool [not null]
+  "is_admin" bool [not null]
+}
+
+Table "main_ad" {
+  "id" integer [pk, not null, increment]
+  "ad_type" varchar(7) [not null]
+  "city" varchar(30) [not null]
+  "title" varchar(50) [not null]
+  "text" longtext
+  "salary_currency" varchar(3) [not null]
+  "salary" "numeric(14, 2)"
+  "experience" integer
+  "experience_type" varchar(6) [not null]
+  "pub_dtime" datetime(6) [not null]
+  "is_archived" bool [not null]
+  "uid_id" integer [not null]
+}
+
+Table "main_skill" {
+  "id" integer [pk, not null, increment]
+  "text" varchar(50) [not null]
+  "ad_id_id" integer [not null]
+}
+
+Table "main_responsibility" {
+  "id" integer [pk, not null, increment]
+  "text" varchar(50) [not null]
+  "vacancy_id_id" integer [not null]
+}
+
+Table "main_pide" {
+  "id" integer [pk, not null, increment]
+  "comment" longtext
+  "state" varchar(8) [not null]
+  "pub_dtime" datetime(6) [not null]
+  "ad_from_id" integer
+  "ad_to_id" integer [not null]
+  "uid_from_id" integer [not null]
+}
+
+Table "main_petproject" {
+  "id" integer [pk, not null, increment]
+  "text" varchar(50) [not null]
+  "link" varchar(50) [not null]
+  "resume_id_id" integer [not null]
+}
+
+Ref:"main_user"."id" < "main_ad"."uid_id"
+
+Ref:"main_ad"."id" < "main_skill"."ad_id_id"
+
+Ref:"main_ad"."id" < "main_responsibility"."vacancy_id_id"
+
+Ref:"main_ad"."id" < "main_pide"."ad_from_id"
+
+Ref:"main_ad"."id" < "main_pide"."ad_to_id"
+
+Ref:"main_user"."id" < "main_pide"."uid_from_id"
+
+Ref:"main_ad"."id" < "main_petproject"."resume_id_id"
