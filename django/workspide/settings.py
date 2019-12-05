@@ -41,6 +41,8 @@ SECRET_KEY = os.environ['WORKSPIDE_SECRET_KEY']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
+
     'html_sanitizer',
     'djmoney.contrib.exchange',
     'djmoney',

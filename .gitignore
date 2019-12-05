@@ -2,6 +2,7 @@
 # files with sensitive environmental data
 .envrc
 environ
+venv
 # todolist
 TODO
 # db migrations
