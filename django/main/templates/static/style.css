@@ -1,0 +1,157 @@
+.mainbg {
+  background-color: #3b3176;
+  color: #837cb0;
+}
+
+.mainbg a,
+.mainbg a:hover,
+.mainbg a:visited {
+  color: #837cb0;
+}
+
+.secondarybg {
+  background-color: #211859;
+  color: #837cb0;
+}
+
+.secondarybg a,
+.secondarybg a:hover,
+.secondarybg a:visited {
+  color: #837cb0;
+}
+
+.ordinary-text {
+  color: #837cb0;
+}
+
+.significant-info {
+  color: #5b5293;
+}
+
+.eye-catching {
+  background-color: #0f083c;
+  color: #837cb0;
+}
+
+.eye-light-context {
+  background-color: #adadad;
+  color: black;
+}
+
+.eye-dark-context {
+  background-color: #292826;
+  color: #837cb0;
+}
+
+.ordinary-badge {
+  background-color: #3b3176;
+  color: black;
+}
+
+.significant-button {
+  color: #837cb0;
+  background-color: #5b5293;
+  border-color: #292826;
+}
+
+.after-all-page {
+  top: 100%;
+}
+
+.after-small-logo {
+  padding-top: 40px;
+}
+
+.custom-shadowed {
+  -moz-box-shadow: 0 0 15px #00004b;
+  -webkit-box-shadow: 0 0 15px #00004b;
+  box-shadow: 0 0 15px #00004b;
+}
+
+.small-logo {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+div.img-link a,
+div.img-link a:hover,
+div.img-link a:visited {
+  border: none;
+  outline: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.custom-spinning-image-faster {
+  -webkit-animation: spin 2s linear infinite;
+  -moz-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+.centered-big-logo {
+  height: 200px;
+  width: 200px;
+  position: fixed;
+  left: 50%;
+  margin-left: -100px;
+  top: 50%;
+  margin-top: -100px;
+}
+
+.custom-spinning-image {
+  -webkit-animation: spin 1s linear infinite;
+  -moz-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #f9d342;
+  background-color: #292826;
+  border-color: black;
+}
+
+.page-item.disabled .page-link {
+  pointer-events: none;
+  cursor: auto;
+  background-color: gray;
+  color: #292826;
+  border-color: black;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #292826;
+  background-color: white;
+}
+
+.page-link:focus,
+.page-link:hover {
+  text-decoration: none;
+  border-color: gray;
+  background-color: black;
+}
+
+/*# sourceMappingURL=style.css.map */
