@@ -1,0 +1,72 @@
+
+Table "main_user" {
+  "id" type [pk, not null, increment]
+  "password" type [not null]
+  "last_login" type
+  "email" type [unique, not null]
+  "first_name" type
+  "last_name" type
+  "not_read" type [not null]
+  "is_active" type [not null]
+  "is_admin" type [not null]
+}
+
+
+Table "main_ad" {
+  "id" type [pk, not null, increment]
+  "ad_type" type [not null]
+  "city"  type [not null]
+  "title" type [not null]
+  "text" type 
+  "salary_currency" type [not null]
+  "salary" type 
+  "experience" type 
+  "experience_type" type [not null]
+  "pub_dtime" type [not null]
+  "is_archived" type [not null]
+  "uid_id" type [not null]
+}
+
+Table "main_skill" {
+  "id"  type [pk, not null, increment]
+  "text" type [not null]
+  "ad_id_id"  type [not null]
+}
+
+Table "main_responsibility" {
+  "id" type [pk, not null, increment]
+  "text" type [not null]
+  "vacancy_id_id" type [not null]
+}
+
+Table "main_pide" {
+  "id" type [pk, not null, increment]
+  "comment" type
+  "state" type [not null]
+  "pub_dtime" type [not null]
+  "ad_from_id" type 
+  "ad_to_id" type [not null]
+  "uid_from_id" type [not null]
+}
+
+Table "main_petproject" {
+  "id" type [pk, not null, increment]
+  "text" type [not null]
+  "link" type [not null]
+  "resume_id_id"  type [not null]
+}
+
+Ref:"main_user"."id" < "main_ad"."uid_id"
+
+Ref:"main_ad"."id" < "main_skill"."ad_id_id"
+
+Ref:"main_ad"."id" < "main_responsibility"."vacancy_id_id"
+
+Ref:"main_ad"."id" < "main_pide"."ad_from_id"
+
+Ref:"main_ad"."id" < "main_pide"."ad_to_id"
+
+Ref:"main_user"."id" < "main_pide"."uid_from_id"
+
+Ref:"main_ad"."id" < "main_petproject"."resume_id_id"
+

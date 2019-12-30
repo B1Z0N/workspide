@@ -31,3 +31,4 @@ ALTER TABLE `main_pide` ADD CONSTRAINT `main_pide_ad_to_id_19107f51_fk_main_ad_i
 ALTER TABLE `main_pide` ADD CONSTRAINT `main_pide_uid_from_id_2c2aa502_fk_main_user_id` FOREIGN KEY (`uid_from_id`) REFERENCES `main_user` (`id`);
 ALTER TABLE `main_petproject` ADD CONSTRAINT `main_petproject_resume_id_id_f937978f_fk_main_ad_id` FOREIGN KEY (`resume_id_id`) REFERENCES `main_ad` (`id`);
 COMMIT;
+
