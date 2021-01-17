@@ -20,7 +20,7 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'workspide@gmail.com'
+EMAIL_HOST_USER = os.environ['WORKSPIDE_EMAIL']
 EMAIL_HOST_PASSWORD = os.environ['WORKSPIDE_EMAIL_PASSWORD']
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -130,9 +130,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = os.environ['WORKSPIDE_LANGUAGE_CODE']WORKSPIDE_TIME_ZONE
 
-TIME_ZONE = 'Europe/Kiev'
+TIME_ZONE = os.environ['WORKSPIDE_TIME_ZONE']
 
 USE_I18N = True
 
